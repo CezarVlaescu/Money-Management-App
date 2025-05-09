@@ -1,4 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import './styles/_colors.scss';
-@import './styles/_typography.scss';
-@import './styles/_setup.scss';
+@use './styles/_colors.scss';
+@use './styles/_typography.scss';
+@use './styles/_setup.scss';
