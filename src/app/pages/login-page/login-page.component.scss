@@ -1,0 +1,47 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.login-page-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    &__title {
+        color: var(--main-green);
+    }
+
+    &__paragraph {
+        max-width: 200px;
+        text-align: center;
+    }
+
+    &__bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &__buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+        }
+
+        &__subtext {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-dark-mode);
+            font-weight: bold;
+            font-style: italic;
+        }
+    }
+}

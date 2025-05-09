@@ -1,0 +1,20 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.launch-page-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--main-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+
+    &__title {
+        color: var(--light-green);
+    }
+}
