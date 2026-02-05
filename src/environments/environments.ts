@@ -1,4 +1,4 @@
-import type { FirebaseEnvironmentSetup } from "../models/environments.model";
+import type { FirebaseEnvironmentSetup } from "../app/models/environments.model";
 
 const firebaseEnvironment: FirebaseEnvironmentSetup = {
   production: false,
