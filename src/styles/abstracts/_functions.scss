@@ -1,0 +1,16 @@
+@function convert-to-rem($px-value) {
+  $rem-value: $px-value / $base-font-size;
+  $zero-safe-rem-value: if($px-value == 0, 0, $rem-value);
+
+  @return $zero-safe-rem-value;
+}
+
+@function rem($px-values) {
+  $rem-values: ();
+
+  @each $px-value in $px-values {
+    $rem-values: append($rem-values, convert-to-rem($px-value));
+  }
+
+  @return $rem-values;
+}

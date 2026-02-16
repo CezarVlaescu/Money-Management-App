@@ -1,0 +1,62 @@
+@mixin displayFlexMixin($direction: row, $justify, $align, $gap: 0px) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  $gap: $gap;
+}
+
+@mixin widthHeightMixin($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin minWidthHeightMixin($min-width, $min-height) {
+  min-width: $min-width;
+  min-height: $min-height;
+}
+
+@mixin maxWidthHeightMixin($max-width, $max-height) {
+  max-width: $max-width;
+  max-height: $max-height;
+}
+
+@mixin textStylingMixin($font-size, $font-weight, $color, $text-align: unset, $line-height: 120%, $letter-spacing: 0%) {
+  font-family: Inter;
+  font-size: $font-size;
+  font-weight: $font-weight;
+  color: $color;
+  text-align: $text-align;
+  line-height: $line-height;
+  letter-spacing: $letter-spacing;
+}
+
+@mixin truncateMixin {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin mediaQueryMixin($app-layout-breakpoints) {
+  @if $app-layout-breakpoints == 'mobile' {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $app-layout-breakpoints == 'tablet' {
+    @media (min-width: 768px) and (max-width: 1024px) {
+      @content;
+    }
+  } @else if $app-layout-breakpoints == 'desktop' {
+    @media (min-width: 1025px) {
+      @content;
+    }
+  }
+}
+
+@mixin absolutePositionMixin($top: auto, $right: auto, $bottom: auto, $left: auto) {
+  bottom: $bottom;
+  left: $left;
+  position: absolute;
+  right: $right;
+  top: $top;
+}

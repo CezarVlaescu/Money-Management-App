@@ -1,0 +1,8 @@
+@use "../abstracts/mixins" as mixins;
+@use "../abstracts/variables" as *;
+
+html,
+body {
+  @include mixins.widthHeightMixin(100%, 100%);
+  background-color: var(--layout-bg-color);
+}
