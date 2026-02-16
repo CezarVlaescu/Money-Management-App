@@ -21,7 +21,7 @@
   max-height: $max-height;
 }
 
-@mixin textStylingMixin($font-size, $font-weight, $color, $text-align: unset, $line-height: 120%, $letter-spacing: 0%) {
+@mixin textStylingMixin($font-size, $font-weight, $color, $line-height: 120%, $text-align: unset, $letter-spacing: 0%) {
   font-family: Inter;
   font-size: $font-size;
   font-weight: $font-weight;

@@ -1,2 +1,11 @@
 @forward "light";
 @forward "dark";
+
+:root { color-scheme: light dark }
+
+:root {
+  --primary-text: light-dark(#111827, #f3f4f6);
+  --secondary-text: light-dark(#4b5563, #9ca3af);
+  --card-background: light-dark(#f3f4f6, #1f2937);
+  --disabled-text: light-dark(#d1d5db, #4b5563);
+}

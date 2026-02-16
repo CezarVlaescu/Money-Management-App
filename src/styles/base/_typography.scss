@@ -1,3 +1,22 @@
-@use "../abstracts/variables" as *;
-@use "../abstracts/mixins" as mixins;
+@use "../utils/mixins" as mx;
+@use "../variables/dimensions" as d;
+@use "sass:map";
 
+
+$headings: (
+  1: (size: d.$font-size-h1, weight: d.$font-weight-h1, line: d.$line-height-h1),
+  2: (size: d.$font-size-h2, weight: d.$font-weight-h2, line: d.$line-height-h2),
+  3: (size: d.$font-size-h3, weight: d.$font-weight-h3, line: d.$line-height-h3),
+  4: (size: d.$font-size-h4, weight: d.$font-weight-h4, line: d.$line-height-h4),
+);
+
+@each $level, $values in $headings {
+  .heading-#{$level} {
+    @include mx.textStylingMixin(
+      map.get($values, size),
+      map.get($values, weight),
+      var(--primary-text),
+      map.get($values, line)
+    );
+  }
+}

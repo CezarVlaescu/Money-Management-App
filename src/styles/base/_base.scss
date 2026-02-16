@@ -1,8 +1,11 @@
-@use "../abstracts/mixins" as mixins;
-@use "../abstracts/variables" as *;
+@use "../utils/mixins" as mx;
+@use "../themes/dark" as dark;
+@use "../themes/light" as light;
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html,
 body {
-  @include mixins.widthHeightMixin(100%, 100%);
-  background-color: var(--layout-bg-color);
+  @include mx.widthHeightMixin(100%, 100%);
+  background:  var(--homepage-background);
 }

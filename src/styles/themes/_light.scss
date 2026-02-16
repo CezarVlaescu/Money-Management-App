@@ -1,0 +1,17 @@
+@media(prefers-color-scheme: light) {
+  :root {
+    --homepage-background: linear-gradient(to bottom right, #f9fafb, #faf5ff, #eff6ff); 
+    --card-border: 1px solid #f3f4f6; 
+    --hover-state: linear-gradient(to right, #faf5ff, #eff6ff); 
+    --input-background: linear-gradient(to right, #faf5ff, #eff6ff); 
+    --input-border: 2px solid #e9d5ff; 
+    --month-buget-card: linear-gradient(to bottom right, #8b5cf6, #2563eb); 
+    --daily-buget-card: linear-gradient(to bottom right, #fbbf24, #f97316);  
+    --primary-gradient: linear-gradient(to bottom right, #8b5cf6, #2563eb); 
+    --secondary-gradient: linear-gradient(to bottom right, #6366f1, #8b5cf6); 
+    --success-gradient: linear-gradient(to bottom right, #10b981, #059669); 
+    --warning-gradient: linear-gradient(to bottom right, #fbbf24, #f97316); 
+    --danger-gradient: linear-gradient(to bottom right, #ef4444, #e11d48); 
+    --info-gradient: linear-gradient(to bottom right, #06b6d4, #2563eb); 
+  }
+}
