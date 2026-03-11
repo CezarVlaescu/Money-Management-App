@@ -1,0 +1,39 @@
+@use './colors' as c;
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --homepage-background: linear-gradient(to bottom right, #{c.$gray-50}, #{c.$violet-50}, #{c.$blue-50});
+    --card-background: #{c.$white-100};
+    --card-border: 1px solid #{c.$gray-100};
+    --hover-state: linear-gradient(to right, #{c.$violet-50}, #{c.$blue-50});
+    --input-background: linear-gradient(to right, #{c.$violet-50}, #{c.$blue-50});
+    --input-border: 2px solid #{c.$gray-200};
+    --month-buget-card: linear-gradient(to bottom right, #{c.$purple-500}, #{c.$blue-600});
+    --daily-buget-card: linear-gradient(to bottom right, #{c.$amber-400}, #{c.$orange-500});
+    --primary-gradient: linear-gradient(to bottom right, #{c.$purple-500}, #{c.$blue-600});
+    --secondary-gradient: linear-gradient(to bottom right, #{c.$indigo-500}, #{c.$purple-500});
+    --success-gradient: linear-gradient(to bottom right, #{c.$green-400}, #{c.$emerald-600});
+    --warning-gradient: linear-gradient(to bottom right, #{c.$amber-400}, #{c.$orange-500});
+    --danger-gradient: linear-gradient(to bottom right, #{c.$red-500}, #{c.$rose-600});
+    --info-gradient: linear-gradient(to bottom right, #{c.$cyan-500}, #{c.$blue-600});
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --homepage-background: linear-gradient(to bottom right, #{c.$gray-900}, #{c.$gray-900}, #{c.$black-soft});
+    --card-background: #{c.$gray-800};
+    --card-border: 1px solid #{c.$gray-700};
+    --hover-state: #{c.$gray-700};
+    --input-background: linear-gradient(to right, #{c.$purple-700-30}, #{c.$blue-800-30});
+    --input-border: 2px solid #{c.$purple-700};
+    --month-buget-card: linear-gradient(to bottom right, #{c.$purple-700}, #{c.$blue-800});
+    --daily-buget-card: linear-gradient(to bottom right, #{c.$orange-600}, #{c.$orange-700});
+    --primary-gradient: linear-gradient(to bottom right, #{c.$purple-700}, #{c.$blue-800});
+    --secondary-gradient: linear-gradient(to bottom right, #{c.$indigo-600}, #{c.$purple-700});
+    --success-gradient: linear-gradient(to bottom right, #{c.$emerald-700}, #{c.$emerald-900});
+    --warning-gradient: linear-gradient(to bottom right, #{c.$orange-600}, #{c.$orange-700});
+    --danger-gradient: linear-gradient(to bottom right, #{c.$red-700}, #{c.$rose-700});
+    --info-gradient: linear-gradient(to bottom right, #{c.$cyan-700}, #{c.$blue-800});
+  }
+}
