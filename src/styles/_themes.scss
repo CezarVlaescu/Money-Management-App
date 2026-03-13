@@ -16,6 +16,10 @@
     --warning-gradient: linear-gradient(to bottom right, #{c.$amber-400}, #{c.$orange-500});
     --danger-gradient: linear-gradient(to bottom right, #{c.$red-500}, #{c.$rose-600});
     --info-gradient: linear-gradient(to bottom right, #{c.$cyan-500}, #{c.$blue-600});
+    --primary-text: #{c.$gray-900};
+    --secondary-text: #{c.$gray-600};
+    --ternary-text: #{c.$gray-500};
+    --disabled-text: #{c.$gray-300};
   }
 }
 
@@ -35,5 +39,9 @@
     --warning-gradient: linear-gradient(to bottom right, #{c.$orange-600}, #{c.$orange-700});
     --danger-gradient: linear-gradient(to bottom right, #{c.$red-700}, #{c.$rose-700});
     --info-gradient: linear-gradient(to bottom right, #{c.$cyan-700}, #{c.$blue-800});
+    --primary-text: #{c.$gray-100};
+    --secondary-text: #{c.$gray-400};
+    --ternary-text: #{c.$gray-500};
+    --disabled-text: #{c.$gray-600};
   }
 }

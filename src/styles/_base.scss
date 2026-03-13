@@ -1,9 +1,22 @@
 @use "mixins" as mx;
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
 
-html,
+html { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-  @include mx.widthHeightMixin(100%, 100%);
+  padding: 32px 24px;
   background:  var(--homepage-background);
+  @include mx.mediaQueryMixin('desktop') { padding: 48px 32px; }
+}
+
+app-root {
+  display: block;
+  height: 100%;
 }

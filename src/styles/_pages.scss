@@ -1,0 +1,12 @@
+@use 'mixins' as mx;
+
+app-dashboard {
+    display: block;
+    @include mx.widthHeightMixin(100%, 100%);
+}
+
+app-dashboard-setup {
+    @include mx.widthHeightMixin(100%, 100%);
+    @include mx.displayMixin(flex, column, center, center, 20px);
+    text-align: center;
+}

@@ -1,0 +1,9 @@
+<button
+class="button-container"
+[style.background]="buttonComponentConfig().buttonColor"
+>
+    <app-icon [iconComponentConfig]="iconComponentConfig" />
+    <span class="primary-heading-4">
+        {{buttonComponentConfig().buttonText}}
+    </span>
+</button>

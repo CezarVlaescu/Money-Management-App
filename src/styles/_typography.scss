@@ -8,14 +8,42 @@ $headings: (
   2: (size: d.$font-size-h2, weight: d.$font-weight-h2, line: d.$line-height-h2),
   3: (size: d.$font-size-h3, weight: d.$font-weight-h3, line: d.$line-height-h3),
   4: (size: d.$font-size-h4, weight: d.$font-weight-h4, line: d.$line-height-h4),
+  bl: (size: d.$font-size-bl, weight: d.$font-weight-body-caption, line: d.$line-height-body-caption),
+  br: (size: d.$font-size-br, weight: d.$font-weight-body-caption, line: d.$line-height-body-caption),
+  bs: (size: d.$font-size-bs, weight: d.$font-weight-body-caption, line: d.$line-height-body-caption),
+  caption: (size: d.$font-size-caption, weight: d.$font-weight-body-caption, line: d.$line-height-body-caption)
 );
 
 @each $level, $values in $headings {
-  .heading-#{$level} {
+  .primary-heading-#{$level} {
     @include mx.textStylingMixin(
       map.get($values, size),
       map.get($values, weight),
       var(--primary-text),
+      map.get($values, line)
+    );
+  }
+  .secondary-heading-#{$level} {
+    @include mx.textStylingMixin(
+      map.get($values, size),
+      map.get($values, weight),
+      var(--secondary-text),
+      map.get($values, line)
+    );
+  }
+  .ternary-heading-#{$level} {
+    @include mx.textStylingMixin(
+      map.get($values, size),
+      map.get($values, weight),
+      var(--ternary-text),
+      map.get($values, line)
+    );
+  }
+  .disabled-heading-#{$level} {
+    @include mx.textStylingMixin(
+      map.get($values, size),
+      map.get($values, weight),
+      var(--disabled-text),
       map.get($values, line)
     );
   }
