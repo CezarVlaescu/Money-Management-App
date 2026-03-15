@@ -9,11 +9,11 @@ import { IconComponent } from '../icon-component/icon.component';
   styleUrl: './button.component.scss'
 })
 export class ButtonComponent {
-  public buttonComponentConfig: InputSignal<ButtonComponentConfig> = input.required<ButtonComponentConfig>();
+  public buttonConfig: InputSignal<ButtonComponentConfig> = input.required<ButtonComponentConfig>();
 
-  protected get iconComponentConfig(): IconComponentConfig {
+  protected get iconConfig(): IconComponentConfig {
     return {
-      iconName: this.buttonComponentConfig().buttonIcon as string,
+      iconName: this.buttonConfig().buttonIcon as string,
       containerColor: 'none'
     } as IconComponentConfig;
   }

@@ -1,0 +1,16 @@
+<div class="dialog-header">
+    <div class="dialog-header__top">
+        <span class="primary-heading-3">
+            {{dialogConfig().dialogHeaderTitle}}
+        </span>
+        <app-button [buttonConfig]="buttonConfig" mat-dialog-close />
+    </div>
+    <ng-content select="[dialog-header]"></ng-content>
+</div>
+<mat-dialog-content class="dialog-content">
+    <ng-content select="[dialog-content]"></ng-content>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-footer">
+    <ng-content select="[dialog-footer]"></ng-content>
+    <span>Button</span>
+</mat-dialog-actions>
