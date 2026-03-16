@@ -6,7 +6,7 @@
     width: 100%;
     padding: 15px 20px;
     border-radius: d.$border-radius-xl d.$border-radius-xl 0px 0px;
-    flex: 0.15;
+    flex: 0.12;
     @include mx.displayMixin(flex, column, flex-start, flex-start, 5px);
 
     &__top {
@@ -20,7 +20,7 @@
 .dialog-content {
     background: var(--card-background);
     width: 100%;
-    flex: 0.75;
+    flex: 0.78;
     padding: 15px 20px;
 }
 

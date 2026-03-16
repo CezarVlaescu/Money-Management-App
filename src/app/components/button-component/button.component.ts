@@ -14,6 +14,7 @@ export class ButtonComponent {
   protected get iconConfig(): IconComponentConfig {
     return {
       iconName: this.buttonConfig().buttonIcon as string,
+      iconColor: this.buttonConfig().buttonIconColor as string,
       containerColor: 'none'
     } as IconComponentConfig;
   }

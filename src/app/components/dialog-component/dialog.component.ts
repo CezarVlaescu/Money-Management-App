@@ -14,6 +14,7 @@ export class DialogComponent {
   public dialogConfig: InputSignal<DialogComponentConfig> = input.required<DialogComponentConfig>();
   protected readonly buttonConfig: ButtonComponentConfig = { 
     buttonIcon: 'close', 
-    buttonColor: 'none', 
+    buttonColor: 'none',
+    buttonIconColor: 'var(--white-100)'  
   }
 }

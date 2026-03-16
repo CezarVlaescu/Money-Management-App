@@ -6,6 +6,4 @@
     padding: 8px;
     border-radius: d.$border-radius-md;
     @include mx.displayMixin(inline-flex, row, center, center);
-    
-    .mat-icon { color: c.$white-100; }
 }

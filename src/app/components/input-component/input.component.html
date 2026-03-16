@@ -1,0 +1,13 @@
+<div class="input-header">
+    <app-icon [iconComponentConfig]="headerIconConfig" />
+    <span>{{inputConfig().inputHeaderText}}</span>
+</div>
+<div class="input-container">
+    <app-icon [iconComponentConfig]="contentIconConfig" />
+    <input 
+    matInput 
+    [type]="inputConfig().inputContentType" 
+    [(ngModel)]="inputValue"
+    [placeholder]="inputConfig().inputContentPlaceholder"
+    >
+</div>
