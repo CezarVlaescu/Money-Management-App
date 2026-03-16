@@ -15,4 +15,11 @@
         <span>Step 1 of 3</span>
         <mat-progress-bar mode="determinate" value="99" />
     </div>
+    <div dialog-content>
+        <span>Set Your Monthly Budget</span>
+        <span>Enter your monthly income sources</span>
+        <app-input [inputConfig]="inputCashIncomeConfig" />
+        <app-input [inputConfig]="inputTicketsConfig" />
+        <app-input [inputConfig]="inputBasedIncomeConfig" />
+    </div>
 </app-dialog>

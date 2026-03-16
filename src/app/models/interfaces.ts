@@ -1,5 +1,6 @@
 interface IconComponentConfig {
     iconName: string;
+    iconColor?: string;
     containerColor?: string;
     containerWidth?: number;
     containerHeight?: number;
@@ -9,6 +10,7 @@ interface IconComponentConfig {
 interface ButtonComponentConfig {
     buttonText?: string;
     buttonIcon: string;
+    buttonIconColor?: string;
     buttonColor?: string;
     buttonAction?: () => void;
 }
@@ -19,8 +21,19 @@ interface DialogComponentConfig {
     dialogContentSubtitle?: string;
 }
 
+interface InputComponentConfig {
+    inputHeaderIcon?: string;
+    inputHeaderIconColor?: string;
+    inputHeaderText?: string;
+    inputContentIcon?: string;
+    inputContentIconColor?: string;
+    inputContentPlaceholder: string;
+    inputContentType: string;
+}
+
 export type { 
     IconComponentConfig,
     ButtonComponentConfig,
-    DialogComponentConfig 
+    DialogComponentConfig,
+    InputComponentConfig
 }

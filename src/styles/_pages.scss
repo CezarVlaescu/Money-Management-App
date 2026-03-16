@@ -13,5 +13,7 @@ app-dashboard-setup {
     app-dialog {
         @include mx.widthHeightMixin(100%, 100%);
         @include mx.displayMixin(flex, column, flex-start, flex-start);
+
+        app-input { @include mx.displayMixin(flex, column, flex-start, flex-start); }
     }
 }
