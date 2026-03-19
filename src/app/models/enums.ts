@@ -5,7 +5,8 @@ enum InputTypes {
     PASSWORD = "password",
     SEACH = "search",
     SUBMIT = "submit",
-    NUMBER = "number"
+    NUMBER = "number",
+    MONTH = "month"
 }
 
 export { InputTypes };

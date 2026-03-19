@@ -1,8 +1,11 @@
 <button
 class="button-container"
 [style.background]="buttonConfig().buttonColor"
+[style.border]="buttonConfig().buttonBorder"
 >
-    <app-icon [iconComponentConfig]="iconConfig" />
+    @if(buttonConfig().buttonIcon) {
+        <app-icon [iconComponentConfig]="iconConfig" />
+    }
     <span class="primary-heading-4">
         {{buttonConfig().buttonText}}
     </span>

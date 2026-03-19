@@ -4,9 +4,8 @@
 .dialog-header {
     background: var(--secondary-gradient);
     width: 100%;
-    padding: 15px 20px;
+    padding: 20px;
     border-radius: d.$border-radius-xl d.$border-radius-xl 0px 0px;
-    flex: 0.12;
     @include mx.displayMixin(flex, column, flex-start, flex-start, 5px);
 
     &__top {
@@ -20,14 +19,21 @@
 .dialog-content {
     background: var(--card-background);
     width: 100%;
-    flex: 0.78;
-    padding: 15px 20px;
+    padding: 40px 20px;
+
+    ::ng-deep [dialog-content] {
+        @include mx.displayMixin(flex, column, flex-start, flex-start, 15px);
+        @include mx.widthHeightMixin(100%, 100%);
+    }
 }
 
 .dialog-footer {
     background: var(--homepage-background);
     width: 100%;
-    flex: 0.10;
     border-radius: 0px 0px d.$border-radius-xl d.$border-radius-xl;
-    padding: 10px 20px;
+    padding: 20px;
+
+    ::ng-deep [dialog-footer] {
+        @include mx.displayMixin(flex, row, space-around, flex-start);
+    }
 }

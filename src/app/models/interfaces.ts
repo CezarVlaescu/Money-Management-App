@@ -9,9 +9,10 @@ interface IconComponentConfig {
 
 interface ButtonComponentConfig {
     buttonText?: string;
-    buttonIcon: string;
+    buttonIcon?: string;
     buttonIconColor?: string;
     buttonColor?: string;
+    buttonBorder?: string;
     buttonAction?: () => void;
 }
 
@@ -31,9 +32,17 @@ interface InputComponentConfig {
     inputContentType: string;
 }
 
+interface CardComponentConfig {
+    cardTitle?: string;
+    cardSubtitle?: string | number;
+    cardBackground?: string;
+    cardBorder?: string;
+}
+
 export type { 
     IconComponentConfig,
     ButtonComponentConfig,
     DialogComponentConfig,
-    InputComponentConfig
+    InputComponentConfig,
+    CardComponentConfig
 }

@@ -1,9 +1,11 @@
 <div class="input-header">
     <app-icon [iconComponentConfig]="headerIconConfig" />
-    <span>{{inputConfig().inputHeaderText}}</span>
+    <span class="primary-heading-bs">{{inputConfig().inputHeaderText}}</span>
 </div>
 <div class="input-container">
-    <app-icon [iconComponentConfig]="contentIconConfig" />
+    @if(inputConfig().inputContentIcon) {
+        <app-icon [iconComponentConfig]="contentIconConfig" />
+    }
     <input 
     matInput 
     [type]="inputConfig().inputContentType" 

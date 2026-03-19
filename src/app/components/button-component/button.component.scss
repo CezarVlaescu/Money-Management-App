@@ -3,7 +3,7 @@
 @use '../../../styles/mixins' as mx;
 
 .button-container {
-    padding: 6px 24px 6px 12px;
+    padding: 8px 24px;
     border-radius: d.$border-radius-lg;
     border: none;
     cursor: pointer;
