@@ -15,6 +15,7 @@ export class DialogComponent {
   protected readonly buttonConfig: ButtonComponentConfig = { 
     buttonIcon: 'close', 
     buttonColor: 'none',
-    buttonIconColor: 'var(--white-100)'  
+    buttonIconColor: 'var(--white-100)',
+    buttonAction: () => console.log()  
   }
 }

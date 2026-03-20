@@ -1,5 +1,5 @@
-@use '../../../styles/mixins' as mx;
-@use '../../../styles/dimensions' as d;
+@use '../../../../styles/mixins' as mx;
+@use '../../../../styles/dimensions' as d;
 
 .dialog-header {
     background: var(--secondary-gradient);
@@ -21,7 +21,9 @@
     width: 100%;
     padding: 40px 20px;
 
-    ::ng-deep [dialog-content] {
+    ::ng-deep [dialog-content] app-first-step,
+    ::ng-deep [dialog-content] app-second-step,
+    ::ng-deep [dialog-content] app-third-step {
         @include mx.displayMixin(flex, column, flex-start, flex-start, 15px);
         @include mx.widthHeightMixin(100%, 100%);
     }

@@ -13,7 +13,7 @@ interface ButtonComponentConfig {
     buttonIconColor?: string;
     buttonColor?: string;
     buttonBorder?: string;
-    buttonAction?: () => void;
+    buttonAction: () => void;
 }
 
 interface DialogComponentConfig {

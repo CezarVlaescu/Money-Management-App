@@ -2,6 +2,7 @@
 class="button-container"
 [style.background]="buttonConfig().buttonColor"
 [style.border]="buttonConfig().buttonBorder"
+(click)="buttonConfig().buttonAction()"
 >
     @if(buttonConfig().buttonIcon) {
         <app-icon [iconComponentConfig]="iconConfig" />

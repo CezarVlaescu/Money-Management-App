@@ -9,4 +9,10 @@ enum InputTypes {
     MONTH = "month"
 }
 
-export { InputTypes };
+enum DashboardSetupSteps {
+    FIRST = 1,
+    SECOND = 2,
+    THIRD = 3
+}
+
+export { InputTypes, DashboardSetupSteps };
