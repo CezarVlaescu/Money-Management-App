@@ -1,4 +1,4 @@
-@if(!isDialogOpen()) {
+@if(!dashboardSetupService.isDialogOpen()) {
     <app-icon [iconComponentConfig]="iconConfig" />
     <span class="primary-heading-2">
         Money Manager
@@ -12,22 +12,24 @@
     </span>
 }
 
-@if(isDialogOpen()) {
-    <app-dialog [dialogConfig]="dialogConfig">
+@if(dashboardSetupService.isDialogOpen()) {
+    <app-dialog 
+    [dialogConfig]="dialogConfig"
+    >
         <div dialog-header>
-            <span>Step {{ currentStep() }} of 3</span>
-            <mat-progress-bar mode="determinate" [value]="progressValue" />
+            <span class="primary-heading-bs">Step {{ dashboardSetupService.currentStep() }} of 3</span>
+            <mat-progress-bar mode="determinate" [value]="dashboardSetupService.progressValue()" />
         </div>
         <div dialog-content>
-            @switch (currentStep()) {
-                @case (DashboardSetupSteps.FIRST) { <app-first-step /> }
-                @case (DashboardSetupSteps.SECOND) { <app-second-step /> }
-                @case (DashboardSetupSteps.THIRD) { <app-third-step /> }
+            @switch (dashboardSetupService.currentStep()) {
+                @case (dashboardSetupService.DashboardSetupSteps.FIRST) { <app-first-step /> }
+                @case (dashboardSetupService.DashboardSetupSteps.SECOND) { <app-second-step /> }
+                @case (dashboardSetupService.DashboardSetupSteps.THIRD) { <app-third-step /> }
             }
         </div>
         <div dialog-footer>
-            @if (currentStep() > DashboardSetupSteps.FIRST) { <app-button [buttonConfig]="backButtonConfig" /> }
-            <app-button [buttonConfig]="currentStep() === DashboardSetupSteps.THIRD ? continueFinalButtonConfig : continueButtonConfig" />
+            @if (dashboardSetupService.currentStep() > dashboardSetupService.DashboardSetupSteps.FIRST) { <app-button [buttonConfig]="backButtonConfig" /> }
+            <app-button [buttonConfig]="dashboardSetupService.currentStep() === dashboardSetupService.DashboardSetupSteps.THIRD ? finalButtonConfig : continueButtonConfig" />
         </div>
     </app-dialog>
 }

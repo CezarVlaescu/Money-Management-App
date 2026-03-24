@@ -3,7 +3,7 @@ import { CardComponent } from '../../../../shared/components/card-component/card
 import { InputComponent } from '../../../../shared/components/input-component/input.component';
 import { CardComponentConfig, InputComponentConfig } from '../../../../shared/models/interfaces';
 import { InputTypes } from '../../../../shared/models/enums';
-
+import { UserMonthlyBudgetData } from '../../../../shared/models/types';
 
 @Component({
   selector: 'app-first-step',
@@ -12,6 +12,13 @@ import { InputTypes } from '../../../../shared/models/enums';
   styleUrl: './first-step.component.scss'
 })
 export class FirstStepComponent {
+  protected monthlyBudgetData: UserMonthlyBudgetData = {
+    cashIncome: 0,
+    ticketsVouchers: 0,
+    basedIncome: 0,
+    totalMonthlyBudget: 0
+  };
+
   protected readonly inputCashIncomeConfig: InputComponentConfig = {
     inputContentType: InputTypes.NUMBER,
     inputHeaderText: 'Cash Income',
@@ -42,9 +49,11 @@ export class FirstStepComponent {
     inputContentPlaceholder: '0.00' 
   }
 
-  protected readonly totalMonthlyCardConfig: CardComponentConfig = {
-    cardTitle: 'Total monthly budget',
-    cardSubtitle: '$ 0.00',
-    cardBackground: 'var(--input-background)'
+  protected get totalMonthlyCardConfig(): CardComponentConfig {
+    return {
+      cardTitle: 'Total monthly budget',
+      cardSubtitle: `$ ${this.monthlyBudgetData.totalMonthlyBudget.toFixed(2)}`,
+      cardBackground: 'var(--input-background)'
+    };
   }
 }

@@ -2,14 +2,15 @@
     <app-icon [iconComponentConfig]="headerIconConfig" />
     <span class="primary-heading-bs">{{inputConfig().inputHeaderText}}</span>
 </div>
-<div class="input-container">
+<div class="input-content">
     @if(inputConfig().inputContentIcon) {
         <app-icon [iconComponentConfig]="contentIconConfig" />
     }
     <input 
     matInput 
     [type]="inputConfig().inputContentType" 
-    [(ngModel)]="inputValue"
+    [ngModel]="inputValue"
+    (ngModelChange)="onValueChange($event)"
     [placeholder]="inputConfig().inputContentPlaceholder"
     >
 </div>

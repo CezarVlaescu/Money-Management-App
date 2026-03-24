@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
 import { DashboardSetupComponent } from "../dashboard-setup/dashboard-setup.component";
+import { DashboardSetupService } from '../dashboard-setup/services/dashboard-setup.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,5 +10,5 @@ import { DashboardSetupComponent } from "../dashboard-setup/dashboard-setup.comp
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
-
+  protected readonly dashboardSetupService: DashboardSetupService = inject<DashboardSetupService>(DashboardSetupService);
 }

@@ -1,9 +1,0 @@
-@use '../../../../styles/dimensions' as d;
-@use '../../../../styles/mixins' as mx;
-@use '../../../../styles/colors' as c;
-
-.icon-container {
-    padding: 8px;
-    border-radius: d.$border-radius-md;
-    @include mx.displayMixin(inline-flex, row, center, center);
-}

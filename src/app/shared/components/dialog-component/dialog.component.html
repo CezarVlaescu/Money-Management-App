@@ -3,13 +3,13 @@
         <span class="primary-heading-3">
             {{dialogConfig().dialogHeaderTitle}}
         </span>
-        <app-button [buttonConfig]="buttonConfig" mat-dialog-close />
+        <app-button [buttonConfig]="buttonConfig" />
     </div>
-    <ng-content select="[dialog-header]"></ng-content>
+    <ng-content select="[dialog-header]" />
 </div>
-<mat-dialog-content class="dialog-content">
-    <ng-content select="[dialog-content]"></ng-content>
-</mat-dialog-content>
-<mat-dialog-actions class="dialog-footer">
-    <ng-content select="[dialog-footer]"></ng-content>
-</mat-dialog-actions>
+<div class="dialog-content">
+    <ng-content select="[dialog-content]" />
+</div>
+<div class="dialog-footer">
+    <ng-content select="[dialog-footer]" />
+</div>

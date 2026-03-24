@@ -1,1 +1,4 @@
-<app-dashboard-setup />
+@if(dashboardSetupService.isSetupFinalized()) {
+    Dashboard
+}
+@else { <app-dashboard-setup /> }

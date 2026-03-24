@@ -1,8 +1,0 @@
-@use '../../../../styles/dimensions' as d;
-@use '../../../../styles/mixins' as mx;
-
-.card-container {
-    padding: 14px 20px;
-    @include mx.displayMixin(flex, column, flex-start, flex-start, 10px);
-    border-radius: d.$border-radius-lg;
-}
