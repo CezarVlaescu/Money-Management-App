@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use 'tokens' as tokens;
+
+@function spacing($key) {
+  @return map.get(tokens.$spacing, $key);
+}
+
+@function radius($key) {
+  @return map.get(tokens.$radii, $key);
+}
+
+@function shadow($key) {
+  @return map.get(tokens.$shadows, $key);
+}
+
+@function weight($key) {
+  @return map.get(tokens.$font-weights, $key);
+}
+
+@function z($key) {
+  @return map.get(tokens.$z-index, $key);
+}
+
+@function breakpoint($key) {
+  @return map.get(tokens.$breakpoints, $key);
+}

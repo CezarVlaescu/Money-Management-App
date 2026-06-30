@@ -1,0 +1,69 @@
+@use 'sass:map';
+@use 'tokens' as tokens;
+
+:root {
+  --shadow-soft: #{map.get(tokens.$shadows, soft)};
+  --shadow-card: #{map.get(tokens.$shadows, card)};
+  --shadow-nav: #{map.get(tokens.$shadows, nav)};
+  --shadow-button: #{map.get(tokens.$shadows, button)};
+}
+
+html.dark {
+  --shadow-soft: #{map.get(tokens.$shadows, dark-soft)};
+  --shadow-card: #{map.get(tokens.$shadows, dark-soft)};
+  --shadow-nav: #{map.get(tokens.$shadows, dark-nav)};
+  --shadow-button: #{map.get(tokens.$shadows, button)};
+}
+
+@each $name, $value in tokens.$spacing {
+  .mb-#{$name} {
+    margin-bottom: $value;
+  }
+
+  .mt-#{$name} {
+    margin-top: $value;
+  }
+
+  .p-#{$name} {
+    padding: $value;
+  }
+
+  .gap-#{$name} {
+    gap: $value;
+  }
+}
+
+@each $name, $value in tokens.$radii {
+  .radius-#{$name} {
+    border-radius: $value;
+  }
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--wants));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(20px);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
