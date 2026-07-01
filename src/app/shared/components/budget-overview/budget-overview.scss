@@ -1,0 +1,140 @@
+@use 'functions' as fn;
+@use 'mixins' as mx;
+
+:host {
+  display: block;
+}
+
+.budget-overview {
+  @include mx.glass-card(30px, 18px);
+}
+
+.budget-overview__header {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(5);
+}
+
+.budget-overview__eyebrow {
+  @include mx.text-eyebrow;
+
+  color: var(--text-muted);
+}
+
+.budget-overview__title {
+  @include mx.text-title(24px);
+
+  margin-top: fn.spacing(1);
+}
+
+.budget-overview__badge {
+  border-radius: fn.radius(full);
+  padding: 8px 11px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: 13px;
+  font-weight: fn.weight(black);
+}
+
+.budget-overview__content {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  align-items: center;
+  gap: fn.spacing(4);
+}
+
+.budget-overview__chart {
+  display: grid;
+  width: 150px;
+  height: 150px;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--needs) 0deg 180deg,
+    var(--wants) 180deg 288deg,
+    var(--savings) 288deg 360deg
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    var(--shadow-card);
+}
+
+.budget-overview__chart-inner {
+  display: grid;
+  width: 94px;
+  height: 94px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  text-align: center;
+
+  strong {
+    max-width: 78px;
+    color: var(--text-primary);
+    font-size: 13px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  span {
+    margin-top: -20px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(bold);
+  }
+}
+
+.budget-overview__legend {
+  display: grid;
+  gap: fn.spacing(3);
+}
+
+.budget-overview__legend-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: fn.spacing(2);
+
+  p {
+    margin: 0 0 2px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: fn.weight(extrabold);
+  }
+
+  strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.1;
+  }
+}
+
+.budget-overview__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+
+  &--needs {
+    background: var(--needs);
+  }
+
+  &--wants {
+    background: var(--wants);
+  }
+
+  &--savings {
+    background: var(--savings);
+  }
+}
+
+@media (max-width: 370px) {
+  .budget-overview__content {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .budget-overview__legend {
+    width: 100%;
+  }
+}

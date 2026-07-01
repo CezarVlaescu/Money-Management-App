@@ -1,0 +1,20 @@
+<nav class="bottom-navigation" aria-label="Main navigation">
+  @for (item of bottomNavigationItems; track item.route) {
+    <a
+      class="bottom-navigation__item"
+      [routerLink]="item.route"
+      routerLinkActive="bottom-navigation__item--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="bottom-navigation__icon">
+        {{ item.icon }}
+      </span>
+      <span class="bottom-navigation__label">
+        {{ item.label }}
+      </span>
+    </a>
+  }
+  <button class="bottom-navigation__add-button" type="button" aria-label="Add expense">
+    +
+  </button>
+</nav>

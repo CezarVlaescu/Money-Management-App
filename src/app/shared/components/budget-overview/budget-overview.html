@@ -1,0 +1,43 @@
+<section class="budget-overview">
+  <header class="budget-overview__header">
+    <div>
+      <p class="budget-overview__eyebrow">Budget overview</p>
+
+      <h2 class="budget-overview__title">
+        {{ moneyFormatterService.format(budgetService.income()) }}
+      </h2>
+    </div>
+
+    <span class="budget-overview__badge">
+      50/30/20
+    </span>
+  </header>
+
+  <div class="budget-overview__content">
+    <div class="budget-overview__chart">
+      <div class="budget-overview__chart-inner">
+        <strong>
+          {{ moneyFormatterService.format(budgetService.income()) }}
+        </strong>
+
+        <span>Total</span>
+      </div>
+    </div>
+
+    <div class="budget-overview__legend">
+      @for (bucket of budgetService.budgetBuckets(); track bucket.category) {
+        <div class="budget-overview__legend-item">
+          <span
+            class="budget-overview__dot"
+            [class]="'budget-overview__dot--' + bucket.category"
+          ></span>
+
+          <div>
+            <p>{{ bucket.label }}</p>
+            <strong>{{ moneyFormatterService.format(bucket.amount) }}</strong>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

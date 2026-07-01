@@ -5,9 +5,9 @@ import { Storage } from '../storage/storage';
 
 @Injectable({ providedIn: 'root' })
 export class Theme {
-  private readonly storageService: Storage = inject<Storage>(Storage);
-  private readonly theme: WritableSignal<AppTheme> = signal<AppTheme>(this.getInitialTheme());
-  private readonly isDarkMode: WritableSignal<boolean> = signal<boolean>(this.theme() === 'dark');
+  public readonly storageService: Storage = inject<Storage>(Storage);
+  public readonly theme: WritableSignal<AppTheme> = signal<AppTheme>(this.getInitialTheme());
+  public readonly isDarkMode: WritableSignal<boolean> = signal<boolean>(this.theme() === 'dark');
 
   public initializeTheme(): void {
     void this.applyTheme(this.theme());

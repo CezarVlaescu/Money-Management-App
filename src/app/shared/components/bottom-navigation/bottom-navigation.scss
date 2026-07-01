@@ -1,0 +1,59 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host { display: block; }
+
+.bottom-navigation {
+  @include mx.bottom-nav-container;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 64px 1fr;
+  align-items: center;
+}
+
+.bottom-navigation__item {
+  display: grid;
+  gap: fn.spacing(1);
+  place-items: center;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: fn.weight(extrabold);
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.bottom-navigation__item:hover,
+.bottom-navigation__item--active {
+  color: var(--primary);
+}
+
+.bottom-navigation__item--active {
+  transform: translateY(-1px);
+}
+
+.bottom-navigation__icon {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.bottom-navigation__label {
+  line-height: 1;
+}
+
+.bottom-navigation__add-button {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 0;
+  border-radius: fn.radius(xl);
+  color: #ffffff;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-button);
+  font-size: 34px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-14px);
+}

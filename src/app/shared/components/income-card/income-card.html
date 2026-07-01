@@ -1,0 +1,21 @@
+<section class="income-card">
+  <div class="income-card__header">
+    <div>
+      <p class="income-card__label">Monthly income</p>
+      <strong class="income-card__amount">
+        {{ moneyFormatterService.format(budgetService.income()) }}
+      </strong>
+    </div>
+    <button class="income-card__edit-button" type="button">
+      Edit
+    </button>
+  </div>
+  <label class="income-card__input-wrapper">
+    <span>RON</span>
+    <input
+      type="number"
+      [value]="budgetService.income()"
+      (input)="updateIncome($event)"
+    />
+  </label>
+</section>

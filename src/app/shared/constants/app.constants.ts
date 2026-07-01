@@ -1,3 +1,5 @@
+import { NavigationItem } from "../models/interfaces/shared.interface";
+
 const THEME_STORAGE_KEY: string = 'money-bloom-theme';
 const INCOME_STORAGE_KEY: string = 'money-bloom-income';
 const EXPENSES_STORE_KEY: string = 'money-bloom-expenses';
@@ -20,6 +22,23 @@ const SAVINGS_CONST: string[] = [
     'economii', 'deposit', 'depozit',
     'investment', 'investitii', 'revolut vault'
 ];
+const BOTTOM_NAVIGATION_ITEMS: NavigationItem[] = [
+    {
+      label: 'Home',
+      icon: '🏠',
+      route: '/dashboard'
+    },
+    {
+      label: 'Expenses',
+      icon: '📊',
+      route: '/expenses'
+    },
+    {
+      label: 'Goals',
+      icon: '🎯',
+      route: '/savings-goals'
+    }
+];
 
 export { 
     THEME_STORAGE_KEY,
@@ -28,5 +47,6 @@ export {
     SAVINGS_STORE_KEY,
     NEEDS_CONST,
     WANTS_CONST,
-    SAVINGS_CONST
+    SAVINGS_CONST,
+    BOTTOM_NAVIGATION_ITEMS
 };

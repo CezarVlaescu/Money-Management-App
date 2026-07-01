@@ -7,10 +7,9 @@ import { BudgetCategory } from '../../models/types/core.types';
 
 @Injectable({ providedIn: 'root' })
 export class Budget {
-  private readonly storageService: Storage = inject<Storage>(Storage);
-  private readonly expensesService: Expenses = inject<Expenses>(Expenses);
-  private readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 5000));
-
+  public readonly storageService: Storage = inject<Storage>(Storage);
+  public readonly expensesService: Expenses = inject<Expenses>(Expenses);
+  public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 5000));
   public readonly needsAmount: Signal<number> = computed<number>(() => this.income() * 0.5);
   public readonly wantsAmount: Signal<number> = computed<number>(() => this.income() * 0.3);
   public readonly savingsAmount: Signal<number> = computed<number>(() => this.income() * 0.2);
@@ -23,7 +22,8 @@ export class Budget {
       amount: income * 0.5,
       spent: this.expensesService.needsSpent(),
       icon: '🧺',
-      description: 'Rent, bills, food, transport'
+      description: 'Rent, bills, food, transport',
+      actionLabel: 'used'
     });
     const wants: BudgetBucket = this.createBucket({
       category: 'wants',
@@ -32,7 +32,8 @@ export class Budget {
       amount: income * 0.3,
       spent: this.expensesService.wantsSpent(),
       icon: '🛍️',
-      description: 'Fun, shopping, restaurants'
+      description: 'Fun, shopping, restaurants',
+      actionLabel: 'used'
     });
 
     const savings: BudgetBucket = this.createBucket({
@@ -42,7 +43,8 @@ export class Budget {
       amount: income * 0.2,
       spent: this.expensesService.savingsSpent(),
       icon: '🐷',
-      description: 'Investments, emergency fund'
+      description: 'Investments, emergency fund',
+      actionLabel: 'used'
     });
 
     const totalSpent: number = needs.spent + wants.spent + savings.spent;
@@ -77,6 +79,7 @@ export class Budget {
     spent: number;
     icon: string;
     description: string;
+    actionLabel: string;
   }): BudgetBucket {
     const remaining = payload.amount - payload.spent;
     const progress = payload.amount > 0

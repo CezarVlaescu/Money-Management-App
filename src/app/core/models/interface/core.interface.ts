@@ -10,6 +10,7 @@ interface BudgetBucket {
   progress: number;
   icon: string;
   description: string;
+  actionLabel: string;
 }
 
 interface BudgetSummary {

@@ -1,0 +1,68 @@
+@use 'functions' as fn;
+@use 'mixins' as mx;
+
+:host {
+  display: block;
+}
+
+.income-card {
+  @include mx.glass-card(30px, 20px);
+
+  color: #ffffff;
+  background: var(--gradient-income);
+}
+
+.income-card__header {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(4);
+}
+
+.income-card__label {
+  margin: 0 0 fn.spacing(2);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  font-weight: fn.weight(bold);
+}
+
+.income-card__amount {
+  display: block;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.income-card__edit-button {
+  border: 0;
+  border-radius: fn.radius(full);
+  padding: 10px 14px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 13px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}
+
+.income-card__input-wrapper {
+  @include mx.flex(row, center, flex-start, fn.spacing(3));
+
+  border-radius: fn.radius(lg);
+  padding: fn.spacing(3) fn.spacing(4);
+  background: rgba(255, 255, 255, 0.13);
+
+  span {
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 13px;
+    font-weight: fn.weight(black);
+  }
+
+  input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    color: #ffffff;
+    background: transparent;
+    font-size: 18px;
+    font-weight: fn.weight(black);
+  }
+}
