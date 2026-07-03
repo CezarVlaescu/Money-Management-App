@@ -1,0 +1,60 @@
+<section class="recent-expenses">
+  <header class="recent-expenses__header">
+    <div>
+      <p class="recent-expenses__eyebrow">Recent expenses</p>
+
+      <h2 class="recent-expenses__title">
+        Latest activity
+      </h2>
+    </div>
+
+    <a class="recent-expenses__link" routerLink="/expenses">
+      View all
+    </a>
+  </header>
+
+  <div class="recent-expenses__list">
+    @for (expense of expensesService.recentExpenses(); track expense.id) {
+      <article class="recent-expenses__item">
+        <span
+          class="recent-expenses__icon"
+          [class]="'recent-expenses__icon--' + expense.category"
+        >
+          {{ categoryService.getCategoryIcon(expense.category) }}
+        </span>
+
+        <div class="recent-expenses__details">
+          <strong>{{ expense.title }}</strong>
+
+          <p>
+            {{ categoryService.getCategoryLabel(expense.category) }}
+            ·
+            {{ expense.date | date: 'MMM d' }}
+          </p>
+        </div>
+
+        <strong
+          class="recent-expenses__amount"
+          [class.recent-expenses__amount--savings]="expense.category === 'savings'"
+        >
+          @if (expense.category === 'savings') {
+            +
+          } @else {
+            -
+          }
+
+          {{ moneyFormatterService.format(expense.amount) }}
+        </strong>
+      </article>
+    } @empty {
+      <div class="recent-expenses__empty">
+        <span>🌱</span>
+
+        <div>
+          <strong>No expenses yet</strong>
+          <p>Add your first transaction and start tracking your money.</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>

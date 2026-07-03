@@ -1,26 +1,26 @@
 import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
 import { Expense, CreateExpensePayload } from '../../models/interface/core.interface';
 import { BudgetCategory } from '../../models/types/core.types';
-import { Category } from '../category/category';
-import { Storage } from '../storage/storage';
+import { CategoryService} from '../category/category';
+import { StorageService } from '../storage/storage';
 import { EXPENSES_STORE_KEY } from '../../../shared/constants/app.constants';
 
 @Injectable({ providedIn: 'root' })
-export class Expenses {
-  private readonly storageService: Storage = inject<Storage>(Storage);
-  private readonly categoryService: Category = inject<Category>(Category);
+export class ExpensesService {
+  private readonly storageService: StorageService = inject<StorageService>(StorageService);
+  private readonly categoryService: CategoryService = inject<CategoryService>(CategoryService);
   public readonly totalSpent: Signal<number> = computed<number>(() =>
     this.expenses().reduce((total, expense) => total + Math.abs(expense.amount), 0)
   );
   public readonly needsSpent: Signal<number> = computed<number>(() => this.getTotalByCategory('needs'));
   public readonly wantsSpent: Signal<number> = computed<number>(() => this.getTotalByCategory('wants'));
   public readonly savingsSpent: Signal<number> = computed<number>(() => this.getTotalByCategory('savings'));
-  public readonly recentExpenses: Signal<Expense[]> = computed<Expense[]>(() =>
+  public readonly recentExpenses: Signal<Expense[]> = computed<Expense[]>(() => 
     [...this.expenses()]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5)
   );
-  private readonly expenses: WritableSignal<Expense[]> = signal<Expense[]>(this.getInitialExpenses());
+  public readonly expenses: WritableSignal<Expense[]> = signal<Expense[]>(this.getInitialExpenses());
 
   public addExpense(payload: CreateExpensePayload): void {
     const category = payload.category ?? this.categoryService.detectCategory(payload.title);

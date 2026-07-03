@@ -1,1 +1,172 @@
-<p>saving-goals works!</p>
+<header class="goals-header">
+  <div>
+    <p class="goals-header__eyebrow">Savings goals</p>
+
+    <h1 class="goals-header__title">
+      Build your future
+    </h1>
+
+    <p class="goals-header__description">
+      Track your emergency fund, vacation money, investments and personal dreams.
+    </p>
+  </div>
+</header>
+
+<section class="goals-summary">
+  <div class="goals-summary__top">
+    <div>
+      <p>Total saved</p>
+
+      <strong>
+        {{ moneyFormatter.format(savingsGoalsService.totalCurrentAmount()) }}
+      </strong>
+    </div>
+
+    <span>
+      {{ savingsGoalsService.totalProgress() }}%
+    </span>
+  </div>
+
+  <div class="goals-summary__progress">
+    <span [style.width.%]="savingsGoalsService.totalProgress()"></span>
+  </div>
+
+  <p class="goals-summary__target">
+    Goal target:
+    <strong>
+      {{ moneyFormatter.format(savingsGoalsService.totalTargetAmount()) }}
+    </strong>
+  </p>
+</section>
+
+<section class="add-goal-card">
+  <div class="add-goal-card__header">
+    <p>Add goal</p>
+    <h2>New savings target</h2>
+  </div>
+
+  <form class="add-goal-card__form" (ngSubmit)="addGoal()">
+    <label>
+      <span>Goal name</span>
+
+      <input
+        type="text"
+        placeholder="e.g. Emergency fund"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        name="title"
+      />
+    </label>
+
+    <div class="add-goal-card__grid">
+      <label>
+        <span>Target</span>
+
+        <input
+          type="number"
+          placeholder="10000"
+          [ngModel]="targetAmount()"
+          (ngModelChange)="targetAmount.set($event)"
+          name="targetAmount"
+        />
+      </label>
+
+      <label>
+        <span>Saved</span>
+
+        <input
+          type="number"
+          placeholder="1000"
+          [ngModel]="currentAmount()"
+          (ngModelChange)="currentAmount.set($event)"
+          name="currentAmount"
+        />
+      </label>
+    </div>
+
+    <label>
+      <span>Monthly contribution</span>
+
+      <input
+        type="number"
+        placeholder="500"
+        [ngModel]="monthlyContribution()"
+        (ngModelChange)="monthlyContribution.set($event)"
+        name="monthlyContribution"
+      />
+    </label>
+
+    <button type="submit">
+      Create goal
+    </button>
+  </form>
+</section>
+
+<section class="goals-list">
+  @for (goal of savingsGoalsService.goals(); track goal.id) {
+    <article class="goal-card">
+      <div class="goal-card__hero">
+        <div>
+          <span class="goal-card__icon">{{ goal.icon }}</span>
+
+          <p>Savings goal</p>
+
+          <h2>{{ goal.title }}</h2>
+        </div>
+
+        <strong>
+          {{ savingsGoalsService.getGoalProgress(goal) }}%
+        </strong>
+      </div>
+
+      <div class="goal-card__amounts">
+        <div>
+          <span>Saved</span>
+
+          <strong>
+            {{ moneyFormatter.format(goal.currentAmount) }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Target</span>
+
+          <strong>
+            {{ moneyFormatter.format(goal.targetAmount) }}
+          </strong>
+        </div>
+      </div>
+
+      <div class="goal-card__progress">
+        <span [style.width.%]="savingsGoalsService.getGoalProgress(goal)"></span>
+      </div>
+
+      @if (goal.monthlyContribution) {
+        <p class="goal-card__monthly">
+          Monthly plan:
+          <strong>{{ moneyFormatter.format(goal.monthlyContribution) }}</strong>
+        </p>
+      }
+
+      <div class="goal-card__actions">
+        <button type="button" (click)="addMoney(goal.id)">
+          +100 RON
+        </button>
+
+        <button type="button" class="goal-card__delete" (click)="deleteGoal(goal.id)">
+          Delete
+        </button>
+      </div>
+    </article>
+  } @empty {
+    <section class="goals-empty">
+      <span>🌱</span>
+
+      <h2>No goals yet</h2>
+
+      <p>
+        Create your first savings goal and start building momentum.
+      </p>
+    </section>
+  }
+</section>

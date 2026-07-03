@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class Storage {
+export class StorageService {
   public getItem<T>(key: string, fallbackValue: T): T {
     const rawValue: string | null = localStorage.getItem(key);
 

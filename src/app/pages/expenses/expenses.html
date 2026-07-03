@@ -1,1 +1,130 @@
-<p>expenses works!</p>
+<header class="expenses-header">
+  <div>
+    <p class="expenses-header__eyebrow">Expenses</p>
+
+    <h1 class="expenses-header__title">
+      Track your spending
+    </h1>
+
+    <p class="expenses-header__description">
+      Add your transactions and Money Bloom will place them into the right budget.
+    </p>
+  </div>
+</header>
+
+<section class="expenses-summary">
+  <p>Total spent</p>
+
+  <strong>
+    {{ moneyFormatter.format(expensesService.totalSpent()) }}
+  </strong>
+
+  <span>
+    Based on {{ expensesService.expenses().length }} transactions
+  </span>
+</section>
+
+<section class="add-expense-card" #addExpensesCardRef>
+  <div class="add-expense-card__header">
+    <div>
+      <p>Add expense</p>
+      <h2>New transaction</h2>
+    </div>
+  </div>
+
+  <form class="add-expense-card__form" (ngSubmit)="addExpense()">
+    <label>
+      <span>Description</span>
+
+      <input
+        #titleInputRef
+        type="text"
+        placeholder="e.g. Lidl, Netflix, XTB"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        name="title"
+      />
+    </label>
+
+    <label>
+      <span>Amount</span>
+
+      <input
+        type="number"
+        placeholder="120"
+        [ngModel]="amount()"
+        (ngModelChange)="amount.set($event)"
+        name="amount"
+      />
+    </label>
+
+    <button type="submit">
+      Add transaction
+    </button>
+  </form>
+</section>
+
+<section class="expense-filters">
+  @for (filter of expensesFilters; track filter.value) {
+    <button
+      type="button"
+      class="expense-filters__item"
+      [class.expense-filters__item--active]="selectedCategory() === filter.value"
+      (click)="selectCategory(filter.value)"
+    >
+      <span>{{ filter.icon }}</span>
+      {{ filter.label }}
+    </button>
+  }
+</section>
+
+<section class="expenses-list">
+  @for (expense of filteredExpenses(); track expense.id) {
+    <article class="expense-item">
+      <span
+        class="expense-item__icon"
+        [class]="'expense-item__icon--' + expense.category"
+      >
+        {{ categoryService.getCategoryIcon(expense.category) }}
+      </span>
+
+      <div class="expense-item__content">
+        <strong>{{ expense.title }}</strong>
+
+        <p>
+          {{ categoryService.getCategoryLabel(expense.category) }}
+          ·
+          {{ expense.date | date: 'MMM d, y' }}
+        </p>
+      </div>
+
+      <div class="expense-item__meta">
+        <strong
+          [class.expense-item__amount--savings]="expense.category === 'savings'"
+        >
+          @if (expense.category === 'savings') {
+            +
+          } @else {
+            -
+          }
+
+          {{ moneyFormatter.format(expense.amount) }}
+        </strong>
+
+        <button type="button" (click)="deleteExpense(expense.id)">
+          Delete
+        </button>
+      </div>
+    </article>
+  } @empty {
+    <section class="expenses-empty">
+      <span>🌱</span>
+
+      <h2>No transactions yet</h2>
+
+      <p>
+        Add your first expense and start tracking your budget.
+      </p>
+    </section>
+  }
+</section>

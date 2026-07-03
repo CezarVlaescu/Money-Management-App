@@ -1,11 +1,11 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { THEME_STORAGE_KEY } from '../../../shared/constants/app.constants';
 import { AppTheme } from '../../models/types/core.types';
-import { Storage } from '../storage/storage';
+import { StorageService } from '../storage/storage';
 
 @Injectable({ providedIn: 'root' })
-export class Theme {
-  public readonly storageService: Storage = inject<Storage>(Storage);
+export class ThemeService {
+  public readonly storageService: StorageService = inject<StorageService>(StorageService);
   public readonly theme: WritableSignal<AppTheme> = signal<AppTheme>(this.getInitialTheme());
   public readonly isDarkMode: WritableSignal<boolean> = signal<boolean>(this.theme() === 'dark');
 

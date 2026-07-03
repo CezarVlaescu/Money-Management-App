@@ -14,7 +14,12 @@
       </span>
     </a>
   }
-  <button class="bottom-navigation__add-button" type="button" aria-label="Add expense">
+  <a
+  class="bottom-navigation__add-button"
+  routerLink="/expenses"
+  [queryParams]="{ add: true }"
+  aria-label="Add expense"
+  >
     +
-  </button>
+  </a>
 </nav>

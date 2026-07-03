@@ -1,9 +1,9 @@
-import { NavigationItem } from "../models/interfaces/shared.interface";
+import { CategoryFilter, NavigationItem } from "../models/interfaces/shared.interface";
 
-const THEME_STORAGE_KEY: string = 'money-bloom-theme';
-const INCOME_STORAGE_KEY: string = 'money-bloom-income';
-const EXPENSES_STORE_KEY: string = 'money-bloom-expenses';
-const SAVINGS_STORE_KEY: string = 'money-bloom-savings-goals';
+const THEME_STORAGE_KEY = 'money-bloom-theme';
+const INCOME_STORAGE_KEY = 'money-bloom-income';
+const EXPENSES_STORE_KEY = 'money-bloom-expenses';
+const SAVINGS_STORE_KEY = 'money-bloom-savings-goals';
 const NEEDS_CONST: string[] = [
     'lidl', 'kaufland', 'carrefour', 'mega image',
     'profi', 'auchan', 'penny', 'rent', 'chirie',
@@ -39,6 +39,28 @@ const BOTTOM_NAVIGATION_ITEMS: NavigationItem[] = [
       route: '/savings-goals'
     }
 ];
+const EXPENSES_FILTERS: CategoryFilter[] = [
+    {
+      label: 'All',
+      value: 'all',
+      icon: '✨'
+    },
+    {
+      label: 'Needs',
+      value: 'needs',
+      icon: '🧺'
+    },
+    {
+      label: 'Wants',
+      value: 'wants',
+      icon: '🛍️'
+    },
+    {
+      label: 'Savings',
+      value: 'savings',
+      icon: '🐷'
+    }
+]
 
 export { 
     THEME_STORAGE_KEY,
@@ -48,5 +70,6 @@ export {
     NEEDS_CONST,
     WANTS_CONST,
     SAVINGS_CONST,
-    BOTTOM_NAVIGATION_ITEMS
+    BOTTOM_NAVIGATION_ITEMS,
+    EXPENSES_FILTERS
 };

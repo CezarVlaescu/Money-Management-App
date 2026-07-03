@@ -1,14 +1,14 @@
 import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
-import { Storage } from '../storage/storage';
-import { Expenses } from '../expenses/expenses';
+import { StorageService } from '../storage/storage';
+import { ExpensesService } from '../expenses/expenses';
 import { INCOME_STORAGE_KEY } from '../../../shared/constants/app.constants';
 import { BudgetSummary, BudgetBucket } from '../../models/interface/core.interface';
 import { BudgetCategory } from '../../models/types/core.types';
 
 @Injectable({ providedIn: 'root' })
-export class Budget {
-  public readonly storageService: Storage = inject<Storage>(Storage);
-  public readonly expensesService: Expenses = inject<Expenses>(Expenses);
+export class BudgetService {
+  public readonly storageService: StorageService = inject<StorageService>(StorageService);
+  public readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
   public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 5000));
   public readonly needsAmount: Signal<number> = computed<number>(() => this.income() * 0.5);
   public readonly wantsAmount: Signal<number> = computed<number>(() => this.income() * 0.3);

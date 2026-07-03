@@ -5,7 +5,7 @@ import { CategoryRule } from '../../models/interface/core.interface';
 import { BudgetCategory } from '../../models/types/core.types';
 
 @Injectable({ providedIn: 'root' })
-export class Category {
+export class CategoryService {
   private readonly categoryRules: CategoryRule[] = [
     { category: CATEGORY.NEEDS, keywords: NEEDS_CONST },
     { category: CATEGORY.WANTS, keywords: WANTS_CONST },

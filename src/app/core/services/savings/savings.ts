@@ -1,13 +1,12 @@
 import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
 import { SavingsGoal, CreateSavingsGoalPayload } from '../../models/interface/core.interface';
-import { Storage } from '../storage/storage';
+import { StorageService } from '../storage/storage';
 import { SAVINGS_STORE_KEY } from '../../../shared/constants/app.constants';
-
 @Injectable({ providedIn: 'root' })
 export class SavingsGoalsService {
-  private readonly storageService: Storage = inject<Storage>(Storage);
-  private readonly goals: WritableSignal<SavingsGoal[]> = signal<SavingsGoal[]>(this.getInitialGoals());
-
+  private readonly storageService: StorageService = inject<StorageService>(StorageService);
+  
+  public readonly goals: WritableSignal<SavingsGoal[]> = signal<SavingsGoal[]>(this.getInitialGoals());
   public readonly totalTargetAmount: Signal<number> = computed<number>(() => 
     this.goals().reduce((total, goal) => total + goal.targetAmount, 0)
   );

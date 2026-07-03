@@ -1,6 +1,6 @@
 import { Component, computed, inject, Signal } from '@angular/core';
 import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
-import { Budget } from '../../../core/services/budget/budget';
+import { BudgetService } from '../../../core/services/budget/budget';
 
 @Component({
   selector: 'app-smart-insight',
@@ -9,7 +9,7 @@ import { Budget } from '../../../core/services/budget/budget';
   styleUrl: './smart-insight.scss',
 })
 export class SmartInsight {
-  protected readonly budgetService: Budget = inject<Budget>(Budget);
+  protected readonly budgetService: BudgetService = inject<BudgetService>(BudgetService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
 
   protected readonly insightTitle: Signal<string> = computed<string>(() => {

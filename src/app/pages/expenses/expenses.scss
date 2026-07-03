@@ -1,0 +1,282 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.expenses-header {
+  margin-bottom: fn.spacing(5);
+}
+
+.expenses-header__eyebrow {
+  @include mx.text-eyebrow;
+}
+
+.expenses-header__title {
+  @include mx.text-title(30px);
+
+  margin-top: fn.spacing(1);
+}
+
+.expenses-header__description {
+  @include mx.text-body(15px);
+
+  margin-top: fn.spacing(2);
+}
+
+.expenses-summary {
+  @include mx.glass-card(30px, 20px);
+
+  margin-bottom: fn.spacing(4);
+  color: #ffffff;
+  background: var(--gradient-income);
+
+  p {
+    margin: 0 0 fn.spacing(2);
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 14px;
+    font-weight: fn.weight(bold);
+  }
+
+  strong {
+    display: block;
+    margin-bottom: fn.spacing(2);
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 13px;
+    font-weight: fn.weight(bold);
+  }
+}
+
+.add-expense-card {
+  @include mx.glass-card(30px, 18px);
+
+  margin-bottom: fn.spacing(4);
+}
+
+.add-expense-card__header {
+  margin-bottom: fn.spacing(4);
+
+  p {
+    @include mx.text-eyebrow;
+
+    color: var(--text-muted);
+  }
+
+  h2 {
+    @include mx.text-title(23px);
+
+    margin-top: fn.spacing(1);
+  }
+}
+
+.add-expense-card__form {
+  display: grid;
+  gap: fn.spacing(3);
+
+  label {
+    display: grid;
+    gap: fn.spacing(2);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: 14px 16px;
+    outline: 0;
+    color: var(--text-primary);
+    background: var(--surface-strong);
+    font-size: 15px;
+    font-weight: fn.weight(bold);
+  }
+
+  input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+  }
+
+  button {
+    @include mx.primary-button;
+
+    width: 100%;
+    margin-top: fn.spacing(1);
+    padding: 15px 16px;
+  }
+}
+
+.expense-filters {
+  @include mx.horizontal-scroll;
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: fn.spacing(2);
+  margin: 0 -14px fn.spacing(4);
+  padding: 0 14px 4px;
+}
+
+.expense-filters__item {
+  display: inline-flex;
+  align-items: center;
+  gap: fn.spacing(2);
+  border: 1px solid var(--border);
+  border-radius: fn.radius(full);
+  padding: 10px 13px;
+  color: var(--text-muted);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: 13px;
+  font-weight: fn.weight(black);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+
+  span {
+    font-size: 16px;
+  }
+
+  &--active {
+    color: #ffffff;
+    border-color: transparent;
+    background: var(--gradient-primary);
+  }
+}
+
+.expenses-list {
+  display: grid;
+  gap: fn.spacing(3);
+  padding-bottom: fn.spacing(4);
+}
+
+.expense-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(3);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+.expense-item__icon {
+  @include mx.grid-center;
+
+  width: 48px;
+  height: 48px;
+  border-radius: fn.radius(lg);
+  font-size: 21px;
+
+  &--needs {
+    background: var(--needs-soft);
+  }
+
+  &--wants {
+    background: var(--wants-soft);
+  }
+
+  &--savings {
+    background: var(--savings-soft);
+  }
+
+  &--uncategorized {
+    background: var(--primary-soft);
+  }
+}
+
+.expense-item__content {
+  min-width: 0;
+
+  strong {
+    @include mx.truncate;
+
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  p {
+    @include mx.truncate;
+
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+}
+
+.expense-item__meta {
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+
+  strong {
+    color: var(--danger);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .expense-item__amount--savings {
+    color: var(--success);
+  }
+
+  button {
+    border: 0;
+    padding: 0;
+    color: var(--text-muted);
+    background: transparent;
+    font-size: 11px;
+    font-weight: fn.weight(bold);
+    cursor: pointer;
+  }
+}
+
+.expenses-empty {
+  @include mx.glass-card(30px, 24px);
+
+  display: grid;
+  justify-items: center;
+  text-align: center;
+
+  span {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    place-items: center;
+    margin-bottom: fn.spacing(3);
+    border-radius: fn.radius(xl);
+    background: var(--primary-soft);
+    font-size: 28px;
+  }
+
+  h2 {
+    margin: 0 0 fn.spacing(2);
+    color: var(--text-primary);
+    font-size: 22px;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    max-width: 260px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

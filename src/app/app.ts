@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Theme } from './core/services/theme/theme';
+import { ThemeService } from './core/services/theme/theme';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { Theme } from './core/services/theme/theme';
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  private readonly themeService: Theme = inject<Theme>(Theme);
+  private readonly themeService: ThemeService = inject<ThemeService>(ThemeService);
 
   public ngOnInit(): void {
     this.themeService.initializeTheme();
