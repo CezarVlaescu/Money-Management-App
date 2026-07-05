@@ -247,3 +247,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+.settings-link-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(xl);
+  padding: fn.spacing(3);
+  background: var(--surface-strong);
+  text-decoration: none;
+
+  > span {
+    @include mx.grid-center;
+
+    width: 48px;
+    height: 48px;
+    border-radius: fn.radius(lg);
+    background: var(--primary-soft);
+    font-size: 22px;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  small {
+    color: var(--primary);
+    font-size: 20px;
+    font-weight: fn.weight(black);
+  }
+}

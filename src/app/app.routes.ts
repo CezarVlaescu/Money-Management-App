@@ -25,6 +25,10 @@ export const routes: Routes = [
             {
                 path: 'settings',
                 loadComponent: () => import('./features/settings/settings').then(component => component.Settings)
+            },
+            {
+                path: 'privacy',
+                loadComponent: () => import('./features/privacy/privacy').then(component => component.Privacy)
             }
         ]
     },

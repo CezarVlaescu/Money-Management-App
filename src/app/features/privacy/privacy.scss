@@ -1,0 +1,109 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.privacy-hero {
+  @include mx.glass-card(30px, 22px);
+
+  display: grid;
+  justify-items: center;
+  margin-bottom: fn.spacing(4);
+  color: #ffffff;
+  background: var(--gradient-income);
+  text-align: center;
+
+  > span {
+    @include mx.grid-center;
+
+    width: 64px;
+    height: 64px;
+    margin-bottom: fn.spacing(3);
+    border-radius: fn.radius(xl);
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 30px;
+  }
+
+  h2 {
+    margin: 0 0 fn.spacing(2);
+    font-size: 26px;
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+.privacy-list {
+  display: grid;
+  gap: fn.spacing(3);
+  margin-bottom: fn.spacing(4);
+}
+
+.privacy-card {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(4);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+
+  > span {
+    @include mx.grid-center;
+
+    width: 50px;
+    height: 50px;
+    border-radius: fn.radius(lg);
+    background: var(--primary-soft);
+    font-size: 23px;
+  }
+
+  h2 {
+    margin: 0 0 fn.spacing(1);
+    color: var(--text-primary);
+    font-size: 18px;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.privacy-note {
+  @include mx.glass-card(30px, 18px);
+
+  margin-bottom: fn.spacing(4);
+  border-color: var(--warning-soft);
+  background:
+    linear-gradient(135deg, var(--warning-soft), transparent),
+    var(--surface);
+
+  h2 {
+    margin: 0 0 fn.spacing(2);
+    color: var(--text-primary);
+    font-size: 20px;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}

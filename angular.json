@@ -33,7 +33,8 @@
             "styles": ["src/styles/styles.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
-            }
+            },
+            "serviceWorker": "ngsw-config.json"
           },
           "configurations": {
             "production": {

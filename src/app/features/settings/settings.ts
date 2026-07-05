@@ -6,10 +6,11 @@ import { ThemeService } from '../../core/services/theme/theme';
 import { MoneyFormatter } from '../../shared/services/moeny-formatter/money-formatter';
 import { FormsModule } from '@angular/forms';
 import { PageHeader } from '../../shared/components/page-header/page-header';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
-  imports: [FormsModule, PageHeader],
+  imports: [FormsModule, PageHeader, RouterLink],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
