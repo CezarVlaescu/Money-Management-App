@@ -1,0 +1,30 @@
+<header class="dashboard-hero">
+  <div class="dashboard-hero__content">
+    <div class="dashboard-hero__brand-row">
+      <p class="dashboard-hero__eyebrow">
+        Money Bloom
+      </p>
+
+      <span class="dashboard-hero__mini-flower">
+        🌷
+      </span>
+    </div>
+
+    <h1 class="dashboard-hero__title">
+      Good morning, Cezar 👋
+    </h1>
+
+    <p class="dashboard-hero__description">
+      Let's make your money <span>bloom.</span>
+    </p>
+  </div>
+
+  <button
+    class="dashboard-hero__theme-button"
+    type="button"
+    (click)="themeService.toggleTheme()"
+    [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+  >
+    {{ themeService.isDarkMode() ? '☀️' : '🌙' }}
+  </button>
+</header>

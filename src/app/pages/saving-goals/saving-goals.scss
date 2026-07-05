@@ -112,3 +112,8 @@ app-add-savings-goal-card {
     line-height: 1.5;
   }
 }
+
+.expenses-list {
+  display: grid;
+  gap: fn.spacing(3);
+}

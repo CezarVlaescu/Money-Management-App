@@ -145,3 +145,21 @@
     line-height: 1.4;
   }
 }
+
+app-empty-state {
+  display: block;
+
+  ::ng-deep .empty-state {
+    padding: 28px 18px;
+  }
+
+  ::ng-deep .empty-state__icon {
+    width: 58px;
+    height: 58px;
+    font-size: 27px;
+  }
+
+  ::ng-deep .empty-state__content h2 {
+    font-size: 19px;
+  }
+}

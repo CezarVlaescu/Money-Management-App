@@ -1,10 +1,4 @@
-<app-page-header
-  eyebrow="Money Bloom"
-  title="Good morning, Cezar 👋"
-  description="Let's make your money"
-  highlight="bloom."
-  [showThemeButton]="true"
-/>
+<app-dashboard-hero />
 <app-income-card />
 <section class="dashboard-budget-list">
   @for (bucket of budgetService.budgetBuckets(); track bucket.category) {

@@ -33,20 +33,20 @@
 </section>
 
 <section class="expenses-list">
-  @for (expense of filteredExpenses(); track expense.id) {
-    <app-expense-item
-      [expense]="expense"
-      (deleteExpense)="deleteExpense($event)"
+  @if (filteredExpenses().length > 0) {
+    @for (expense of filteredExpenses(); track expense.id) {
+      <app-expense-item
+        [expense]="expense"
+        (deleteExpense)="deleteExpense($event)"
+      />
+    }
+  } @else {
+    <app-empty-state
+      icon="🌿"
+      title="No transactions yet"
+      description="Start by adding your first expense. Money Bloom will automatically place it into Needs, Wants or Savings."
+      actionLabel="Add transaction"
+      (actionClicked)="openAddTransaction()"
     />
-  } @empty {
-    <section class="expenses-empty">
-      <span>🌱</span>
-
-      <h2>No transactions yet</h2>
-
-      <p>
-        Add your first expense and start tracking your budget.
-      </p>
-    </section>
   }
 </section>

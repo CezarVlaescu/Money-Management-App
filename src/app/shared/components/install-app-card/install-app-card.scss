@@ -1,0 +1,82 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.install-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(4);
+  color: #ffffff;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 32%),
+    var(--gradient-income);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.install-card__icon {
+  @include mx.grid-center;
+
+  width: 54px;
+  height: 54px;
+  border-radius: fn.radius(xl);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 26px;
+}
+
+.install-card__content {
+  min-width: 0;
+
+  p {
+    margin: 0 0 4px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  h2 {
+    margin: 0 0 4px;
+    color: #ffffff;
+    font-size: 19px;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  span {
+    display: block;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}
+
+button {
+  border: 0;
+  border-radius: fn.radius(full);
+  padding: 10px 14px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 13px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}
+
+@media (max-width: 370px) {
+  .install-card {
+    grid-template-columns: 54px minmax(0, 1fr);
+  }
+
+  button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}

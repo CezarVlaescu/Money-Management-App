@@ -73,6 +73,14 @@ interface Toast {
   type: ToastType;
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -81,5 +89,6 @@ export type {
   CategoryRule, 
   CreateExpensePayload, 
   CreateSavingsGoalPayload,
-  Toast
+  Toast,
+  BeforeInstallPromptEvent
 };

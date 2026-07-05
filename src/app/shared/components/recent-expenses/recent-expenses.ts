@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 import { ExpensesService } from '../../../core/services/expenses/expenses';
 import { CategoryService } from '../../../core/services/category/category';
 import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
+import { EmptyState } from '../empty-state/empty-state';
 
 @Component({
   selector: 'app-recent-expenses',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, EmptyState],
   templateUrl: './recent-expenses.html',
   styleUrl: './recent-expenses.scss',
 })

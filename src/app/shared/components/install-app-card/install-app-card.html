@@ -1,0 +1,31 @@
+<section class="install-card">
+  <div class="install-card__icon">
+    🌷
+  </div>
+
+  <div class="install-card__content">
+    <p>Mobile app</p>
+
+    <h2>
+      @if (pwaInstallService.isInstalled()) {
+        Money Bloom is installed
+      } @else {
+        Install Money Bloom
+      }
+    </h2>
+
+    <span>
+      @if (pwaInstallService.isIos()) {
+        On iPhone, open Share and choose Add to Home Screen.
+      } @else {
+        Use Money Bloom like a real app from your phone home screen.
+      }
+    </span>
+  </div>
+
+  @if (!pwaInstallService.isInstalled()) {
+    <button type="button" (click)="installApp()">
+      Install
+    </button>
+  }
+</section>

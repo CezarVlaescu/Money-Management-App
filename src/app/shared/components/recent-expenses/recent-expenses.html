@@ -47,14 +47,11 @@
         </strong>
       </article>
     } @empty {
-      <div class="recent-expenses__empty">
-        <span>🌱</span>
-
-        <div>
-          <strong>No expenses yet</strong>
-          <p>Add your first transaction and start tracking your money.</p>
-        </div>
-      </div>
+      <app-empty-state
+        icon="🧾"
+        title="No recent transactions"
+        description="Your latest expenses will appear here after you start adding transactions."
+      />
     }
   </div>
 </section>

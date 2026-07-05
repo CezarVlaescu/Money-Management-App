@@ -1,7 +1,9 @@
 @use 'mixins' as mx;
 @use 'functions' as fn;
 
-:host { display: block; }
+:host {
+  display: block;
+}
 
 .dashboard-budget-list {
   @include mx.horizontal-scroll;
@@ -14,6 +16,7 @@
   padding-bottom: 6px;
 }
 
+app-income-card,
 app-budget-overview,
 app-smart-insight,
 app-recent-expenses {

@@ -66,3 +66,28 @@
     font-weight: fn.weight(black);
   }
 }
+
+.income-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.income-card::after {
+  content: '';
+  position: absolute;
+  right: -32px;
+  bottom: -46px;
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+.income-card__note {
+  position: relative;
+  margin: fn.spacing(3) 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: fn.weight(bold);
+}

@@ -7,10 +7,11 @@ import { MoneyFormatter } from '../../shared/services/moeny-formatter/money-form
 import { FormsModule } from '@angular/forms';
 import { PageHeader } from '../../shared/components/page-header/page-header';
 import { RouterLink } from '@angular/router';
+import { InstallAppCard } from '../../shared/components/install-app-card/install-app-card';
 
 @Component({
   selector: 'app-settings',
-  imports: [FormsModule, PageHeader, RouterLink],
+  imports: [FormsModule, PageHeader, RouterLink, InstallAppCard],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })

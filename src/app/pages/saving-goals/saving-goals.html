@@ -31,24 +31,26 @@
   </p>
 </section>
 
-<app-add-savings-goal-card (goalAdded)="onGoalAdded()" />
+<div #addGoalSection>
+  <app-add-savings-goal-card (goalAdded)="onGoalAdded()" />
+</div>
 
 <section class="goals-list">
-  @for (goal of savingsGoalsService.goals(); track goal.id) {
-    <app-savings-goal-card
-      [goal]="goal"
-      (addMoney)="addMoney($event)"
-      (deleteGoal)="deleteGoal($event)"
+  @if (savingsGoalsService.goals().length > 0) {
+    @for (goal of savingsGoalsService.goals(); track goal.id) {
+      <app-savings-goal-card
+        [goal]="goal"
+        (addMoney)="addMoney($event)"
+        (deleteGoal)="deleteGoal($event)"
+      />
+    }
+  } @else {
+    <app-empty-state
+      icon="🎯"
+      title="No savings goals yet"
+      description="Create your first goal and start tracking progress toward something meaningful."
+      actionLabel="Create goal"
+      (actionClicked)="scrollToAddGoal()"
     />
-  } @empty {
-    <section class="goals-empty">
-      <span>🌱</span>
-
-      <h2>No goals yet</h2>
-
-      <p>
-        Create your first savings goal and start building momentum.
-      </p>
-    </section>
   }
 </section>

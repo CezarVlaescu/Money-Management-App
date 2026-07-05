@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, Signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SavingsGoalsService } from '../../core/services/savings/savings';
 import { MoneyFormatter } from '../../shared/services/moeny-formatter/money-formatter';
@@ -6,14 +6,17 @@ import { PageHeader } from '../../shared/components/page-header/page-header';
 import { SavingsGoalCard } from '../../shared/components/savings-goal-card/savings-goal-card';
 import { AddSavingsGoalCard } from '../../shared/components/add-savings-goal-card/add-savings-goal-card';
 import { ToastService } from '../../core/services/toast/toast';
+import { EmptyState } from '../../shared/components/empty-state/empty-state';
 
 @Component({
   selector: 'app-saving-goals',
-  imports: [FormsModule, PageHeader, SavingsGoalCard, AddSavingsGoalCard],
+  imports: [FormsModule, PageHeader, SavingsGoalCard, AddSavingsGoalCard, EmptyState],
   templateUrl: './saving-goals.html',
   styleUrl: './saving-goals.scss',
 })
 export class SavingGoals {
+  private readonly addGoalSection: Signal<ElementRef<HTMLElement> | undefined> = viewChild<ElementRef<HTMLElement>>('addGoalSection');
+
   protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
@@ -26,6 +29,13 @@ export class SavingGoals {
   protected deleteGoal(goalId: string): void {
     this.savingsGoalsService.deleteGoal(goalId);
     this.toastService.info('Goal deleted');
+  }
+
+  protected scrollToAddGoal(): void {
+    this.addGoalSection()?.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   }
 
   protected onGoalAdded(): void {

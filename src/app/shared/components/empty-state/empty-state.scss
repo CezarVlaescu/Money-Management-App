@@ -1,0 +1,104 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.empty-state {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(7) fn.spacing(5);
+  background:
+    radial-gradient(circle at top, var(--primary-soft), transparent 42%),
+    var(--surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 160px;
+  height: 160px;
+  border-radius: fn.radius(full);
+  background: var(--decorative-purple);
+  filter: blur(20px);
+  opacity: 0.6;
+}
+
+.empty-state::after {
+  content: '';
+  position: absolute;
+  bottom: -72px;
+  left: -72px;
+  width: 170px;
+  height: 170px;
+  border-radius: fn.radius(full);
+  background: var(--decorative-green);
+  filter: blur(22px);
+  opacity: 0.55;
+}
+
+.empty-state__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: fn.spacing(4);
+}
+
+.empty-state__glow {
+  position: absolute;
+  width: 92px;
+  height: 92px;
+  border-radius: fn.radius(full);
+  background: var(--primary-soft);
+  filter: blur(8px);
+}
+
+.empty-state__icon {
+  position: relative;
+  display: grid;
+  width: 74px;
+  height: 74px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: fn.radius(2xl);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-soft);
+  font-size: 34px;
+}
+
+.empty-state__content {
+  position: relative;
+  max-width: 280px;
+
+  h2 {
+    margin: 0 0 fn.spacing(2);
+    color: var(--text-primary);
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+.empty-state__button {
+  @include mx.primary-button;
+
+  position: relative;
+  margin-top: fn.spacing(5);
+  padding: 13px 18px;
+}
