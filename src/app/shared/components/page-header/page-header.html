@@ -1,0 +1,32 @@
+<header class="page-header">
+  <div class="page-header__content">
+    <p class="page-header__eyebrow">
+      {{ eyebrow() }}
+    </p>
+
+    <h1 class="page-header__title">
+      {{ title() }}
+    </h1>
+
+    @if (description()) {
+      <p class="page-header__description">
+        {{ description() }}
+
+        @if (highlight()) {
+          <span>{{ highlight() }}</span>
+        }
+      </p>
+    }
+  </div>
+
+  @if (showThemeButton()) {
+    <button
+      class="page-header__theme-button"
+      type="button"
+      (click)="themeService.toggleTheme()"
+      [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+    >
+      {{ themeService.isDarkMode() ? '☀️' : '🌙' }}
+    </button>
+  }
+</header>

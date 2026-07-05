@@ -1,0 +1,73 @@
+<section class="add-goal-card">
+  <div class="add-goal-card__header">
+    <div>
+      <p>Add goal</p>
+
+      <h2>New savings target</h2>
+    </div>
+
+    <span class="add-goal-card__badge">
+      Goal
+    </span>
+  </div>
+
+  <form class="add-goal-card__form" (ngSubmit)="addGoal()">
+    <label>
+      <span>Goal name</span>
+
+      <input
+        type="text"
+        placeholder="e.g. Emergency fund"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        name="title"
+      />
+    </label>
+
+    <div class="add-goal-card__grid">
+      <label>
+        <span>Target</span>
+
+        <input
+          type="number"
+          placeholder="10000"
+          [ngModel]="targetAmount()"
+          (ngModelChange)="targetAmount.set($event)"
+          name="targetAmount"
+        />
+      </label>
+
+      <label>
+        <span>Saved</span>
+
+        <input
+          type="number"
+          placeholder="1000"
+          [ngModel]="currentAmount()"
+          (ngModelChange)="currentAmount.set($event)"
+          name="currentAmount"
+        />
+      </label>
+    </div>
+
+    <label>
+      <span>Monthly contribution</span>
+
+      <input
+        type="number"
+        placeholder="500"
+        [ngModel]="monthlyContribution()"
+        (ngModelChange)="monthlyContribution.set($event)"
+        name="monthlyContribution"
+      />
+    </label>
+
+    <button type="submit">
+      Create goal
+    </button>
+  </form>
+
+  <p class="add-goal-card__hint">
+    Use this for emergency funds, vacations, investments or anything you want to save for.
+  </p>
+</section>

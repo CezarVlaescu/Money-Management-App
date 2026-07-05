@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        loadComponent: () => import('./features/layout/app-shell/app-shell').then(m => m.AppShell),
+        loadComponent: () => import('./features/layout/layout').then(component => component.Layout),
         children: [
             {
                 path: '',
@@ -12,15 +12,19 @@ export const routes: Routes = [
             },
             {
                 path: 'dashboard',
-                loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard)
+                loadComponent: () => import('./pages/dashboard/dashboard').then(component => component.Dashboard)
             },
             {
                 path: 'expenses',
-                loadComponent: () => import('./pages/expenses/expenses').then(m => m.Expenses)
+                loadComponent: () => import('./pages/expenses/expenses').then(component => component.Expenses)
             },
             {
                 path: 'savings-goals',
-                loadComponent: () => import('./pages/saving-goals/saving-goals').then(m => m.SavingGoals)
+                loadComponent: () => import('./pages/saving-goals/saving-goals').then(component => component.SavingGoals)
+            },
+            {
+                path: 'settings',
+                loadComponent: () => import('./features/settings/settings').then(component => component.Settings)
             }
         ]
     },

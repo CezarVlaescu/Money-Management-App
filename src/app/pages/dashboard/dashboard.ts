@@ -7,6 +7,7 @@ import { BudgetCard } from "../../shared/components/budget-card/budget-card";
 import { BudgetOverview } from '../../shared/components/budget-overview/budget-overview';
 import { SmartInsight } from '../../shared/components/smart-insight/smart-insight';
 import { RecentExpenses } from '../../shared/components/recent-expenses/recent-expenses';
+import { PageHeader } from '../../shared/components/page-header/page-header';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +17,8 @@ import { RecentExpenses } from '../../shared/components/recent-expenses/recent-e
     BudgetCard, 
     BudgetOverview, 
     SmartInsight,
-    RecentExpenses
+    RecentExpenses,
+    PageHeader
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',

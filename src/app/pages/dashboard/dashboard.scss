@@ -1,41 +1,7 @@
 @use 'mixins' as mx;
 @use 'functions' as fn;
 
-:host {
-  display: block;
-}
-
-.dashboard-header {
-  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
-
-  margin-bottom: fn.spacing(5);
-}
-
-.dashboard-header__eyebrow {
-  @include mx.text-eyebrow;
-}
-
-.dashboard-header__title {
-  @include mx.text-title(28px);
-
-  margin-top: fn.spacing(1);
-}
-
-.dashboard-header__description {
-  @include mx.text-body(16px);
-
-  margin-top: fn.spacing(2);
-
-  span {
-    color: var(--primary);
-    font-weight: fn.weight(black);
-    font-style: italic;
-  }
-}
-
-.dashboard-header__theme-button {
-  @include mx.icon-button;
-}
+:host { display: block; }
 
 .dashboard-budget-list {
   @include mx.horizontal-scroll;
@@ -46,18 +12,6 @@
   gap: fn.spacing(3);
   margin: fn.spacing(4) 0 fn.spacing(4);
   padding-bottom: 6px;
-}
-
-@media (max-width: 390px) {
-  .dashboard-budget-list {
-    gap: fn.spacing(2);
-  }
-}
-
-@media (max-width: 350px) {
-  .dashboard-budget-list {
-    grid-template-columns: 1fr;
-  }
 }
 
 app-budget-overview,

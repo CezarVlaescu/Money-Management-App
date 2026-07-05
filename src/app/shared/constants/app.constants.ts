@@ -23,21 +23,26 @@ const SAVINGS_CONST: string[] = [
     'investment', 'investitii', 'revolut vault'
 ];
 const BOTTOM_NAVIGATION_ITEMS: NavigationItem[] = [
-    {
-      label: 'Home',
-      icon: '🏠',
-      route: '/dashboard'
-    },
-    {
-      label: 'Expenses',
-      icon: '📊',
-      route: '/expenses'
-    },
-    {
-      label: 'Goals',
-      icon: '🎯',
-      route: '/savings-goals'
-    }
+  {
+    label: 'Home',
+    icon: '🏠',
+    route: '/dashboard'
+  },
+  {
+    label: 'Expenses',
+    icon: '📊',
+    route: '/expenses'
+  },
+  {
+    label: 'Goals',
+    icon: '🎯',
+    route: '/savings-goals'
+  },
+  {
+    label: 'Settings',
+    icon: '⚙️',
+    route: '/settings'
+  }
 ];
 const EXPENSES_FILTERS: CategoryFilter[] = [
     {

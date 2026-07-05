@@ -1,0 +1,64 @@
+<article class="goal-card">
+  <div class="goal-card__hero">
+    <div class="goal-card__hero-content">
+      <span class="goal-card__icon">
+        {{ goal().icon }}
+      </span>
+
+      <p>Savings goal</p>
+
+      <h2>
+        {{ goal().title }}
+      </h2>
+    </div>
+
+    <strong class="goal-card__percentage">
+      {{ savingsGoalsService.getGoalProgress(goal()) }}%
+    </strong>
+  </div>
+
+  <div class="goal-card__amounts">
+    <div>
+      <span>Saved</span>
+
+      <strong>
+        {{ moneyFormatter.format(goal().currentAmount) }}
+      </strong>
+    </div>
+
+    <div>
+      <span>Target</span>
+
+      <strong>
+        {{ moneyFormatter.format(goal().targetAmount) }}
+      </strong>
+    </div>
+  </div>
+
+  <div class="goal-card__progress">
+    <span [style.width.%]="savingsGoalsService.getGoalProgress(goal())"></span>
+  </div>
+
+  @if (goal().monthlyContribution) {
+    <p class="goal-card__monthly">
+      Monthly plan:
+      <strong>
+        {{ moneyFormatter.format(goal().monthlyContribution!) }}
+      </strong>
+    </p>
+  }
+
+  <div class="goal-card__actions">
+    <button type="button" (click)="onAddMoney()">
+      +100 RON
+    </button>
+
+    <button
+      class="goal-card__delete"
+      type="button"
+      (click)="onDelete()"
+    >
+      Delete
+    </button>
+  </div>
+</article>

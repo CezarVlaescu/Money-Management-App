@@ -1,0 +1,122 @@
+<app-page-header
+  eyebrow="Settings"
+  title="Customize Money Bloom"
+  description="Manage your theme, income, currency and local app data."
+/>
+
+<section class="settings-card settings-card--theme">
+  <div class="settings-card__content">
+    <span class="settings-card__icon">
+      {{ themeService.isDarkMode() ? '🌙' : '☀️' }}
+    </span>
+
+    <div>
+      <p>Appearance</p>
+
+      <h2>
+        {{ themeService.isDarkMode() ? 'Dark mode' : 'Light mode' }}
+      </h2>
+
+      <span>
+        Choose the look that feels best for your budgeting flow.
+      </span>
+    </div>
+  </div>
+
+  <button type="button" (click)="themeService.toggleTheme()">
+    Switch
+  </button>
+</section>
+
+<section class="settings-card">
+  <div class="settings-card__section-title">
+    <p>Monthly income</p>
+    <h2>Budget base</h2>
+  </div>
+
+  <label class="settings-input">
+    <span>Income in RON</span>
+
+    <input
+      type="number"
+      [ngModel]="incomeDraft()"
+      (ngModelChange)="incomeDraft.set($event)"
+    />
+  </label>
+
+  <button class="settings-primary-button" type="button" (click)="saveIncome()">
+    Save income
+  </button>
+</section>
+
+<section class="settings-card">
+  <div class="settings-card__section-title">
+    <p>Current summary</p>
+    <h2>Your local data</h2>
+  </div>
+
+  <div class="settings-stats">
+    <article>
+      <span>Income</span>
+      <strong>{{ moneyFormatter.format(budgetService.income()) }}</strong>
+    </article>
+
+    <article>
+      <span>Expenses</span>
+      <strong>{{ expensesService.expenses().length }}</strong>
+    </article>
+
+    <article>
+      <span>Goals</span>
+      <strong>{{ savingsGoalsService.goals().length }}</strong>
+    </article>
+  </div>
+</section>
+
+<section class="settings-card">
+  <div class="settings-card__section-title">
+    <p>Currency</p>
+    <h2>Romanian Leu</h2>
+  </div>
+
+  <div class="settings-info-row">
+    <span>Currency</span>
+    <strong>RON</strong>
+  </div>
+
+  <div class="settings-info-row">
+    <span>Locale</span>
+    <strong>ro-RO</strong>
+  </div>
+
+  <p class="settings-note">
+    Multi-currency support can be added later for EUR, USD or GBP.
+  </p>
+</section>
+
+<section class="settings-card settings-card--danger">
+  <div class="settings-card__section-title">
+    <p>Danger zone</p>
+    <h2>Reset local data</h2>
+  </div>
+
+  <div class="settings-danger-actions">
+    <button type="button" (click)="resetExpenses()">
+      Reset expenses
+    </button>
+
+    <button type="button" (click)="resetGoals()">
+      Reset goals
+    </button>
+  </div>
+</section>
+
+<section class="settings-about">
+  <span>🌷</span>
+
+  <h2>Money Bloom</h2>
+
+  <p>
+    A colorful 50/30/20 budget planner built with Angular.
+  </p>
+</section>

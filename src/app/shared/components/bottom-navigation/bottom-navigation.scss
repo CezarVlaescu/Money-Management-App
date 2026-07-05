@@ -7,7 +7,7 @@
   @include mx.bottom-nav-container;
 
   display: grid;
-  grid-template-columns: 1fr 1fr 64px 1fr;
+  grid-template-columns: 1fr 1fr 64px 1fr 1fr;
   align-items: center;
 }
 
@@ -17,8 +17,9 @@
   place-items: center;
   min-width: 0;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: fn.weight(extrabold);
+  text-decoration: none;
   transition:
     color 180ms ease,
     transform 180ms ease;
@@ -34,12 +35,16 @@
 }
 
 .bottom-navigation__icon {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .bottom-navigation__label {
+  max-width: 58px;
+  overflow: hidden;
   line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bottom-navigation__add-button {
@@ -55,6 +60,6 @@
   font-size: 34px;
   line-height: 1;
   cursor: pointer;
-  transform: translateY(-14px);
   text-decoration: none;
+  transform: translateY(-14px);
 }

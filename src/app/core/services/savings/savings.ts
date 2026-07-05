@@ -65,6 +65,11 @@ export class SavingsGoalsService {
     return Math.min(Math.round((goal.currentAmount / goal.targetAmount) * 100), 100);
   }
 
+  public clearGoals(): void {
+    this.goals.set([]);
+    this.saveGoals();
+  }
+
   private getInitialGoals(): SavingsGoal[] {
     return this.storageService.getItem<SavingsGoal[]>(SAVINGS_STORE_KEY, [
       {

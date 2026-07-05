@@ -1,0 +1,50 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.page-header {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(5);
+}
+
+.page-header__content {
+  min-width: 0;
+}
+
+.page-header__eyebrow {
+  @include mx.text-eyebrow;
+}
+
+.page-header__title {
+  @include mx.text-title(30px);
+
+  margin-top: fn.spacing(1);
+}
+
+.page-header__description {
+  @include mx.text-body(15px);
+
+  margin-top: fn.spacing(2);
+
+  span {
+    color: var(--primary);
+    font-weight: fn.weight(black);
+    font-style: italic;
+  }
+}
+
+.page-header__theme-button {
+  @include mx.icon-button;
+
+  flex: 0 0 auto;
+}
+
+@media (max-width: 370px) {
+  .page-header__title {
+    font-size: 27px;
+  }
+}

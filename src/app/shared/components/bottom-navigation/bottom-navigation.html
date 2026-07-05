@@ -1,25 +1,50 @@
 <nav class="bottom-navigation" aria-label="Main navigation">
-  @for (item of bottomNavigationItems; track item.route) {
-    <a
-      class="bottom-navigation__item"
-      [routerLink]="item.route"
-      routerLinkActive="bottom-navigation__item--active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <span class="bottom-navigation__icon">
-        {{ item.icon }}
-      </span>
-      <span class="bottom-navigation__label">
-        {{ item.label }}
-      </span>
-    </a>
-  }
   <a
-  class="bottom-navigation__add-button"
-  routerLink="/expenses"
-  [queryParams]="{ add: true }"
-  aria-label="Add expense"
+    class="bottom-navigation__item"
+    routerLink="/dashboard"
+    routerLinkActive="bottom-navigation__item--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <span class="bottom-navigation__icon">🏠</span>
+    <span class="bottom-navigation__label">Home</span>
+  </a>
+
+  <a
+    class="bottom-navigation__item"
+    routerLink="/expenses"
+    routerLinkActive="bottom-navigation__item--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <span class="bottom-navigation__icon">📊</span>
+    <span class="bottom-navigation__label">Expenses</span>
+  </a>
+
+  <button
+    class="bottom-navigation__add-button"
+    type="button"
+    aria-label="Add expense"
+    (click)="addExpensesSheetService.open()"
   >
     +
+  </button>
+
+  <a
+    class="bottom-navigation__item"
+    routerLink="/savings-goals"
+    routerLinkActive="bottom-navigation__item--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <span class="bottom-navigation__icon">🎯</span>
+    <span class="bottom-navigation__label">Goals</span>
+  </a>
+
+  <a
+    class="bottom-navigation__item"
+    routerLink="/settings"
+    routerLinkActive="bottom-navigation__item--active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <span class="bottom-navigation__icon">⚙️</span>
+    <span class="bottom-navigation__label">Settings</span>
   </a>
 </nav>

@@ -1,6 +1,0 @@
-@use 'mixins' as mx;
-@use 'tokens' as tokens;
-
-:host { display: block; }
-.app-shell-container { @include mx.app-page; }
-.app-shell-container__content { @include mx.mobile-shell; }

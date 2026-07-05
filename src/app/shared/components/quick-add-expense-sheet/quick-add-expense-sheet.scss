@@ -1,0 +1,171 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+@use 'tokens' as tokens;
+
+:host {
+  display: block;
+}
+
+.quick-add-sheet {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  align-items: end;
+}
+
+.quick-add-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(5, 7, 18, 0.58);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.quick-add-sheet__panel {
+  position: relative;
+  width: min(tokens.$app-width, calc(100% - 20px));
+  margin: 0 auto 10px;
+  border: 1px solid var(--border);
+  border-radius: 32px 32px 28px 28px;
+  padding: 10px 18px 18px;
+  background: var(--surface);
+  box-shadow: 0 -20px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(24px);
+  animation: sheet-in 220ms ease-out;
+}
+
+.quick-add-sheet__handle {
+  width: 44px;
+  height: 5px;
+  margin: 0 auto 18px;
+  border-radius: fn.radius(full);
+  background: var(--border);
+}
+
+.quick-add-sheet__header {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(4);
+
+  p {
+    @include mx.text-eyebrow;
+
+    color: var(--text-muted);
+  }
+
+  h2 {
+    @include mx.text-title(24px);
+
+    margin-top: fn.spacing(1);
+  }
+}
+
+.quick-add-sheet__close {
+  @include mx.icon-button(40px, 15px);
+
+  box-shadow: none;
+}
+
+.quick-add-sheet__form {
+  display: grid;
+  gap: fn.spacing(3);
+
+  label {
+    display: grid;
+    gap: fn.spacing(2);
+  }
+
+  label span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: 14px 16px;
+    outline: 0;
+    color: var(--text-primary);
+    background: var(--surface-strong);
+    font-size: 15px;
+    font-weight: fn.weight(bold);
+  }
+
+  input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+  }
+}
+
+.quick-add-sheet__category-preview {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(xl);
+  padding: fn.spacing(3);
+  background: var(--surface-strong);
+
+  p {
+    margin: 0 0 4px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(bold);
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-size: 15px;
+  }
+}
+
+.quick-add-sheet__category-icon {
+  @include mx.grid-center;
+
+  width: 46px;
+  height: 46px;
+  border-radius: fn.radius(lg);
+  font-size: 20px;
+
+  &--needs {
+    background: var(--needs-soft);
+  }
+
+  &--wants {
+    background: var(--wants-soft);
+  }
+
+  &--savings {
+    background: var(--savings-soft);
+  }
+
+  &--uncategorized {
+    background: var(--primary-soft);
+  }
+}
+
+.quick-add-sheet__submit {
+  @include mx.primary-button;
+
+  width: 100%;
+  padding: 15px 16px;
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

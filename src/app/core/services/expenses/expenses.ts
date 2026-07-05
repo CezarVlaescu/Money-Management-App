@@ -56,6 +56,11 @@ export class ExpensesService {
     return this.expenses().filter(expense => expense.category === category);
   }
 
+  public clearExpenses(): void {
+    this.expenses.set([]);
+    this.saveExpenses();
+  }
+
   private getTotalByCategory(category: BudgetCategory): number {
     return this.expenses()
     .filter(expense => expense.category === category)

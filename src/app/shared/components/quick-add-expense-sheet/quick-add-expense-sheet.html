@@ -1,0 +1,70 @@
+@if (sheetService.isOpen()) {
+  <div class="quick-add-sheet">
+    <button
+      class="quick-add-sheet__backdrop"
+      type="button"
+      aria-label="Close quick add"
+      (click)="close()"
+    ></button>
+
+    <section class="quick-add-sheet__panel" role="dialog" aria-modal="true">
+      <div class="quick-add-sheet__handle"></div>
+
+      <header class="quick-add-sheet__header">
+        <div>
+          <p>Quick add</p>
+          <h2>New transaction</h2>
+        </div>
+
+        <button type="button" class="quick-add-sheet__close" (click)="close()">
+          ✕
+        </button>
+      </header>
+
+      <form class="quick-add-sheet__form" (ngSubmit)="addExpense()">
+        <label>
+          <span>Description</span>
+
+          <input
+            type="text"
+            placeholder="e.g. Lidl, Netflix, XTB"
+            [ngModel]="title()"
+            (ngModelChange)="title.set($event)"
+            name="title"
+            autocomplete="off"
+          />
+        </label>
+
+        <label>
+          <span>Amount</span>
+
+          <input
+            type="number"
+            placeholder="120"
+            [ngModel]="amount()"
+            (ngModelChange)="amount.set($event)"
+            name="amount"
+          />
+        </label>
+
+        <div class="quick-add-sheet__category-preview">
+          <span
+            class="quick-add-sheet__category-icon"
+            [class]="'quick-add-sheet__category-icon--' + detectedCategory()"
+          >
+            {{ categoryService.getCategoryIcon(detectedCategory()) }}
+          </span>
+
+          <div>
+            <p>Detected category</p>
+            <strong>{{ categoryService.getCategoryLabel(detectedCategory()) }}</strong>
+          </div>
+        </div>
+
+        <button class="quick-add-sheet__submit" type="submit">
+          Add transaction
+        </button>
+      </form>
+    </section>
+  </div>
+}

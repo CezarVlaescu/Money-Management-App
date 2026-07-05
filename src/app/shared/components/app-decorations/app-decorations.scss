@@ -1,0 +1,132 @@
+@use 'functions' as fn;
+
+:host {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-decorations {
+  position: absolute;
+  inset: 0;
+}
+
+.app-decorations__orb,
+.app-decorations__petal,
+.app-decorations__coin {
+  position: absolute;
+  display: block;
+}
+
+.app-decorations__orb {
+  border-radius: 999px;
+  filter: blur(2px);
+  opacity: 0.72;
+}
+
+.app-decorations__orb--blue {
+  top: 46px;
+  left: -72px;
+  width: 170px;
+  height: 170px;
+  background: var(--glow-blue);
+}
+
+.app-decorations__orb--pink {
+  top: 130px;
+  right: -92px;
+  width: 210px;
+  height: 210px;
+  background: var(--glow-pink);
+}
+
+.app-decorations__orb--green {
+  right: -70px;
+  bottom: 130px;
+  width: 180px;
+  height: 180px;
+  background: var(--glow-green);
+}
+
+.app-decorations__petal {
+  width: 18px;
+  height: 28px;
+  border-radius: 999px 999px 999px 4px;
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.5), rgba(167, 139, 250, 0.28));
+  opacity: 0.45;
+  transform: rotate(24deg);
+}
+
+.app-decorations__petal--one {
+  top: 96px;
+  right: 62px;
+  animation: float-petal 7s ease-in-out infinite;
+}
+
+.app-decorations__petal--two {
+  top: 360px;
+  left: 28px;
+  width: 14px;
+  height: 22px;
+  opacity: 0.35;
+  animation: float-petal 8s ease-in-out infinite reverse;
+}
+
+.app-decorations__petal--three {
+  right: 38px;
+  bottom: 246px;
+  width: 16px;
+  height: 24px;
+  opacity: 0.32;
+  animation: float-petal 9s ease-in-out infinite;
+}
+
+.app-decorations__coin {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  border-radius: 50%;
+  color: rgba(120, 76, 0, 0.7);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 28%),
+    linear-gradient(135deg, rgba(250, 204, 21, 0.72), rgba(251, 191, 36, 0.22));
+  box-shadow: 0 16px 42px rgba(250, 204, 21, 0.18);
+  font-size: 9px;
+  font-weight: fn.weight(black);
+  opacity: 0.46;
+}
+
+.app-decorations__coin--one {
+  top: 250px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  transform: rotate(18deg);
+}
+
+.app-decorations__coin--two {
+  bottom: 190px;
+  left: 18px;
+  width: 30px;
+  height: 30px;
+  transform: rotate(-18deg);
+}
+
+html.dark .app-decorations__coin {
+  color: rgba(255, 255, 255, 0.78);
+  opacity: 0.28;
+}
+
+@keyframes float-petal {
+  0%,
+  100% {
+    transform: translateY(0) rotate(24deg);
+  }
+
+  50% {
+    transform: translateY(-14px) rotate(38deg);
+  }
+}

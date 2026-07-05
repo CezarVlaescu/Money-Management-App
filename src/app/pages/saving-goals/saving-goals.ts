@@ -1,48 +1,36 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SavingsGoalsService } from '../../core/services/savings/savings';
 import { MoneyFormatter } from '../../shared/services/moeny-formatter/money-formatter';
+import { PageHeader } from '../../shared/components/page-header/page-header';
+import { SavingsGoalCard } from '../../shared/components/savings-goal-card/savings-goal-card';
+import { AddSavingsGoalCard } from '../../shared/components/add-savings-goal-card/add-savings-goal-card';
+import { ToastService } from '../../core/services/toast/toast';
 
 @Component({
   selector: 'app-saving-goals',
-  imports: [FormsModule],
+  imports: [FormsModule, PageHeader, SavingsGoalCard, AddSavingsGoalCard],
   templateUrl: './saving-goals.html',
   styleUrl: './saving-goals.scss',
 })
 export class SavingGoals {
-    protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
-
-  protected readonly title: WritableSignal<string> = signal<string>('');
-  protected readonly targetAmount: WritableSignal<number | null> = signal<number | null>(null);
-  protected readonly currentAmount: WritableSignal<number | null> = signal<number | null>(null);
-  protected readonly monthlyContribution: WritableSignal<number | null> = signal<number | null>(null);
-
-  protected addGoal(): void {
-    const title = this.title().trim();
-    const targetAmount = this.targetAmount();
-
-    if (!title || !targetAmount || targetAmount <= 0) return;
-
-    this.savingsGoalsService.addGoal({
-      title,
-      targetAmount,
-      currentAmount: this.currentAmount() ?? 0,
-      monthlyContribution: this.monthlyContribution() ?? undefined,
-      icon: '🎯'
-    });
-
-    this.title.set('');
-    this.targetAmount.set(null);
-    this.currentAmount.set(null);
-    this.monthlyContribution.set(null);
-  }
+  private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   protected addMoney(goalId: string): void {
     this.savingsGoalsService.addMoneyToGoal(goalId, 100);
+    this.toastService.success('Added 100 RON to goal');
   }
 
   protected deleteGoal(goalId: string): void {
     this.savingsGoalsService.deleteGoal(goalId);
+    this.toastService.info('Goal deleted');
   }
+
+  protected onGoalAdded(): void {
+    // Momentan nu trebuie să facă nimic.
+    // Lăsăm metoda pentru extensie: toast, scroll, analytics, etc.
+  }
+
 }

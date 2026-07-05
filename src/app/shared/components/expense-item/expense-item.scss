@@ -1,0 +1,91 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.expense-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(3);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+.expense-item__icon {
+  @include mx.grid-center;
+
+  width: 48px;
+  height: 48px;
+  border-radius: fn.radius(lg);
+  font-size: 21px;
+
+  &--needs {
+    background: var(--needs-soft);
+  }
+
+  &--wants {
+    background: var(--wants-soft);
+  }
+
+  &--savings {
+    background: var(--savings-soft);
+  }
+
+  &--uncategorized {
+    background: var(--primary-soft);
+  }
+}
+
+.expense-item__content {
+  min-width: 0;
+
+  strong {
+    @include mx.truncate;
+
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  p {
+    @include mx.truncate;
+
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+}
+
+.expense-item__meta {
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+}
+
+.expense-item__amount {
+  color: var(--danger);
+  font-size: 13px;
+  white-space: nowrap;
+
+  &--savings {
+    color: var(--success);
+  }
+}
+
+button {
+  border: 0;
+  padding: 0;
+  color: var(--text-muted);
+  background: transparent;
+  font-size: 11px;
+  font-weight: fn.weight(bold);
+  cursor: pointer;
+}

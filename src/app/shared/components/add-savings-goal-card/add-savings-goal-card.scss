@@ -1,0 +1,104 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.add-goal-card {
+  @include mx.glass-card(30px, 18px);
+}
+
+.add-goal-card__header {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(4);
+
+  p {
+    @include mx.text-eyebrow;
+
+    color: var(--text-muted);
+  }
+
+  h2 {
+    @include mx.text-title(23px);
+
+    margin-top: fn.spacing(1);
+  }
+}
+
+.add-goal-card__badge {
+  border-radius: fn.radius(full);
+  padding: 8px 11px;
+  color: var(--savings);
+  background: var(--savings-soft);
+  font-size: 12px;
+  font-weight: fn.weight(black);
+}
+
+.add-goal-card__form {
+  display: grid;
+  gap: fn.spacing(3);
+
+  label {
+    display: grid;
+    gap: fn.spacing(2);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: 14px 16px;
+    outline: 0;
+    color: var(--text-primary);
+    background: var(--surface-strong);
+    font-size: 15px;
+    font-weight: fn.weight(bold);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      background 180ms ease;
+  }
+
+  input:focus {
+    border-color: var(--savings);
+    box-shadow: 0 0 0 4px var(--savings-soft);
+  }
+
+  button {
+    @include mx.primary-button;
+
+    width: 100%;
+    margin-top: fn.spacing(1);
+    padding: 15px 16px;
+    background: var(--gradient-savings);
+  }
+}
+
+.add-goal-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: fn.spacing(3);
+}
+
+.add-goal-card__hint {
+  margin: fn.spacing(3) 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 370px) {
+  .add-goal-card__grid {
+    grid-template-columns: 1fr;
+  }
+}

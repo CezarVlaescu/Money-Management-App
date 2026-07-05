@@ -1,0 +1,149 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.goal-card {
+  @include mx.glass-card(30px, 18px);
+}
+
+.goal-card__hero {
+  @include mx.flex(row, flex-start, space-between, fn.spacing(4));
+
+  margin-bottom: fn.spacing(4);
+  border-radius: fn.radius(2xl);
+  padding: fn.spacing(4);
+  overflow: hidden;
+  color: #ffffff;
+  background: var(--gradient-savings);
+}
+
+.goal-card__hero-content {
+  min-width: 0;
+
+  p {
+    margin: fn.spacing(3) 0 fn.spacing(1);
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 13px;
+    font-weight: fn.weight(bold);
+  }
+
+  h2 {
+    @include mx.truncate;
+
+    margin: 0;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+  }
+}
+
+.goal-card__icon {
+  @include mx.grid-center;
+
+  width: 46px;
+  height: 46px;
+  border-radius: fn.radius(lg);
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 22px;
+}
+
+.goal-card__percentage {
+  flex: 0 0 auto;
+  border-radius: fn.radius(full);
+  padding: 8px 11px;
+  color: rgba(0, 0, 0, 0.68);
+  background: rgba(255, 255, 255, 0.68);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.goal-card__amounts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: fn.spacing(3);
+  margin-bottom: fn.spacing(4);
+
+  div {
+    min-width: 0;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: fn.spacing(3);
+    background: var(--surface-strong);
+  }
+
+  span {
+    display: block;
+    margin-bottom: fn.spacing(1);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  strong {
+    @include mx.truncate;
+
+    display: block;
+    color: var(--text-primary);
+    font-size: 15px;
+  }
+}
+
+.goal-card__progress {
+  height: 9px;
+  margin-bottom: fn.spacing(3);
+  overflow: hidden;
+  border-radius: fn.radius(full);
+  background: var(--surface-strong);
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--gradient-savings);
+  }
+}
+
+.goal-card__monthly {
+  margin: 0 0 fn.spacing(4);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: fn.weight(bold);
+
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+.goal-card__actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: fn.spacing(3);
+
+  button {
+    @include mx.primary-button;
+
+    padding: 13px 16px;
+  }
+
+  .goal-card__delete {
+    color: var(--danger);
+    background: var(--danger-soft);
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 370px) {
+  .goal-card__amounts {
+    grid-template-columns: 1fr;
+  }
+
+  .goal-card__actions {
+    grid-template-columns: 1fr;
+  }
+}

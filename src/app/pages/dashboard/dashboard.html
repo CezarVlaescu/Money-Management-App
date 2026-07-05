@@ -1,27 +1,11 @@
-<header class="dashboard-header">
-  <div>
-    <p class="dashboard-header__eyebrow">Money Bloom</p>
-
-    <h1 class="dashboard-header__title">
-      Good morning, Cezar 👋
-    </h1>
-
-    <p class="dashboard-header__description">
-      Let's make your money <span>bloom.</span>
-    </p>
-  </div>
-
-  <button
-    class="dashboard-header__theme-button"
-    type="button"
-    (click)="themeService.toggleTheme()"
-  >
-    {{ themeService.isDarkMode() ? '☀️' : '🌙' }}
-  </button>
-</header>
-
+<app-page-header
+  eyebrow="Money Bloom"
+  title="Good morning, Cezar 👋"
+  description="Let's make your money"
+  highlight="bloom."
+  [showThemeButton]="true"
+/>
 <app-income-card />
-
 <section class="dashboard-budget-list">
   @for (bucket of budgetService.budgetBuckets(); track bucket.category) {
     <app-budget-card [budgetBucket]="bucket" />

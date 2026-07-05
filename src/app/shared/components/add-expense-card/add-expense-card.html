@@ -1,0 +1,47 @@
+<section class="add-expense-card">
+  <div class="add-expense-card__header">
+    <div>
+      <p>Add expense</p>
+      <h2>New transaction</h2>
+    </div>
+
+    <span class="add-expense-card__badge">
+      Auto
+    </span>
+  </div>
+
+  <form class="add-expense-card__form" (ngSubmit)="addExpense()">
+    <label>
+      <span>Description</span>
+
+      <input
+        #titleInput
+        type="text"
+        placeholder="e.g. Lidl, Netflix, XTB"
+        [ngModel]="title()"
+        (ngModelChange)="title.set($event)"
+        name="title"
+      />
+    </label>
+
+    <label>
+      <span>Amount</span>
+
+      <input
+        type="number"
+        placeholder="120"
+        [ngModel]="amount()"
+        (ngModelChange)="amount.set($event)"
+        name="amount"
+      />
+    </label>
+
+    <button type="submit">
+      Add transaction
+    </button>
+  </form>
+
+  <p class="add-expense-card__hint">
+    Money Bloom will automatically detect the category from the description.
+  </p>
+</section>

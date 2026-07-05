@@ -1,4 +1,4 @@
-import { BudgetCategory } from "../types/core.types";
+import { BudgetCategory, ToastType } from "../types/core.types";
 
 interface BudgetBucket {
   category: BudgetCategory;
@@ -67,6 +67,12 @@ interface CreateSavingsGoalPayload {
   color?: string;
 }
 
+interface Toast {
+  id: string;
+  message: string;
+  type: ToastType;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -74,5 +80,6 @@ export type {
   SavingsGoal, 
   CategoryRule, 
   CreateExpensePayload, 
-  CreateSavingsGoalPayload 
+  CreateSavingsGoalPayload,
+  Toast
 };

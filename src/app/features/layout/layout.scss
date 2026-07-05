@@ -1,0 +1,10 @@
+@use 'mixins' as mx;
+@use 'tokens' as tokens;
+
+:host { display: block; }
+.layout-container { @include mx.app-page; }
+.layout-container__content { 
+    @include mx.mobile-shell;
+    position: relative;
+    z-index: 1;
+}

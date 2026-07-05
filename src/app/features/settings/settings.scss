@@ -1,0 +1,249 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.settings-card {
+  @include mx.glass-card(30px, 18px);
+
+  display: grid;
+  gap: fn.spacing(4);
+  margin-bottom: fn.spacing(4);
+}
+
+.settings-card--theme {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  color: #ffffff;
+  background: var(--gradient-income);
+
+  button {
+    border: 0;
+    border-radius: fn.radius(full);
+    padding: 10px 14px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 13px;
+    font-weight: fn.weight(black);
+    cursor: pointer;
+  }
+}
+
+.settings-card__content {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+  gap: fn.spacing(3);
+  min-width: 0;
+
+  p {
+    margin: 0 0 4px;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 13px;
+    font-weight: fn.weight(bold);
+  }
+
+  h2 {
+    margin: 0 0 4px;
+    color: #ffffff;
+    font-size: 20px;
+    letter-spacing: -0.04em;
+  }
+
+  span:not(.settings-card__icon) {
+    display: block;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}
+
+.settings-card__icon {
+  @include mx.grid-center;
+
+  width: 48px;
+  height: 48px;
+  border-radius: fn.radius(lg);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 22px;
+}
+
+.settings-card__section-title {
+  p {
+    @include mx.text-eyebrow;
+
+    color: var(--text-muted);
+  }
+
+  h2 {
+    @include mx.text-title(23px);
+
+    margin-top: fn.spacing(1);
+  }
+}
+
+.settings-input {
+  display: grid;
+  gap: fn.spacing(2);
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: 14px 16px;
+    outline: 0;
+    color: var(--text-primary);
+    background: var(--surface-strong);
+    font-size: 15px;
+    font-weight: fn.weight(bold);
+  }
+
+  input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+  }
+}
+
+.settings-primary-button {
+  @include mx.primary-button;
+
+  width: 100%;
+  padding: 15px 16px;
+}
+
+.settings-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: fn.spacing(3);
+
+  article {
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(xl);
+    padding: fn.spacing(3);
+    background: var(--surface-strong);
+  }
+
+  span {
+    display: block;
+    margin-bottom: fn.spacing(1);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: fn.weight(black);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-size: 15px;
+  }
+}
+
+.settings-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border-muted);
+  border-radius: fn.radius(xl);
+  padding: fn.spacing(3);
+  background: var(--surface-strong);
+
+  span {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: fn.weight(bold);
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+}
+
+.settings-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.settings-card--danger {
+  border-color: var(--danger-soft);
+}
+
+.settings-danger-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: fn.spacing(3);
+
+  button {
+    border: 0;
+    border-radius: fn.radius(xl);
+    padding: 13px 14px;
+    color: var(--danger);
+    background: var(--danger-soft);
+    font-size: 13px;
+    font-weight: fn.weight(black);
+    cursor: pointer;
+  }
+}
+
+.settings-about {
+  display: grid;
+  justify-items: center;
+  margin-bottom: fn.spacing(4);
+  padding: fn.spacing(5);
+  text-align: center;
+
+  span {
+    @include mx.grid-center;
+
+    width: 58px;
+    height: 58px;
+    margin-bottom: fn.spacing(3);
+    border-radius: fn.radius(xl);
+    background: var(--primary-soft);
+    font-size: 28px;
+  }
+
+  h2 {
+    margin: 0 0 fn.spacing(2);
+    color: var(--text-primary);
+    font-size: 24px;
+    letter-spacing: -0.05em;
+  }
+
+  p {
+    max-width: 270px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 370px) {
+  .settings-card--theme {
+    grid-template-columns: 1fr;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .settings-stats,
+  .settings-danger-actions {
+    grid-template-columns: 1fr;
+  }
+}

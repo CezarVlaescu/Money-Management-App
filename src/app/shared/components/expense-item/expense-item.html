@@ -1,0 +1,37 @@
+<article class="expense-item">
+  <span
+    class="expense-item__icon"
+    [class]="'expense-item__icon--' + expense().category"
+  >
+    {{ categoryService.getCategoryIcon(expense().category) }}
+  </span>
+
+  <div class="expense-item__content">
+    <strong>{{ expense().title }}</strong>
+
+    <p>
+      {{ categoryService.getCategoryLabel(expense().category) }}
+      ·
+      {{ expense().date | date: 'MMM d, y' }}
+    </p>
+  </div>
+
+  <div class="expense-item__meta">
+    <strong
+      class="expense-item__amount"
+      [class.expense-item__amount--savings]="expense().category === 'savings'"
+    >
+      @if (expense().category === 'savings') {
+        +
+      } @else {
+        -
+      }
+
+      {{ moneyFormatter.format(expense().amount) }}
+    </strong>
+
+    <button type="button" (click)="onDelete()">
+      Delete
+    </button>
+  </div>
+</article>

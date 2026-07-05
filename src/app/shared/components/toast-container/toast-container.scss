@@ -1,0 +1,91 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+@use 'tokens' as tokens;
+
+:host {
+  display: block;
+}
+
+.toast-container {
+  position: fixed;
+  z-index: 180;
+  right: 14px;
+  bottom: 104px;
+  left: 14px;
+  display: grid;
+  gap: fn.spacing(2);
+  width: min(tokens.$app-width, calc(100% - 28px));
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.toast {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  border: 1px solid var(--border);
+  border-radius: fn.radius(xl);
+  padding: 10px 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-nav);
+  backdrop-filter: blur(24px);
+  animation: toast-in 220ms ease-out;
+  pointer-events: auto;
+
+  p {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: fn.weight(bold);
+    line-height: 1.35;
+  }
+
+  button {
+    @include mx.grid-center;
+
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: fn.radius(full);
+    color: var(--text-muted);
+    background: var(--surface-strong);
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+
+.toast__icon {
+  @include mx.grid-center;
+
+  width: 34px;
+  height: 34px;
+  border-radius: fn.radius(md);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: fn.weight(black);
+}
+
+.toast--success .toast__icon {
+  background: var(--success);
+}
+
+.toast--error .toast__icon {
+  background: var(--danger);
+}
+
+.toast--info .toast__icon {
+  background: var(--primary);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
