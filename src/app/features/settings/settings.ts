@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { InstallAppCard } from '../../shared/components/install-app-card/install-app-card';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
 import { ToastService } from '../../core/services/toast/toast';
+import { OnboardingService } from '../../core/services/onboarding/onboarding-service';
 
 @Component({
   selector: 'app-settings',
@@ -25,8 +26,13 @@ export class Settings {
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
   private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
+  private readonly onboardingService: OnboardingService = inject<OnboardingService>(OnboardingService);
 
   protected readonly incomeDraft: WritableSignal<number> = signal<number>(this.budgetService.income());
+
+  protected openGuide(): void {
+    this.onboardingService.open();
+  }
 
   protected saveIncome(): void {
     void this.budgetService.updateIncome(Number(this.incomeDraft()) || 0);

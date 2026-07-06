@@ -78,28 +78,7 @@ export class SavingsGoalsService {
   }
 
   private getInitialGoals(): SavingsGoal[] {
-    return this.storageService.getItem<SavingsGoal[]>(SAVINGS_STORE_KEY, [
-      {
-        id: crypto.randomUUID(),
-        title: 'Emergency Fund',
-        targetAmount: 10000,
-        currentAmount: 5000,
-        monthlyContribution: 700,
-        icon: '🛟',
-        color: 'savings',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: crypto.randomUUID(),
-        title: 'Vacation',
-        targetAmount: 3000,
-        currentAmount: 1200,
-        monthlyContribution: 400,
-        icon: '🏖️',
-        color: 'wants',
-        createdAt: new Date().toISOString()
-      }
-    ]);
+    return this.storageService.getItem<SavingsGoal[]>(SAVINGS_STORE_KEY, []);
   }
 
   private saveGoals(): void {

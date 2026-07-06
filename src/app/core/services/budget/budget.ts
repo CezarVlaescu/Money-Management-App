@@ -9,7 +9,7 @@ import { BudgetCategory } from '../../models/types/core.types';
 export class BudgetService {
   public readonly storageService: StorageService = inject<StorageService>(StorageService);
   public readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 5000));
+  public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 0));
   public readonly needsAmount: Signal<number> = computed<number>(() => this.income() * 0.5);
   public readonly wantsAmount: Signal<number> = computed<number>(() => this.income() * 0.3);
   public readonly savingsAmount: Signal<number> = computed<number>(() => this.income() * 0.2);

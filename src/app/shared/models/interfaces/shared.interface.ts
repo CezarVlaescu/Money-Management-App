@@ -10,5 +10,11 @@ interface CategoryFilter {
   value: BudgetCategory | 'all';
   icon: string;
 }
+interface OnboardingStep {
+  icon: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+}
 
-export type { NavigationItem, CategoryFilter };
+export type { NavigationItem, CategoryFilter, OnboardingStep };

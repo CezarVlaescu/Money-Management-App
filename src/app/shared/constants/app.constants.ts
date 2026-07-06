@@ -1,10 +1,11 @@
 import { BudgetCategory } from "../../core/models/types/core.types";
-import { CategoryFilter, NavigationItem } from "../models/interfaces/shared.interface";
+import { CategoryFilter, NavigationItem, OnboardingStep } from "../models/interfaces/shared.interface";
 
 const THEME_STORAGE_KEY = 'money-bloom-theme';
 const INCOME_STORAGE_KEY = 'money-bloom-income';
 const EXPENSES_STORE_KEY = 'money-bloom-expenses';
 const SAVINGS_STORE_KEY = 'money-bloom-savings-goals';
+const ONBOARDING_STORAGE_KEY = 'money-bloom-onboarding-completed';
 const NEEDS_CONST: string[] = [
   'lidl', 'kaufland', 'carrefour', 'mega image',
   'profi', 'auchan', 'penny', 'rent', 'chirie',
@@ -68,6 +69,33 @@ const EXPENSES_FILTERS: CategoryFilter[] = [
   }
 ]
 
+const ONBOARDING_STEPS: OnboardingStep[] = [
+  {
+    icon: '🌷',
+    eyebrow: 'Welcome',
+    title: 'Make your money bloom',
+    description: 'Money Bloom helps you organize your monthly income using the simple 50/30/20 budgeting method.'
+  },
+  {
+    icon: '💸',
+    eyebrow: 'Track',
+    title: 'Add your transactions',
+    description: 'Add expenses manually and Money Bloom will try to detect if they belong to Needs, Wants or Savings.'
+  },
+  {
+    icon: '🎯',
+    eyebrow: 'Plan',
+    title: 'Create savings goals',
+    description: 'Track progress for your emergency fund, vacation, home, car or any other financial goal.'
+  },
+  {
+    icon: '🔐',
+    eyebrow: 'Local-first',
+    title: 'Your data stays on this device',
+    description: 'Money Bloom V1 stores data locally in your browser. You can export a backup from Settings.'
+  }
+]
+
 const CATEGORIES_CONST: BudgetCategory[] = ['needs', 'wants', 'savings'];
 const ICON_OPTIONS_CONST: string[] = ['🎯', '🏖️', '🛟', '🏠', '🚗', '💻', '💍', '📚'];
 
@@ -82,5 +110,7 @@ export {
   BOTTOM_NAVIGATION_ITEMS,
   EXPENSES_FILTERS,
   CATEGORIES_CONST,
-  ICON_OPTIONS_CONST
+  ICON_OPTIONS_CONST,
+  ONBOARDING_STORAGE_KEY,
+  ONBOARDING_STEPS
 };

@@ -72,32 +72,7 @@ export class ExpensesService {
   }
 
   private getInitialExpenses(): Expense[] {
-    return this.storageService.getItem<Expense[]>(EXPENSES_STORE_KEY, [
-      {
-        id: crypto.randomUUID(),
-        title: 'Lidl Supermarket',
-        amount: 156.8,
-        category: 'needs',
-        date: new Date().toISOString(),
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: crypto.randomUUID(),
-        title: 'Netflix',
-        amount: 49.99,
-        category: 'wants',
-        date: new Date().toISOString(),
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: crypto.randomUUID(),
-        title: 'XTB Vanguard ETF',
-        amount: 300,
-        category: 'savings',
-        date: new Date().toISOString(),
-        createdAt: new Date().toISOString()
-      }
-    ]);
+    return this.storageService.getItem<Expense[]>(EXPENSES_STORE_KEY, []);
   }
 
   private saveExpenses(): void {

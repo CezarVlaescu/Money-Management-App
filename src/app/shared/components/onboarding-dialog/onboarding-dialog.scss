@@ -1,0 +1,191 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.onboarding-dialog {
+  position: fixed;
+  z-index: 230;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.onboarding-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 18, 0.66);
+  backdrop-filter: blur(12px);
+}
+
+.onboarding-dialog__panel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 378px);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  padding: fn.spacing(7) fn.spacing(5) fn.spacing(5);
+  background:
+    radial-gradient(circle at top right, var(--primary-soft), transparent 34%),
+    var(--surface);
+  box-shadow: 0 26px 100px rgba(0, 0, 0, 0.36);
+  text-align: center;
+  animation: onboarding-in 200ms ease-out;
+}
+
+.onboarding-dialog__panel::before {
+  content: '';
+  position: absolute;
+  top: -72px;
+  right: -72px;
+  width: 170px;
+  height: 170px;
+  border-radius: fn.radius(full);
+  background: var(--decorative-purple);
+  filter: blur(22px);
+  opacity: 0.6;
+}
+
+.onboarding-dialog__skip {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 14px;
+  border: 0;
+  border-radius: fn.radius(full);
+  padding: 8px 12px;
+  color: var(--text-muted);
+  background: var(--surface-strong);
+  font-size: 12px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}
+
+.onboarding-dialog__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: fn.spacing(5);
+}
+
+.onboarding-dialog__glow {
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  border-radius: fn.radius(full);
+  background: var(--primary-soft);
+  filter: blur(10px);
+}
+
+.onboarding-dialog__icon {
+  position: relative;
+  display: grid;
+  width: 92px;
+  height: 92px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-card);
+  font-size: 42px;
+}
+
+.onboarding-dialog__content {
+  position: relative;
+
+  p {
+    @include mx.text-eyebrow;
+
+    justify-content: center;
+    margin-bottom: fn.spacing(2);
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 29px;
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+  }
+
+  span {
+    display: block;
+    margin-top: fn.spacing(3);
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+.onboarding-dialog__dots {
+  display: flex;
+  gap: fn.spacing(2);
+  margin: fn.spacing(5) 0;
+}
+
+.onboarding-dialog__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: fn.radius(full);
+  background: var(--border);
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.onboarding-dialog__dot--active {
+  width: 24px !important;
+  background: var(--primary) !important;
+}
+
+.onboarding-dialog__actions {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: fn.spacing(3);
+  width: 100%;
+}
+
+.onboarding-dialog__secondary,
+.onboarding-dialog__primary {
+  min-height: 48px;
+  border-radius: fn.radius(xl);
+  font-size: 13px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}
+
+.onboarding-dialog__secondary {
+  border: 1px solid var(--border-muted);
+  color: var(--text-primary);
+  background: var(--surface-strong);
+}
+
+.onboarding-dialog__primary {
+  border: 0;
+  color: #ffffff;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-button);
+}
+
+@keyframes onboarding-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 360px) {
+  .onboarding-dialog__actions {
+    grid-template-columns: 1fr;
+  }
+}
