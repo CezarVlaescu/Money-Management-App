@@ -7,25 +7,42 @@
       (click)="close()"
     ></button>
 
-    <section class="quick-add-sheet__panel" role="dialog" aria-modal="true">
+    <section
+      class="quick-add-sheet__panel"
+      role="dialog"
+      aria-modal="true"
+    >
       <div class="quick-add-sheet__handle"></div>
 
       <header class="quick-add-sheet__header">
         <div>
-          <p>Quick add</p>
-          <h2>New transaction</h2>
+          <p>
+            {{ sheetService.isEditMode() ? 'Update' : 'Quick add' }}
+          </p>
+
+          <h2>
+            {{ sheetTitle() }}
+          </h2>
         </div>
 
-        <button type="button" class="quick-add-sheet__close" (click)="close()">
+        <button
+          type="button"
+          class="quick-add-sheet__close"
+          (click)="close()"
+        >
           ✕
         </button>
       </header>
 
-      <form class="quick-add-sheet__form" (ngSubmit)="addExpense()">
+      <form
+        class="quick-add-sheet__form"
+        (ngSubmit)="submitExpense()"
+      >
         <label>
           <span>Description</span>
 
           <input
+            #titleInput
             type="text"
             placeholder="e.g. Lidl, Netflix, XTB"
             [ngModel]="title()"
@@ -47,6 +64,29 @@
           />
         </label>
 
+        <div class="quick-add-sheet__category-options">
+          <button
+            type="button"
+            class="quick-add-sheet__category-option"
+            [class.quick-add-sheet__category-option--active]="selectedCategory() === 'auto'"
+            (click)="selectedCategory.set('auto')"
+          >
+            ✨ Auto
+          </button>
+
+          @for (category of categories; track category) {
+            <button
+              type="button"
+              class="quick-add-sheet__category-option"
+              [class.quick-add-sheet__category-option--active]="selectedCategory() === category"
+              (click)="selectedCategory.set(category)"
+            >
+              {{ categoryService.getCategoryIcon(category) }}
+              {{ categoryService.getCategoryLabel(category) }}
+            </button>
+          }
+        </div>
+
         <div class="quick-add-sheet__category-preview">
           <span
             class="quick-add-sheet__category-icon"
@@ -56,13 +96,22 @@
           </span>
 
           <div>
-            <p>Detected category</p>
-            <strong>{{ categoryService.getCategoryLabel(detectedCategory()) }}</strong>
+            <p>
+              {{ selectedCategory() === 'auto' ? 'Detected category' : 'Selected category' }}
+            </p>
+
+            <strong>
+              {{ categoryService.getCategoryLabel(detectedCategory()) }}
+            </strong>
           </div>
         </div>
 
-        <button class="quick-add-sheet__submit" type="submit">
-          Add transaction
+        <button
+          class="quick-add-sheet__submit"
+          type="submit"
+          [disabled]="!canSubmit()"
+        >
+          {{ submitLabel() }}
         </button>
       </form>
     </section>

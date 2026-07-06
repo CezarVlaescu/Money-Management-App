@@ -30,8 +30,22 @@
       {{ moneyFormatter.format(expense().amount) }}
     </strong>
 
-    <button type="button" (click)="onDelete()">
-      Delete
-    </button>
+    <div class="expense-item__actions">
+      <button
+        class="expense-item__action"
+        type="button"
+        (click)="onEditExpense()"
+      >
+        Edit
+      </button>
+
+      <button
+        class="expense-item__action expense-item__action--danger"
+        type="button"
+       (click)="onDeleteExpense()"
+      >
+        Delete
+      </button>
+    </div>
   </div>
 </article>

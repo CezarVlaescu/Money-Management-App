@@ -36,8 +36,15 @@ export class SavingsGoalsService {
     this.saveGoals();
   }
 
-  public updateGoal(updatedGoal: SavingsGoal): void {
-    this.goals.update(goals => goals.map(goal => goal.id === updatedGoal.id ? updatedGoal : goal));
+  public updateGoal(goalId: string, goal: Partial<SavingsGoal>): void {
+    this.goals.update(goals =>
+      goals.map(currentGoal =>
+        currentGoal.id === goalId
+          ? { ...currentGoal, ...goal }
+          : currentGoal
+      )
+    );
+
     this.saveGoals();
   }
 

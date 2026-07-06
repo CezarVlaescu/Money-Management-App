@@ -6,15 +6,15 @@
   display: block;
 }
 
-.quick-add-sheet {
+.goal-sheet {
   position: fixed;
-  z-index: 120;
+  z-index: 130;
   inset: 0;
   display: grid;
   align-items: end;
 }
 
-.quick-add-sheet__backdrop {
+.goal-sheet__backdrop {
   position: absolute;
   inset: 0;
   border: 0;
@@ -23,9 +23,11 @@
   cursor: pointer;
 }
 
-.quick-add-sheet__panel {
+.goal-sheet__panel {
   position: relative;
   width: min(tokens.$app-width, calc(100% - 20px));
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
   margin: 0 auto 10px;
   border: 1px solid var(--border);
   border-radius: 32px 32px 28px 28px;
@@ -33,10 +35,10 @@
   background: var(--surface);
   box-shadow: 0 -20px 80px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(24px);
-  animation: sheet-in 220ms ease-out;
+  animation: goal-sheet-in 220ms ease-out;
 }
 
-.quick-add-sheet__handle {
+.goal-sheet__handle {
   width: 44px;
   height: 5px;
   margin: 0 auto 18px;
@@ -44,7 +46,7 @@
   background: var(--border);
 }
 
-.quick-add-sheet__header {
+.goal-sheet__header {
   @include mx.flex(row, flex-start, space-between, fn.spacing(4));
 
   margin-bottom: fn.spacing(4);
@@ -62,13 +64,13 @@
   }
 }
 
-.quick-add-sheet__close {
+.goal-sheet__close {
   @include mx.icon-button(40px, 15px);
 
   box-shadow: none;
 }
 
-.quick-add-sheet__form {
+.goal-sheet__form {
   display: grid;
   gap: fn.spacing(3);
 
@@ -103,74 +105,7 @@
   }
 }
 
-.quick-add-sheet__category-preview {
-  display: grid;
-  grid-template-columns: 46px 1fr;
-  align-items: center;
-  gap: fn.spacing(3);
-  border: 1px solid var(--border-muted);
-  border-radius: fn.radius(xl);
-  padding: fn.spacing(3);
-  background: var(--surface-strong);
-
-  p {
-    margin: 0 0 4px;
-    color: var(--text-muted);
-    font-size: 12px;
-    font-weight: fn.weight(bold);
-  }
-
-  strong {
-    color: var(--text-primary);
-    font-size: 15px;
-  }
-}
-
-.quick-add-sheet__category-icon {
-  @include mx.grid-center;
-
-  width: 46px;
-  height: 46px;
-  border-radius: fn.radius(lg);
-  font-size: 20px;
-
-  &--needs {
-    background: var(--needs-soft);
-  }
-
-  &--wants {
-    background: var(--wants-soft);
-  }
-
-  &--savings {
-    background: var(--savings-soft);
-  }
-
-  &--uncategorized {
-    background: var(--primary-soft);
-  }
-}
-
-.quick-add-sheet__submit {
-  @include mx.primary-button;
-
-  width: 100%;
-  padding: 15px 16px;
-}
-
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.quick-add-sheet__category-options {
+.goal-sheet__icons {
   display: flex;
   gap: fn.spacing(2);
   overflow-x: auto;
@@ -182,31 +117,45 @@
   }
 }
 
-.quick-add-sheet__category-option {
+.goal-sheet__icon-option {
+  display: grid;
   flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  place-items: center;
   border: 1px solid var(--border-muted);
-  border-radius: fn.radius(full);
-  padding: 10px 12px;
-  color: var(--text-muted);
+  border-radius: fn.radius(lg);
   background: var(--surface-strong);
-  font-size: 12px;
-  font-weight: fn.weight(black);
+  font-size: 22px;
   cursor: pointer;
-  transition:
-    color 180ms ease,
-    border-color 180ms ease,
-    background 180ms ease,
-    transform 180ms ease;
 }
 
-.quick-add-sheet__category-option--active {
+.goal-sheet__icon-option--active {
   border-color: var(--primary);
-  color: var(--primary);
   background: var(--primary-soft);
   transform: translateY(-1px);
 }
 
-.quick-add-sheet__submit:disabled {
+.goal-sheet__submit {
+  @include mx.primary-button;
+
+  width: 100%;
+  padding: 15px 16px;
+}
+
+@keyframes goal-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.goal-sheet__submit:disabled {
   opacity: 0.48;
   cursor: not-allowed;
   transform: none;

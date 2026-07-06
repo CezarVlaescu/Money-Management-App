@@ -12,6 +12,7 @@ import { MoneyFormatter } from '../../shared/services/moeny-formatter/money-form
 import { ToastService } from '../../core/services/toast/toast';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import { AddExpensesSheetService } from '../../core/services/add-expenses-sheet/add-expenses-sheet';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
 
 @Component({
   selector: 'app-expenses',
@@ -24,6 +25,7 @@ export class Expenses {
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
   private readonly addExpenseSheetService: AddExpensesSheetService = inject<AddExpensesSheetService>(AddExpensesSheetService);
+  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
 
   protected readonly selectedCategory: WritableSignal<BudgetCategory | 'all'> = signal<BudgetCategory | 'all'>('all');
   protected readonly expensesFilters: CategoryFilter[] = EXPENSES_FILTERS;
@@ -41,12 +43,26 @@ export class Expenses {
     this.selectedCategory.set(category);
   }
 
-  protected deleteExpense(expenseId: string): void {
+  protected async deleteExpense(expenseId: string): Promise<void> {
+    const confirmed = await this.confirmDialogService.confirm({
+      title: 'Delete transaction?',
+      message: 'This transaction will be removed from your local budget history.',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Keep it',
+      tone: 'danger'
+    });
+
+    if (!confirmed) return;
+
     this.expensesService.deleteExpense(expenseId);
     this.toastService.info('Transaction deleted');
   }
 
   protected openAddTransaction(): void {
     void this.addExpenseSheetService.open();
+  }
+
+  protected editExpense(expense: Expense): void {
+    this.addExpenseSheetService.open(expense);
   }
 }

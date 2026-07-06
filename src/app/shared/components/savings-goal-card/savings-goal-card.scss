@@ -147,3 +147,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+.goal-card__action {
+  border: 0;
+  border-radius: fn.radius(full);
+  padding: 9px 12px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: 12px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}

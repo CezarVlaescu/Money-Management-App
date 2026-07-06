@@ -89,3 +89,10 @@
   font-size: 12px;
   line-height: 1.45;
 }
+
+.add-expense-card__submit:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

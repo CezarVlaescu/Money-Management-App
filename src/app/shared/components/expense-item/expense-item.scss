@@ -89,3 +89,25 @@ button {
   font-weight: fn.weight(bold);
   cursor: pointer;
 }
+
+.expense-item__actions {
+  display: flex;
+  gap: fn.spacing(2);
+  align-items: center;
+}
+
+.expense-item__action {
+  border: 0;
+  border-radius: fn.radius(full);
+  padding: 8px 10px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: 11px;
+  font-weight: fn.weight(black);
+  cursor: pointer;
+}
+
+.expense-item__action--danger {
+  color: var(--danger);
+  background: var(--danger-soft);
+}

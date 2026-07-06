@@ -38,6 +38,7 @@
       <app-expense-item
         [expense]="expense"
         (deleteExpense)="deleteExpense($event)"
+        (editExpense)="editExpense($event)"
       />
     }
   } @else {

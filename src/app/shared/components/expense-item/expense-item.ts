@@ -12,12 +12,17 @@ import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
 })
 export class ExpenseItem {
   public readonly expense: InputSignal<Expense> = input.required<Expense>();
+  public readonly editExpense: OutputEmitterRef<Expense> = output<Expense>();
   public readonly deleteExpense: OutputEmitterRef<string> = output<string>();
 
   protected readonly categoryService: CategoryService = inject<CategoryService>(CategoryService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
 
-  protected onDelete(): void {
+  protected onDeleteExpense(): void {
     this.deleteExpense.emit(this.expense().id);
+  }
+
+  protected onEditExpense(): void {
+    this.editExpense.emit(this.expense());
   }
 }

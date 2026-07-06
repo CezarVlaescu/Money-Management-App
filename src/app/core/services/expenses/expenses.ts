@@ -39,9 +39,13 @@ export class ExpensesService {
     this.saveExpenses();
   }
 
-  public updateExpense(updatedExpense: Expense): void {
+  public updateExpense(expenseId: string, expense: Partial<Expense>): void {
     this.expenses.update(expenses =>
-      expenses.map(expense => expense.id === updatedExpense.id ? updatedExpense : expense)
+      expenses.map(currentExpense =>
+        currentExpense.id === expenseId
+          ? { ...currentExpense, ...expense }
+          : currentExpense
+      )
     );
 
     this.saveExpenses();

@@ -7,6 +7,9 @@ import { SavingsGoalCard } from '../../shared/components/savings-goal-card/savin
 import { AddSavingsGoalCard } from '../../shared/components/add-savings-goal-card/add-savings-goal-card';
 import { ToastService } from '../../core/services/toast/toast';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
+import { SavingsGoalSheetService } from '../../core/services/savings-goal-sheet/savings-goal-sheet-service';
+import { SavingsGoal } from '../../core/models/interface/core.interface';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
 
 @Component({
   selector: 'app-saving-goals',
@@ -19,14 +22,26 @@ export class SavingGoals {
 
   protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
+  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
+  private readonly savingsGoalSheetService: SavingsGoalSheetService = inject<SavingsGoalSheetService>(SavingsGoalSheetService);
 
   protected addMoney(goalId: string): void {
     this.savingsGoalsService.addMoneyToGoal(goalId, 100);
     this.toastService.success('Added 100 RON to goal');
   }
 
-  protected deleteGoal(goalId: string): void {
+  protected async deleteGoal(goalId: string): Promise<void> {
+    const confirmed = await this.confirmDialogService.confirm({
+      title: 'Delete savings goal?',
+      message: 'This goal and its progress will be removed from your device.',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Keep goal',
+      tone: 'danger'
+    });
+
+    if (!confirmed) return;
+
     this.savingsGoalsService.deleteGoal(goalId);
     this.toastService.info('Goal deleted');
   }
@@ -36,6 +51,10 @@ export class SavingGoals {
       behavior: 'smooth',
       block: 'center'
     });
+  }
+
+  protected editGoal(goal: SavingsGoal): void {
+    this.savingsGoalSheetService.open(goal);
   }
 
   protected onGoalAdded(): void {

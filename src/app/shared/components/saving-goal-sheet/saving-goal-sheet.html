@@ -1,0 +1,108 @@
+@if (sheetService.isOpen()) {
+  <div class="goal-sheet">
+    <button
+      class="goal-sheet__backdrop"
+      type="button"
+      aria-label="Close goal editor"
+      (click)="close()"
+    ></button>
+
+    <section
+      class="goal-sheet__panel"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="goal-sheet__handle"></div>
+
+      <header class="goal-sheet__header">
+        <div>
+          <p>Update goal</p>
+          <h2>Edit savings goal</h2>
+        </div>
+
+        <button
+          class="goal-sheet__close"
+          type="button"
+          (click)="close()"
+        >
+          ✕
+        </button>
+      </header>
+
+      <form
+        class="goal-sheet__form"
+        (ngSubmit)="saveGoal()"
+      >
+        <label>
+          <span>Goal name</span>
+
+          <input
+            #goalTitleInput
+            type="text"
+            placeholder="e.g. Emergency fund"
+            [ngModel]="title()"
+            (ngModelChange)="title.set($event)"
+            name="title"
+          />
+        </label>
+
+        <label>
+          <span>Target amount</span>
+
+          <input
+            type="number"
+            placeholder="10000"
+            [ngModel]="targetAmount()"
+            (ngModelChange)="targetAmount.set($event)"
+            name="targetAmount"
+          />
+        </label>
+
+        <label>
+          <span>Saved so far</span>
+
+          <input
+            type="number"
+            placeholder="2500"
+            [ngModel]="currentAmount()"
+            (ngModelChange)="currentAmount.set($event)"
+            name="currentAmount"
+          />
+        </label>
+
+        <label>
+          <span>Monthly contribution</span>
+
+          <input
+            type="number"
+            placeholder="500"
+            [ngModel]="monthlyContribution()"
+            (ngModelChange)="monthlyContribution.set($event)"
+            name="monthlyContribution"
+          />
+        </label>
+
+        <div class="goal-sheet__icons">
+          @for (icon of iconOptions; track icon) {
+            <button
+              type="button"
+              class="goal-sheet__icon-option"
+              [class.goal-sheet__icon-option--active]="selectedIcon() === icon"
+              (click)="selectedIcon.set(icon)"
+            >
+              {{ icon }}
+            </button>
+          }
+        </div>
+
+        <button
+          class="goal-sheet__submit"
+          type="submit"
+          [disabled]="!canSubmit()"
+        >
+          Save changes
+        </button>
+      </form>
+    </section>
+  </div>
+}

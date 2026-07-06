@@ -1,0 +1,54 @@
+@if (confirmDialogService.isOpen() && confirmDialogService.config(); as config) {
+  <div class="confirm-dialog">
+    <button
+      class="confirm-dialog__backdrop"
+      type="button"
+      aria-label="Cancel confirmation"
+      (click)="confirmDialogService.cancel()"
+    ></button>
+
+    <section
+      class="confirm-dialog__panel"
+      role="dialog"
+      aria-modal="true"
+      [class]="'confirm-dialog__panel--' + config.tone"
+    >
+      <div class="confirm-dialog__icon">
+        @switch (config.tone) {
+          @case ('warning') {
+            ⚠️
+          }
+          @case ('info') {
+            ℹ️
+          }
+          @default {
+            🗑️
+          }
+        }
+      </div>
+
+      <div class="confirm-dialog__content">
+        <h2>{{ config.title }}</h2>
+        <p>{{ config.message }}</p>
+      </div>
+
+      <div class="confirm-dialog__actions">
+        <button
+          class="confirm-dialog__cancel"
+          type="button"
+          (click)="confirmDialogService.cancel()"
+        >
+          {{ config.cancelLabel }}
+        </button>
+
+        <button
+          class="confirm-dialog__confirm"
+          type="button"
+          (click)="confirmDialogService.accept()"
+        >
+          {{ config.confirmLabel }}
+        </button>
+      </div>
+    </section>
+  </div>
+}

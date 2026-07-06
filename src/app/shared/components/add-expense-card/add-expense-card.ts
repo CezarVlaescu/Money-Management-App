@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import { Component, computed, ElementRef, inject, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
 import { ExpensesService } from '../../../core/services/expenses/expenses';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast/toast';
@@ -18,6 +18,13 @@ export class AddExpenseCard {
   public readonly expenseAdded: OutputEmitterRef<void> = output<void>();
   protected readonly title: WritableSignal<string> = signal<string>('');
   protected readonly amount: WritableSignal<number | null> = signal<number | null>(null);
+
+  protected readonly canSubmit: Signal<boolean> = computed<boolean>(() => {
+    const title = this.title().trim();
+    const amount = this.amount();
+
+    return !!title && !!amount && amount > 0;
+  });
 
   public scrollAndFocus(): void {
     this.hostElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });

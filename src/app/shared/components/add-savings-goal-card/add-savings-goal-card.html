@@ -62,7 +62,7 @@
       />
     </label>
 
-    <button type="submit">
+    <button type="submit" [disabled]="!canSubmit()" class="add-goal-card__submit">
       Create goal
     </button>
   </form>

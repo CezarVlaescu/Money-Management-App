@@ -1,4 +1,4 @@
-import { BudgetCategory, ToastType } from "../types/core.types";
+import { BudgetCategory, ConfirmDialogTone, ToastType } from "../types/core.types";
 
 interface BudgetBucket {
   category: BudgetCategory;
@@ -80,6 +80,13 @@ interface BeforeInstallPromptEvent extends Event {
     platform: string;
   }>;
 }
+interface ConfirmDialogConfig {
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  tone?: ConfirmDialogTone;
+}
 
 export type { 
   BudgetBucket, 
@@ -90,5 +97,6 @@ export type {
   CreateExpensePayload, 
   CreateSavingsGoalPayload,
   Toast,
-  BeforeInstallPromptEvent
+  BeforeInstallPromptEvent,
+  ConfirmDialogConfig
 };

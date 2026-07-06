@@ -12,6 +12,7 @@ import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
 export class SavingsGoalCard {
   public readonly goal: InputSignal<SavingsGoal> = input.required<SavingsGoal>();
   public readonly addMoney: OutputEmitterRef<string> = output<string>();
+  public readonly editGoal: OutputEmitterRef<SavingsGoal> = output<SavingsGoal>();
   public readonly deleteGoal: OutputEmitterRef<string> = output<string>();
 
   protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
@@ -23,5 +24,9 @@ export class SavingsGoalCard {
 
   protected onDelete(): void {
     this.deleteGoal.emit(this.goal().id);
+  }
+
+  protected onEdit(): void {
+    this.editGoal.emit(this.goal());
   }
 }

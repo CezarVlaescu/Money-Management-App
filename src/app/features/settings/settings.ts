@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { PageHeader } from '../../shared/components/page-header/page-header';
 import { RouterLink } from '@angular/router';
 import { InstallAppCard } from '../../shared/components/install-app-card/install-app-card';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
+import { ToastService } from '../../core/services/toast/toast';
 
 @Component({
   selector: 'app-settings',
@@ -21,6 +23,8 @@ export class Settings {
   protected readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
   protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
+  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
+  private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   protected readonly incomeDraft: WritableSignal<number> = signal<number>(this.budgetService.income());
 
@@ -28,15 +32,34 @@ export class Settings {
     void this.budgetService.updateIncome(Number(this.incomeDraft()) || 0);
   }
 
-  protected resetExpenses(): void {
-    const confirmed = window.confirm('Are you sure you want to delete all expenses?');
+  protected async resetExpenses(): Promise<void> {
+    const confirmed = await this.confirmDialogService.confirm({
+      title: 'Reset all expenses?',
+      message: 'All local transactions will be deleted. You can export a backup before doing this.',
+      confirmLabel: 'Reset',
+      cancelLabel: 'Cancel',
+      tone: 'danger'
+    });
+
     if (!confirmed) return;
+
     this.expensesService.clearExpenses();
+    this.toastService.info('Expenses reset');
   }
 
-  protected resetGoals(): void {
-    const confirmed = window.confirm('Are you sure you want to delete all savings goals?');
+  protected async resetGoals(): Promise<void> {
+    const confirmed = await this.confirmDialogService.confirm({
+      title: 'Reset savings goals?',
+      message: 'All local savings goals and progress will be deleted.',
+      confirmLabel: 'Reset',
+      cancelLabel: 'Cancel',
+      tone: 'danger'
+    });
+
+
     if (!confirmed) return;
+
     this.savingsGoalsService.clearGoals();
+    this.toastService.info('Savings goals reset');
   }
 }

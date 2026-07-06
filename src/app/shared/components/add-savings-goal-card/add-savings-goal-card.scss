@@ -102,3 +102,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+.add-goal-card__submit:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
