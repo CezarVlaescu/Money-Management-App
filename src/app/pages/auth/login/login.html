@@ -1,0 +1,46 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <div class="auth-card__header">
+      <span class="auth-card__eyebrow">Money Bloom</span>
+      <h1>Welcome back</h1>
+      <p>Sign in to sync your budget across your devices.</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="auth-form__field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <small class="auth-form__error">Please enter a valid email.</small>
+      }
+
+      <label class="auth-form__field">
+        <span>Password</span>
+        <input type="password" formControlName="password" placeholder="Your password" />
+      </label>
+
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="auth-form__error">Password is required.</small>
+      }
+
+      @if (error()) {
+        <p class="auth-form__server-error">{{ error() }}</p>
+      }
+
+      <button class="auth-form__submit" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+
+    <div class="auth-card__links">
+      <a routerLink="/auth/forgot-password">Forgot password?</a>
+      <a routerLink="/auth/register">Create account</a>
+    </div>
+
+    <button class="auth-card__guest" type="button" (click)="continueAsGuest()">
+      Continue as guest
+    </button>
+  </section>
+</main>

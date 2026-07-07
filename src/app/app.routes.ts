@@ -2,6 +2,22 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
+        path: 'auth/login',
+        loadComponent: () => import('./pages/auth/login/login').then(component => component.Login)
+    },
+    {
+        path: 'auth/register',
+        loadComponent: () => import('./pages/auth/register/register').then(component => component.Register)
+    },
+    {
+        path: 'auth/forgot-password',
+        loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(component => component.ForgotPassword)
+    },
+    {
+        path: 'auth/update-password',
+        loadComponent: () => import('./pages/auth/update-password/update-password').then(component => component.UpdatePassword)
+    },
+    {
         path: '',
         loadComponent: () => import('./features/layout/layout').then(component => component.Layout),
         children: [

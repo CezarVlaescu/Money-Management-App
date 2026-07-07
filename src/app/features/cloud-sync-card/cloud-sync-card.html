@@ -1,0 +1,71 @@
+<section class="cloud-sync-card">
+  <div class="cloud-sync-card__icon">
+    ☁️
+  </div>
+
+  <div class="cloud-sync-card__content">
+    <div class="cloud-sync-card__header">
+      <h2>Cloud Sync</h2>
+
+      @if (authService.isLoggedIn()) {
+        <span class="cloud-sync-card__badge cloud-sync-card__badge--active">
+          Connected
+        </span>
+      } @else {
+        <span class="cloud-sync-card__badge">
+          Guest mode
+        </span>
+      }
+    </div>
+
+    @if (authService.isLoggedIn()) {
+      <p class="cloud-sync-card__description">
+        Signed in as <strong>{{ authService.user()?.email }}</strong>.
+        Your account is connected. You can now back up your local budget data to the cloud.
+      </p>
+
+      <div class="cloud-sync-card__actions">
+        <button
+          class="cloud-sync-card__button cloud-sync-card__button--primary"
+          type="button"
+          [disabled]="backupLoading()"
+          (click)="backupToCloud()"
+        >
+          {{ backupLoading() ? 'Backing up...' : 'Backup to cloud' }}
+        </button>
+
+        <button
+          class="cloud-sync-card__button cloud-sync-card__button--danger"
+          type="button"
+          [disabled]="loading()"
+          (click)="logout()"
+        >
+          {{ loading() ? 'Logging out...' : 'Logout' }}
+        </button>
+      </div>
+
+      @if (backupSuccess()) {
+        <p class="cloud-sync-card__success">{{ backupSuccess() }}</p>
+      }
+    } @else {
+      <p class="cloud-sync-card__description">
+        You are using Money Bloom as a guest. Create an account to back up your budget
+        and sync it between your phone and laptop.
+      </p>
+
+      <div class="cloud-sync-card__actions">
+        <a class="cloud-sync-card__button cloud-sync-card__button--primary" routerLink="/auth/register">
+          Create account
+        </a>
+
+        <a class="cloud-sync-card__button cloud-sync-card__button--secondary" routerLink="/auth/login">
+          Sign in
+        </a>
+      </div>
+    }
+
+    @if (error()) {
+      <p class="cloud-sync-card__error">{{ error() }}</p>
+    }
+  </div>
+</section>

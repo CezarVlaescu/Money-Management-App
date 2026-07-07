@@ -11,10 +11,11 @@ import { InstallAppCard } from '../../shared/components/install-app-card/install
 import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
 import { ToastService } from '../../core/services/toast/toast';
 import { OnboardingService } from '../../core/services/onboarding/onboarding-service';
+import { CloudSyncCard } from '../cloud-sync-card/cloud-sync-card';
 
 @Component({
   selector: 'app-settings',
-  imports: [FormsModule, PageHeader, RouterLink, InstallAppCard],
+  imports: [FormsModule, PageHeader, RouterLink, InstallAppCard, CloudSyncCard],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })

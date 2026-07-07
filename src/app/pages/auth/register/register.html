@@ -1,0 +1,46 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <div class="auth-card__header">
+      <span class="auth-card__eyebrow">Money Bloom</span>
+      <h1>Create account</h1>
+      <p>Save your budget in the cloud and sync it between devices.</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="auth-form__field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <small class="auth-form__error">Please enter a valid email.</small>
+      }
+
+      <label class="auth-form__field">
+        <span>Password</span>
+        <input type="password" formControlName="password" placeholder="Minimum 8 characters" />
+      </label>
+
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="auth-form__error">Password must have at least 8 characters.</small>
+      }
+
+      @if (error()) {
+        <p class="auth-form__server-error">{{ error() }}</p>
+      }
+
+      @if (success()) {
+        <p class="auth-form__success">{{ success() }}</p>
+      }
+
+      <button class="auth-form__submit" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Creating account...' : 'Create account' }}
+      </button>
+    </form>
+
+    <div class="auth-card__links">
+      <span>Already have an account?</span>
+      <a routerLink="/auth/login">Sign in</a>
+    </div>
+  </section>
+</main>

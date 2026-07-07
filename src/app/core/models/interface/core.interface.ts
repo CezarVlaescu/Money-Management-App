@@ -88,6 +88,95 @@ interface ConfirmDialogConfig {
   tone?: ConfirmDialogTone;
 }
 
+interface CloudExpense {
+  id: string;
+  user_id: string;
+  local_id: string | null;
+  title: string;
+  amount: number;
+  category: string;
+  expense_date: string;
+  note: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+interface CreateCloudExpensePayload {
+  user_id: string;
+  local_id?: string | null;
+  title: string;
+  amount: number;
+  category: string;
+  expense_date: string;
+  note?: string | null;
+}
+
+interface UpdateCloudExpensePayload {
+  title?: string;
+  amount?: number;
+  category?: string;
+  expense_date?: string;
+  note?: string | null;
+  deleted_at?: string | null;
+}
+
+interface CloudSavingsGoal {
+  id: string;
+  user_id: string;
+  local_id: string | null;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  deadline: string | null;
+  icon: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+interface CreateCloudSavingsGoalPayload {
+  user_id: string;
+  local_id?: string | null;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  deadline?: string | null;
+  icon?: string | null;
+}
+
+interface UpdateCloudSavingsGoalPayload {
+  name?: string;
+  target_amount?: number;
+  current_amount?: number;
+  deadline?: string | null;
+  icon?: string | null;
+  deleted_at?: string | null;
+}
+
+interface CloudUserSettings {
+  id: string;
+  user_id: string;
+  monthly_income: number;
+  currency: string;
+  needs_percentage: number;
+  wants_percentage: number;
+  savings_percentage: number;
+  theme: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface UpsertCloudUserSettingsPayload {
+  user_id: string;
+  monthly_income: number;
+  currency: string;
+  needs_percentage: number;
+  wants_percentage: number;
+  savings_percentage: number;
+  theme?: string | null;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -98,5 +187,13 @@ export type {
   CreateSavingsGoalPayload,
   Toast,
   BeforeInstallPromptEvent,
-  ConfirmDialogConfig
+  ConfirmDialogConfig,
+  CloudExpense,
+  CreateCloudExpensePayload,
+  UpdateCloudExpensePayload,
+  CloudSavingsGoal,
+  CreateCloudSavingsGoalPayload,
+  UpdateCloudSavingsGoalPayload,
+  CloudUserSettings,
+  UpsertCloudUserSettingsPayload
 };

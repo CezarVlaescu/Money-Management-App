@@ -1,0 +1,156 @@
+@use 'mixins' as mx;
+@use 'functions' as fn;
+
+.cloud-sync-card {
+  @include mx.glass-card(30px, 20px);
+  @include mx.flex(row, flex-start, flex-start, 16px);
+
+  background:
+    linear-gradient(135deg, var(--primary-soft), var(--savings-soft)),
+    var(--surface);
+  color: var(--text-primary);
+
+  &__icon {
+    @include mx.grid-center;
+    @include mx.size(50px);
+
+    flex: 0 0 50px;
+    border-radius: fn.radius(lg);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-soft);
+    font-size: 24px;
+  }
+
+  &__content {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+    gap: 14px;
+  }
+
+  &__header {
+    @include mx.flex(row, flex-start, space-between, 12px);
+
+    h2 {
+      @include mx.text-title(20px);
+
+      letter-spacing: -0.03em;
+    }
+  }
+
+  &__badge {
+    flex: 0 0 auto;
+    border-radius: fn.radius(full);
+    padding: 6px 10px;
+    color: var(--text-secondary);
+    background: var(--surface-muted);
+    font-size: 12px;
+    font-weight: fn.weight(black);
+    white-space: nowrap;
+
+    &--active {
+      color: var(--success);
+      background: var(--success-soft);
+    }
+  }
+
+  &__description {
+    @include mx.text-body(15px);
+
+    color: var(--text-secondary);
+
+    strong {
+      color: var(--text-primary);
+      font-weight: fn.weight(black);
+      word-break: break-word;
+    }
+  }
+
+  &__actions {
+    @include mx.flex(row, center, flex-start, 10px);
+
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    @include mx.flex(row, center, center, 0);
+
+    min-height: 42px;
+    border: 0;
+    border-radius: fn.radius(md);
+    padding: 0 16px;
+    font: inherit;
+    font-weight: fn.weight(black);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.18s ease,
+      opacity 0.18s ease,
+      background 0.18s ease;
+
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.68;
+      cursor: not-allowed;
+    }
+
+    &--primary {
+      color: var(--text-inverse);
+      background: var(--gradient-primary);
+      box-shadow: var(--shadow-button);
+    }
+
+    &--secondary {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    &--danger {
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+  }
+
+  &__error {
+    margin: 0;
+    border-radius: fn.radius(md);
+    padding: 12px 14px;
+    color: var(--danger);
+    background: var(--danger-soft);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  &__success {
+    margin: 0;
+    border-radius: fn.radius(md);
+    padding: 12px 14px;
+    color: var(--success);
+    background: var(--success-soft);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+@include mx.respond-max(sm) {
+  .cloud-sync-card {
+    flex-direction: column;
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__actions {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    &__button {
+      width: 100%;
+    }
+  }
+}
