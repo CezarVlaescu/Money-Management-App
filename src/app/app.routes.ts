@@ -1,17 +1,25 @@
 import { Routes } from '@angular/router';
+import { authenticatedGuard, authPageGuard } from './core/guards/auth-guard-guard';
 
 export const routes: Routes = [
     {
         path: 'auth/login',
+        canMatch: [authPageGuard],
         loadComponent: () => import('./pages/auth/login/login').then(component => component.Login)
     },
     {
         path: 'auth/register',
+        canMatch: [authPageGuard],
         loadComponent: () => import('./pages/auth/register/register').then(component => component.Register)
     },
     {
         path: 'auth/forgot-password',
+        canMatch: [authPageGuard],
         loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(component => component.ForgotPassword)
+    },
+    {
+        path: 'privacy',
+        loadComponent: () => import('./features/privacy/privacy').then(component => component.Privacy)
     },
     {
         path: 'auth/update-password',
@@ -19,6 +27,12 @@ export const routes: Routes = [
     },
     {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'auth/login'
+    },
+    {
+        path: '',
+        canMatch: [authenticatedGuard],
         loadComponent: () => import('./features/layout/layout').then(component => component.Layout),
         children: [
             {
@@ -50,6 +64,6 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: 'dashboard'
+        redirectTo: 'auth/login'
     }
 ];

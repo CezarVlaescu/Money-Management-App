@@ -61,6 +61,14 @@ export class CloudSyncMetaService {
     localStorage.removeItem(CLOUD_SYNC_META_SERVICE_KEY);
   }
 
+  public clearError(): void {
+    this.updateMeta({
+      lastErrorAt: null,
+      lastErrorMessage: null,
+      state: this.meta().lastBackupAt || this.meta().lastRestoreAt ? 'synced' : 'idle'
+    });
+  }
+
   private updateMeta(partialMeta: Partial<CloudSyncMeta>): void {
     const nextMeta: CloudSyncMeta = {
       ...this.meta(),

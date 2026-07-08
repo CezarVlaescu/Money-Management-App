@@ -74,6 +74,7 @@ export class CloudSyncCard implements OnInit {
       this.error.set(null);
       this.backupSuccess.set(null);
 
+      this.cloudSyncMetaService.clearError();
       await this.cloudBackupService.backupLocalDataToCloud();
       await this.loadCloudStatus();
 

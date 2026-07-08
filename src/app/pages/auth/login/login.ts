@@ -37,8 +37,8 @@ export class Login {
       const { email, password } = this.form.getRawValue();
 
       await this.authService.signIn(email, password);
-      await this.router.navigate(['/dashboard']);
       await this.cloudRestorePromptService.askToRestoreCloudDataIfNeeded();
+      await this.router.navigate(['/dashboard']);
     } 
     catch (error) { this.error.set(this.authService.getErrorMessage(error)); } 
     finally { this.loading.set(false); }
