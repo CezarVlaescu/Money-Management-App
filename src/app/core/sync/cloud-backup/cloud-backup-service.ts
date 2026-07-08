@@ -55,33 +55,42 @@ export class CloudBackupService {
     const localExpenses = this.expensesService.expenses();
     const cloudExpenses = await this.cloudExpensesService.getExpenses();
     const cloudExpensesByLocalId = new Map(
-      cloudExpenses
-        .filter(expense => !!expense.local_id)
-        .map(expense => [expense.local_id as string, expense])
+    cloudExpenses
+      .filter(expense => !!expense.local_id)
+      .map(expense => [expense.local_id as string, expense])
     );
 
-    const payload = localExpenses.map(expense => ({
+    const payloadWithMeta = localExpenses.map(expense => ({
       local_id: this.getStringValue(expense, 'id'),
       title: this.getStringValue(expense, 'title', 'Untitled expense'),
       amount: this.getNumberValue(expense, 'amount'),
       category: this.getStringValue(expense, 'category', 'wants'),
       expense_date: this.getDateValue(expense, ['date', 'expenseDate', 'createdAt']),
       note: this.getNullableStringValue(expense, 'note'),
-      _localUpdatedAt: this.getLocalUpdatedAt(expense)
+      localUpdatedAt: this.getLocalUpdatedAt(expense)
     }));
 
-    const expensesToUpload = payload
-      .filter(expense => {
-        const cloudExpense = expense.local_id
-        ? cloudExpensesByLocalId.get(expense.local_id)
-        : undefined;
+    const expensesToUpload = payloadWithMeta
+    .filter(expense => {
+      const cloudExpense = expense.local_id
+      ? cloudExpensesByLocalId.get(expense.local_id)
+      : undefined;
 
       if (!cloudExpense) return true;
-      return this.isLocalNewerOrEqual(expense._localUpdatedAt, cloudExpense.updated_at);
+
+      return this.isLocalNewerOrEqual(expense.localUpdatedAt, cloudExpense.updated_at);
     })
-    .map(({ ...expense }) => expense);
+    .map(expense => ({
+      local_id: expense.local_id,
+      title: expense.title,
+      amount: expense.amount,
+      category: expense.category,
+      expense_date: expense.expense_date,
+      note: expense.note
+    }));
 
     if (expensesToUpload.length) await this.cloudExpensesService.upsertExpenses(expensesToUpload);
+
     await this.syncDeletedExpenses(cloudExpensesByLocalId);
   }
 
@@ -90,31 +99,38 @@ export class CloudBackupService {
     const cloudGoals = await this.cloudSavingsGoalsService.getGoals();
     const cloudGoalsByLocalId = new Map(
       cloudGoals
-        .filter(goal => !!goal.local_id)
-        .map(goal => [goal.local_id as string, goal])
+      .filter(goal => !!goal.local_id)
+      .map(goal => [goal.local_id as string, goal])
     );
 
-    const payload = localGoals.map(goal => ({
+    const payloadWithMeta = localGoals.map(goal => ({
       local_id: this.getStringValue(goal, 'id'),
       name: this.getStringFromKeys(goal, ['name', 'title', 'label'], 'Untitled goal'),
       target_amount: this.getNumberValue(goal, 'targetAmount'),
       current_amount: this.getNumberValue(goal, 'currentAmount'),
       deadline: this.getNullableDateValue(goal, ['deadline', 'targetDate']),
       icon: this.getNullableStringValue(goal, 'icon'),
-      _localUpdatedAt: this.getLocalUpdatedAt(goal)
+      localUpdatedAt: this.getLocalUpdatedAt(goal)
     }));
 
-    const goalsToUpload = payload
+    const goalsToUpload = payloadWithMeta
     .filter(goal => {
       const cloudGoal = goal.local_id
-        ? cloudGoalsByLocalId.get(goal.local_id)
-        : undefined;
+      ? cloudGoalsByLocalId.get(goal.local_id)
+      : undefined;
 
       if (!cloudGoal) return true;
 
-      return this.isLocalNewerOrEqual(goal._localUpdatedAt, cloudGoal.updated_at);
+      return this.isLocalNewerOrEqual(goal.localUpdatedAt, cloudGoal.updated_at);
     })
-    .map(({ ...goal }) => goal);
+    .map(goal => ({
+      local_id: goal.local_id,
+      name: goal.name,
+      target_amount: goal.target_amount,
+      current_amount: goal.current_amount,
+      deadline: goal.deadline,
+      icon: goal.icon
+    }));
 
     if (goalsToUpload.length) await this.cloudSavingsGoalsService.upsertGoals(goalsToUpload);
 
