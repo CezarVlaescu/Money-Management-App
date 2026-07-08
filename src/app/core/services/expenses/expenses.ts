@@ -4,11 +4,14 @@ import { BudgetCategory } from '../../models/types/core.types';
 import { CategoryService} from '../category/category';
 import { StorageService } from '../storage/storage';
 import { EXPENSES_STORE_KEY } from '../../../shared/constants/app.constants';
+import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';
 
 @Injectable({ providedIn: 'root' })
 export class ExpensesService {
   private readonly storageService: StorageService = inject<StorageService>(StorageService);
   private readonly categoryService: CategoryService = inject<CategoryService>(CategoryService);
+  private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
+
   public readonly totalSpent: Signal<number> = computed<number>(() =>
     this.expenses().reduce((total, expense) => total + Math.abs(expense.amount), 0)
   );
@@ -37,6 +40,7 @@ export class ExpensesService {
 
     this.expenses.update(expenses => [expense, ...expenses]);
     this.saveExpenses();
+    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
   public updateExpense(expenseId: string, expense: Partial<Expense>): void {
@@ -49,11 +53,13 @@ export class ExpensesService {
     );
 
     this.saveExpenses();
+    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
   public deleteExpense(expenseId: string): void {
     this.expenses.update(expenses => expenses.filter(expense => expense.id !== expenseId));
     this.saveExpenses();
+    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
   public getExpensesByCategory(category: BudgetCategory): Expense[] {
@@ -63,6 +69,13 @@ export class ExpensesService {
   public clearExpenses(): void {
     this.expenses.set([]);
     this.saveExpenses();
+    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
+  }
+
+  public replaceExpenses(expenses: Expense[]): void {
+    this.expenses.set(expenses);
+    this.saveExpenses();
+    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
   private getTotalByCategory(category: BudgetCategory): number {

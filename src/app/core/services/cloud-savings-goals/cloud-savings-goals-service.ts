@@ -9,6 +9,19 @@ import { CloudSavingsGoal, CreateCloudSavingsGoalPayload, UpdateCloudSavingsGoal
 export class CloudSavingsGoalsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
 
+  public async softDeleteGoals(ids: string[]): Promise<void> {
+    if (!ids.length) return;
+
+    const userId = this.authService.getCurrentUserId();
+    const { error } = await supabase
+      .from('savings_goals')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .in('id', ids);
+  
+    if (error) throw error;
+  }
+
   public async getGoals(): Promise<CloudSavingsGoal[]> {
     const userId = this.authService.getCurrentUserId();
 

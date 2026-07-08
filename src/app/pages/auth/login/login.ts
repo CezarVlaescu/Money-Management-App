@@ -2,6 +2,7 @@ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth-service';
+import { CloudRestorePromptService } from '../../../core/sync/cloud-restore-prompt/cloud-restore-prompt-service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class Login {
   private readonly formBuilder: FormBuilder = inject<FormBuilder>(FormBuilder);
   private readonly router: Router = inject<Router>(Router);
   private readonly authService: AuthService = inject<AuthService>(AuthService);
+  private readonly cloudRestorePromptService: CloudRestorePromptService = inject<CloudRestorePromptService>(CloudRestorePromptService);
 
   protected readonly loading: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly error: WritableSignal<string | null> = signal<string | null>(null);
@@ -36,11 +38,10 @@ export class Login {
 
       await this.authService.signIn(email, password);
       await this.router.navigate(['/dashboard']);
-    } catch (error) {
-      this.error.set(this.authService.getErrorMessage(error));
-    } finally {
-      this.loading.set(false);
-    }
+      await this.cloudRestorePromptService.askToRestoreCloudDataIfNeeded();
+    } 
+    catch (error) { this.error.set(this.authService.getErrorMessage(error)); } 
+    finally { this.loading.set(false); }
   }
 
   protected async continueAsGuest(): Promise<void> {

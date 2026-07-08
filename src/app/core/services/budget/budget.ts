@@ -4,11 +4,14 @@ import { ExpensesService } from '../expenses/expenses';
 import { INCOME_STORAGE_KEY } from '../../../shared/constants/app.constants';
 import { BudgetSummary, BudgetBucket } from '../../models/interface/core.interface';
 import { BudgetCategory } from '../../models/types/core.types';
+import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';
 
 @Injectable({ providedIn: 'root' })
 export class BudgetService {
-  public readonly storageService: StorageService = inject<StorageService>(StorageService);
-  public readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
+  private readonly storageService: StorageService = inject<StorageService>(StorageService);
+  private readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
+  private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
+  
   public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 0));
   public readonly needsAmount: Signal<number> = computed<number>(() => this.income() * 0.5);
   public readonly wantsAmount: Signal<number> = computed<number>(() => this.income() * 0.3);
@@ -69,6 +72,13 @@ export class BudgetService {
     const safeIncome = Math.max(income, 0);
     this.income.set(safeIncome);
     this.storageService.setItem(INCOME_STORAGE_KEY, safeIncome);
+    this.cloudSyncQueueService.requestAutoBackup('settings-changed');
+  }
+
+  public setIncome(income: number): void {
+    this.income.set(income);
+    this.income();
+    this.cloudSyncQueueService.requestAutoBackup('settings-changed');
   }
 
   private createBucket(payload: {

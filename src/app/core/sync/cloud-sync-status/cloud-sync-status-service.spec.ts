@@ -1,0 +1,16 @@
+import { TestBed } from '@angular/core/testing';
+
+import { CloudSyncStatusService } from './cloud-sync-status-service';
+
+describe('CloudSyncStatusService', () => {
+  let service: CloudSyncStatusService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(CloudSyncStatusService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

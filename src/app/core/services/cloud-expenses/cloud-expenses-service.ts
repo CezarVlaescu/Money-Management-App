@@ -9,6 +9,19 @@ import { supabase } from '../../cloud/supabase.client';
 export class CloudExpensesService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
 
+  public async softDeleteExpenses(ids: string[]): Promise<void> {
+    if (!ids.length) return;
+
+    const userId = this.authService.getCurrentUserId();
+    const { error } = await supabase
+      .from('expenses')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .in('id', ids);
+
+    if (error) throw error;
+  }
+
   public async getExpenses(): Promise<CloudExpense[]> {
     const userId = this.authService.getCurrentUserId();
 

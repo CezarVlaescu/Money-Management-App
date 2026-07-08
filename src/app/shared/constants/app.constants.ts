@@ -1,3 +1,4 @@
+import { CloudSyncMeta } from "../../core/models/interface/core.interface";
 import { BudgetCategory } from "../../core/models/types/core.types";
 import { CategoryFilter, NavigationItem, OnboardingStep } from "../models/interfaces/shared.interface";
 
@@ -6,6 +7,8 @@ const INCOME_STORAGE_KEY = 'money-bloom-income';
 const EXPENSES_STORE_KEY = 'money-bloom-expenses';
 const SAVINGS_STORE_KEY = 'money-bloom-savings-goals';
 const ONBOARDING_STORAGE_KEY = 'money-bloom-onboarding-completed';
+const CLOUD_RESTORE_PROMPT_KEY = 'money-bloom-cloud-restore-prompt-seen';
+const CLOUD_SYNC_META_SERVICE_KEY = 'money-bloom-cloud-sync-meta';
 const NEEDS_CONST: string[] = [
   'lidl', 'kaufland', 'carrefour', 'mega image',
   'profi', 'auchan', 'penny', 'rent', 'chirie',
@@ -98,6 +101,13 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
 
 const CATEGORIES_CONST: BudgetCategory[] = ['needs', 'wants', 'savings'];
 const ICON_OPTIONS_CONST: string[] = ['🎯', '🏖️', '🛟', '🏠', '🚗', '💻', '💍', '📚'];
+const DEFAULT_CLOUD_SYNC_META: CloudSyncMeta = {
+  lastBackupAt: null,
+  lastRestoreAt: null,
+  lastErrorAt: null,
+  lastErrorMessage: null,
+  state: 'idle'
+};
 
 export { 
   THEME_STORAGE_KEY,
@@ -112,5 +122,8 @@ export {
   CATEGORIES_CONST,
   ICON_OPTIONS_CONST,
   ONBOARDING_STORAGE_KEY,
-  ONBOARDING_STEPS
+  ONBOARDING_STEPS,
+  CLOUD_RESTORE_PROMPT_KEY,
+  DEFAULT_CLOUD_SYNC_META,
+  CLOUD_SYNC_META_SERVICE_KEY
 };

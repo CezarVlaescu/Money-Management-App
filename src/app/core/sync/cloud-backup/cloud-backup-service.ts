@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { BudgetService } from '../services/budget/budget';
-import { ExpensesService } from '../services/expenses/expenses';
-import { SavingsGoalsService } from '../services/savings/savings';
-import { ThemeService } from '../services/theme/theme';
-import { CloudExpensesService } from '../services/cloud-expenses/cloud-expenses-service';
-import { CloudSavingsGoalsService } from '../services/cloud-savings-goals/cloud-savings-goals-service';
-import { CloudUserSettingsService } from '../services/cloud-user-settings/cloud-user-settings-service';
+import { BudgetService } from '../../services/budget/budget';
+import { ExpensesService } from '../../services/expenses/expenses';
+import { SavingsGoalsService } from '../../services/savings/savings';
+import { ThemeService } from '../../services/theme/theme';
+import { CloudExpensesService } from '../../services/cloud-expenses/cloud-expenses-service';
+import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/cloud-savings-goals-service';
+import { CloudUserSettingsService } from '../../services/cloud-user-settings/cloud-user-settings-service';
+import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service';
 
 
 @Injectable({
@@ -19,11 +20,22 @@ export class CloudBackupService {
   private readonly cloudExpensesService: CloudExpensesService = inject<CloudExpensesService>(CloudExpensesService);
   private readonly cloudSavingsGoalsService: CloudSavingsGoalsService = inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
   private readonly cloudUserSettingsService: CloudUserSettingsService = inject<CloudUserSettingsService>(CloudUserSettingsService);
+  private readonly cloudSyncMetaService: CloudSyncMetaService = inject<CloudSyncMetaService>(CloudSyncMetaService);
 
   public async backupLocalDataToCloud(): Promise<void> {
-    await this.backupUserSettings();
-    await this.backupExpenses();
-    await this.backupSavingsGoals();
+    try {
+      this.cloudSyncMetaService.markSyncing();
+      
+      await this.backupUserSettings();
+      await this.backupExpenses();
+      await this.backupSavingsGoals();
+
+      this.cloudSyncMetaService.markBackupSuccess();
+    } 
+    catch (error) {
+      this.cloudSyncMetaService.markError(error);
+      throw error;
+    }
   }
 
   private async backupUserSettings(): Promise<void> {
@@ -39,9 +51,6 @@ export class CloudBackupService {
 
   private async backupExpenses(): Promise<void> {
     const expenses = this.expensesService.expenses();
-
-    if (!expenses.length) return;
-
     const payload = expenses.map(expense => ({
       local_id: this.getStringValue(expense, 'id'),
       title: this.getStringValue(expense, 'title', 'Untitled expense'),
@@ -51,14 +60,15 @@ export class CloudBackupService {
       note: this.getNullableStringValue(expense, 'note')
     }));
 
-    await this.cloudExpensesService.upsertExpenses(payload);
+    if (payload.length) await this.cloudExpensesService.upsertExpenses(payload);
+
+    await this.reconcileDeletedCloudExpenses(
+      new Set(payload.map(expense => expense.local_id).filter(Boolean))
+    );
   }
 
   private async backupSavingsGoals(): Promise<void> {
     const goals = this.savingsGoalsService.goals();
-
-    if (!goals.length) return;
-
     const payload = goals.map(goal => ({
       local_id: this.getStringValue(goal, 'id'),
       name: this.getStringFromKeys(goal, ['name', 'title', 'label'], 'Untitled goal'),
@@ -68,7 +78,11 @@ export class CloudBackupService {
       icon: this.getNullableStringValue(goal, 'icon')
     }));
 
-    await this.cloudSavingsGoalsService.upsertGoals(payload);
+    if (payload.length) await this.cloudSavingsGoalsService.upsertGoals(payload);
+
+    await this.reconcileDeletedCloudGoals(
+      new Set(payload.map(goal => goal.local_id).filter(Boolean))
+    );
   }
 
   private getStringValue<T extends object>(
@@ -143,5 +157,25 @@ export class CloudBackupService {
     }
 
     return fallback;
+  }
+
+  private async reconcileDeletedCloudExpenses(localIds: Set<string>): Promise<void> {
+    const cloudExpenses = await this.cloudExpensesService.getExpenses();
+
+    const cloudExpenseIdsToDelete = cloudExpenses
+      .filter(cloudExpense => cloudExpense.local_id && !localIds.has(cloudExpense.local_id))
+      .map(cloudExpense => cloudExpense.id);
+
+    await this.cloudExpensesService.softDeleteExpenses(cloudExpenseIdsToDelete);
+  }
+
+  private async reconcileDeletedCloudGoals(localIds: Set<string>): Promise<void> {
+    const cloudGoals = await this.cloudSavingsGoalsService.getGoals();
+
+    const cloudGoalIdsToDelete = cloudGoals
+      .filter(cloudGoal => cloudGoal.local_id && !localIds.has(cloudGoal.local_id))
+      .map(cloudGoal => cloudGoal.id);
+
+    await this.cloudSavingsGoalsService.softDeleteGoals(cloudGoalIdsToDelete);
   }
 }

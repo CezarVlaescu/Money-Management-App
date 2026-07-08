@@ -1,4 +1,4 @@
-import { BudgetCategory, ConfirmDialogTone, ToastType } from "../types/core.types";
+import { BudgetCategory, CloudSyncReason, CloudSyncState, ConfirmDialogTone, ToastType } from "../types/core.types";
 
 interface BudgetBucket {
   category: BudgetCategory;
@@ -94,7 +94,7 @@ interface CloudExpense {
   local_id: string | null;
   title: string;
   amount: number;
-  category: string;
+  category: BudgetCategory;
   expense_date: string;
   note: string | null;
   created_at: string;
@@ -177,6 +177,33 @@ interface UpsertCloudUserSettingsPayload {
   theme?: string | null;
 }
 
+interface CloudRestoreResult {
+  settingsRestored: boolean;
+  expensesCount: number;
+  goalsCount: number;
+}
+
+interface CloudSyncStatus {
+  hasCloudData: boolean;
+  hasSettings: boolean;
+  expensesCount: number;
+  goalsCount: number;
+  checkedAt: string;
+}
+
+interface CloudSyncMeta {
+  lastBackupAt: string | null;
+  lastRestoreAt: string | null;
+  lastErrorAt: string | null;
+  lastErrorMessage: string | null;
+  state: CloudSyncState;
+}
+
+interface CloudSyncRequest {
+  reason: CloudSyncReason;
+  requestedAt: string;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -195,5 +222,9 @@ export type {
   CreateCloudSavingsGoalPayload,
   UpdateCloudSavingsGoalPayload,
   CloudUserSettings,
-  UpsertCloudUserSettingsPayload
+  UpsertCloudUserSettingsPayload,
+  CloudRestoreResult,
+  CloudSyncStatus,
+  CloudSyncMeta,
+  CloudSyncRequest
 };

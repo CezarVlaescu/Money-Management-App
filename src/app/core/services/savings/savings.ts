@@ -2,9 +2,11 @@ import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@a
 import { SavingsGoal, CreateSavingsGoalPayload } from '../../models/interface/core.interface';
 import { StorageService } from '../storage/storage';
 import { SAVINGS_STORE_KEY } from '../../../shared/constants/app.constants';
+import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';
 @Injectable({ providedIn: 'root' })
 export class SavingsGoalsService {
   private readonly storageService: StorageService = inject<StorageService>(StorageService);
+  private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
   
   public readonly goals: WritableSignal<SavingsGoal[]> = signal<SavingsGoal[]>(this.getInitialGoals());
   public readonly totalTargetAmount: Signal<number> = computed<number>(() => 
@@ -34,6 +36,7 @@ export class SavingsGoalsService {
 
     this.goals.update(goals => [goal, ...goals]);
     this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
   }
 
   public updateGoal(goalId: string, goal: Partial<SavingsGoal>): void {
@@ -46,11 +49,13 @@ export class SavingsGoalsService {
     );
 
     this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
   }
 
   public deleteGoal(goalId: string): void {
     this.goals.update(goals => goals.filter(goal => goal.id !== goalId));
     this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
   }
 
   public addMoneyToGoal(goalId: string, amount: number): void {
@@ -65,6 +70,7 @@ export class SavingsGoalsService {
     );
 
     this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
   }
 
   public getGoalProgress(goal: SavingsGoal): number {
@@ -75,6 +81,13 @@ export class SavingsGoalsService {
   public clearGoals(): void {
     this.goals.set([]);
     this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
+  }
+
+  public replaceGoals(goals: SavingsGoal[]): void {
+    this.goals.set(goals);
+    this.saveGoals();
+    this.cloudSyncQueueService.requestAutoBackup('goals-changed');
   }
 
   private getInitialGoals(): SavingsGoal[] {

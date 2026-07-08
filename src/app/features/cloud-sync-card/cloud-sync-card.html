@@ -18,54 +18,106 @@
       }
     </div>
 
-    @if (authService.isLoggedIn()) {
-      <p class="cloud-sync-card__description">
-        Signed in as <strong>{{ authService.user()?.email }}</strong>.
-        Your account is connected. You can now back up your local budget data to the cloud.
-      </p>
+  @if (authService.isLoggedIn()) {
+    <p class="cloud-sync-card__description">
+      Signed in as <strong>{{ authService.user()?.email }}</strong>.
+      Back up your local data to cloud or restore your saved data on this device.
+    </p>
 
-      <div class="cloud-sync-card__actions">
-        <button
-          class="cloud-sync-card__button cloud-sync-card__button--primary"
-          type="button"
-          [disabled]="backupLoading()"
-          (click)="backupToCloud()"
-        >
-          {{ backupLoading() ? 'Backing up...' : 'Backup to cloud' }}
-        </button>
+    <div
+    class="cloud-sync-card__sync-status"
+    [class.cloud-sync-card__sync-status--success]="cloudSyncMetaService.meta().state === 'synced'"
+    [class.cloud-sync-card__sync-status--error]="cloudSyncMetaService.meta().state === 'error'"
+    >
+      <div class="cloud-sync-card__sync-status-header">
+        <strong>{{ cloudSyncMetaService.statusLabel() }}</strong>
 
-        <button
-          class="cloud-sync-card__button cloud-sync-card__button--danger"
-          type="button"
-          [disabled]="loading()"
-          (click)="logout()"
-        >
-          {{ loading() ? 'Logging out...' : 'Logout' }}
-        </button>
+        @if (cloudSyncMetaService.meta().state === 'synced') {
+          <span>Ready</span>
+        } @else if (cloudSyncMetaService.meta().state === 'error') {
+          <span>Needs attention</span>
+        } @else {
+          <span>Manual sync</span>
+        }
       </div>
 
-      @if (backupSuccess()) {
-        <p class="cloud-sync-card__success">{{ backupSuccess() }}</p>
-      }
-    } @else {
-      <p class="cloud-sync-card__description">
-        You are using Money Bloom as a guest. Create an account to back up your budget
-        and sync it between your phone and laptop.
-      </p>
+      <div class="cloud-sync-card__sync-grid">
+        <div>
+          <span>Last backup</span>
+          <strong>{{ cloudSyncMetaService.lastBackupLabel() }}</strong>
+        </div>
 
-      <div class="cloud-sync-card__actions">
-        <a class="cloud-sync-card__button cloud-sync-card__button--primary" routerLink="/auth/register">
-          Create account
-        </a>
-
-        <a class="cloud-sync-card__button cloud-sync-card__button--secondary" routerLink="/auth/login">
-          Sign in
-        </a>
+        <div>
+          <span>Last restore</span>
+          <strong>{{ cloudSyncMetaService.lastRestoreLabel() }}</strong>
+        </div>
       </div>
-    }
 
-    @if (error()) {
-      <p class="cloud-sync-card__error">{{ error() }}</p>
+      @if (cloudSyncMetaService.meta().lastErrorMessage) {
+        <p>{{ cloudSyncMetaService.meta().lastErrorMessage }}</p>
+      } 
+    </div>
+
+    <div class="cloud-sync-card__actions">
+      <button
+      class="cloud-sync-card__button cloud-sync-card__button--primary"
+      type="button"
+      [disabled]="backupLoading() || restoreLoading()"
+      (click)="backupToCloud()"
+      >
+        {{ backupLoading() ? 'Backing up...' : 'Backup to cloud' }}
+      </button>
+
+      <button
+      class="cloud-sync-card__button cloud-sync-card__button--secondary"
+      type="button"
+      [disabled]="backupLoading() || restoreLoading()"
+      (click)="restoreFromCloud()"
+      >
+        {{ restoreLoading() ? 'Restoring...' : 'Restore from cloud' }}
+      </button>
+
+      <button
+      class="cloud-sync-card__button cloud-sync-card__button--danger"
+      type="button"
+      [disabled]="loading() || backupLoading() || restoreLoading()"
+      (click)="logout()"
+      >
+        {{ loading() ? 'Logging out...' : 'Logout' }}
+      </button>
+    </div>
+
+    @if (backupSuccess()) {
+      <p class="cloud-sync-card__success">{{ backupSuccess() }}</p>
     }
+    @if (restoreSuccess()) {
+      <p class="cloud-sync-card__success">{{ restoreSuccess() }}</p>
+    }
+  } @else {
+    <p class="cloud-sync-card__description">
+      You are using Money Bloom as a guest. Create an account to back up your budget
+      and sync it between your phone and laptop.
+    </p>
+
+    <div class="cloud-sync-card__actions">
+      <a
+        class="cloud-sync-card__button cloud-sync-card__button--primary"
+        routerLink="/auth/register"
+      >
+        Create account
+      </a>
+
+      <a
+        class="cloud-sync-card__button cloud-sync-card__button--secondary"
+        routerLink="/auth/login"
+      >
+        Sign in
+      </a>
+    </div>
+  }
+
+  @if (error()) {
+    <p class="cloud-sync-card__error">{{ error() }}</p>
+  }
   </div>
 </section>
