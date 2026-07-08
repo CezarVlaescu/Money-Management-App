@@ -11,7 +11,7 @@ for (const variable of requiredVariables) {
   }
 }
 
-const environmentFileContent = `export const environment = {
+const environmentContent = `export const environment = {
   production: true,
   supabaseUrl: '${process.env.SUPABASE_URL}',
   supabasePublishableKey: '${process.env.SUPABASE_PUBLISHABLE_KEY}'
@@ -19,6 +19,10 @@ const environmentFileContent = `export const environment = {
 `;
 
 mkdirSync('src/environments', { recursive: true });
-writeFileSync('src/environments/environment.prod.ts', environmentFileContent);
 
-console.log('Production environment file generated.');
+writeFileSync('src/environments/environment.ts', environmentContent);
+writeFileSync('src/environments/environment.prod.ts', environmentContent);
+
+console.log('Production environment files generated.');
+console.log('SUPABASE_URL exists:', Boolean(process.env.SUPABASE_URL));
+console.log('SUPABASE_PUBLISHABLE_KEY exists:', Boolean(process.env.SUPABASE_PUBLISHABLE_KEY));
