@@ -40,20 +40,21 @@ export class AuthService {
   }
 
   public async signUp(email: string, password: string): Promise<void> {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/login`
-      }
+    const { data, error } = await supabase.auth.signUp({ email, password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/login` }
     });
 
     if (error) throw error;
-  }
 
+    this.user.set(data.user ?? data.session?.user ?? null);
+}
+  
   public async signIn(email: string, password: string): Promise<void> {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
     if (error) throw error;
+    
+    this.user.set(data.user ?? data.session?.user ?? null);
   }
 
   public async resetPassword(email: string): Promise<void> {
