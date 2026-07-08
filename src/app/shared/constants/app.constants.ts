@@ -9,6 +9,8 @@ const SAVINGS_STORE_KEY = 'money-bloom-savings-goals';
 const ONBOARDING_STORAGE_KEY = 'money-bloom-onboarding-completed';
 const CLOUD_RESTORE_PROMPT_KEY = 'money-bloom-cloud-restore-prompt-seen';
 const CLOUD_SYNC_META_SERVICE_KEY = 'money-bloom-cloud-sync-meta';
+const LOCAL_DELETION_TOMBSTONE_KEY = 'money-bloom-local-deletion-tombstones';
+
 const NEEDS_CONST: string[] = [
   'lidl', 'kaufland', 'carrefour', 'mega image',
   'profi', 'auchan', 'penny', 'rent', 'chirie',
@@ -125,5 +127,6 @@ export {
   ONBOARDING_STEPS,
   CLOUD_RESTORE_PROMPT_KEY,
   DEFAULT_CLOUD_SYNC_META,
-  CLOUD_SYNC_META_SERVICE_KEY
+  CLOUD_SYNC_META_SERVICE_KEY,
+  LOCAL_DELETION_TOMBSTONE_KEY
 };

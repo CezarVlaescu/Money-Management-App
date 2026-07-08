@@ -32,8 +32,8 @@ export class CloudRestoreService {
 
       if (settings) this.restoreSettings(settings);
 
-      this.expensesService.replaceExpenses(expenses.map(expense => this.mapCloudExpenseToLocalExpense(expense)));
-      this.savingsGoalsService.replaceGoals(goals.map(goal => this.mapCloudGoalToLocalGoal(goal)));
+      this.expensesService.replaceExpenses(expenses.map(expense => this.mapCloudExpenseToLocalExpense(expense)), { skipAutoSync: true });
+      this.savingsGoalsService.replaceGoals(goals.map(goal => this.mapCloudGoalToLocalGoal(goal)), { skipAutoSync: true });
       this.cloudSyncMetaService.markRestoreSuccess();
 
       return { settingsRestored: !!settings, expensesCount: expenses.length, goalsCount: goals.length };
@@ -59,7 +59,8 @@ export class CloudRestoreService {
       category: expense.category,
       date: expense.expense_date,
       note: expense.note ?? undefined,
-      createdAt: expense.created_at
+      createdAt: expense.created_at,
+      updatedAt: expense.updated_at
     };
   }
 
@@ -70,7 +71,8 @@ export class CloudRestoreService {
       targetAmount: Number(goal.target_amount),
       currentAmount: Number(goal.current_amount),
       icon: goal.icon ?? '🎯',
-      createdAt: goal.created_at
+      createdAt: goal.created_at,
+      updatedAt: goal.updated_at
     };
   }
 }

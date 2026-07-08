@@ -27,7 +27,7 @@ export class SavingGoals {
   private readonly savingsGoalSheetService: SavingsGoalSheetService = inject<SavingsGoalSheetService>(SavingsGoalSheetService);
 
   protected addMoney(goalId: string): void {
-    this.savingsGoalsService.addMoneyToGoal(goalId, 100);
+    this.savingsGoalsService.addContribution(goalId, 100);
     this.toastService.success('Added 100 RON to goal');
   }
 

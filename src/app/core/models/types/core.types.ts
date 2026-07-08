@@ -7,6 +7,7 @@ type CloudSyncReason =
   | 'expenses-changed'
   | 'goals-changed'
   | 'settings-changed';
+type DeletedEntityType = 'expense' | 'goal';
 
 export type { 
     AppTheme, 
@@ -14,5 +15,6 @@ export type {
     ToastType, 
     ConfirmDialogTone, 
     CloudSyncState, 
-    CloudSyncReason 
+    CloudSyncReason,
+    DeletedEntityType
 };

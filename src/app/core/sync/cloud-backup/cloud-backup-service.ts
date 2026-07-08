@@ -7,6 +7,7 @@ import { CloudExpensesService } from '../../services/cloud-expenses/cloud-expens
 import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/cloud-savings-goals-service';
 import { CloudUserSettingsService } from '../../services/cloud-user-settings/cloud-user-settings-service';
 import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service';
+import { LocalDeletionTombstoneService } from '../local-deletion-tombstone/local-deletion-tombstone-service';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class CloudBackupService {
   private readonly cloudSavingsGoalsService: CloudSavingsGoalsService = inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
   private readonly cloudUserSettingsService: CloudUserSettingsService = inject<CloudUserSettingsService>(CloudUserSettingsService);
   private readonly cloudSyncMetaService: CloudSyncMetaService = inject<CloudSyncMetaService>(CloudSyncMetaService);
+  private readonly localDeletionTombstoneService: LocalDeletionTombstoneService = inject<LocalDeletionTombstoneService>(LocalDeletionTombstoneService);
 
   public async backupLocalDataToCloud(): Promise<void> {
     try {
@@ -50,39 +52,73 @@ export class CloudBackupService {
   }
 
   private async backupExpenses(): Promise<void> {
-    const expenses = this.expensesService.expenses();
-    const payload = expenses.map(expense => ({
+    const localExpenses = this.expensesService.expenses();
+    const cloudExpenses = await this.cloudExpensesService.getExpenses();
+    const cloudExpensesByLocalId = new Map(
+      cloudExpenses
+        .filter(expense => !!expense.local_id)
+        .map(expense => [expense.local_id as string, expense])
+    );
+
+    const payload = localExpenses.map(expense => ({
       local_id: this.getStringValue(expense, 'id'),
       title: this.getStringValue(expense, 'title', 'Untitled expense'),
       amount: this.getNumberValue(expense, 'amount'),
       category: this.getStringValue(expense, 'category', 'wants'),
       expense_date: this.getDateValue(expense, ['date', 'expenseDate', 'createdAt']),
-      note: this.getNullableStringValue(expense, 'note')
+      note: this.getNullableStringValue(expense, 'note'),
+      _localUpdatedAt: this.getLocalUpdatedAt(expense)
     }));
 
-    if (payload.length) await this.cloudExpensesService.upsertExpenses(payload);
+    const expensesToUpload = payload
+      .filter(expense => {
+        const cloudExpense = expense.local_id
+        ? cloudExpensesByLocalId.get(expense.local_id)
+        : undefined;
 
-    await this.reconcileDeletedCloudExpenses(
-      new Set(payload.map(expense => expense.local_id).filter(Boolean))
-    );
+      if (!cloudExpense) return true;
+      return this.isLocalNewerOrEqual(expense._localUpdatedAt, cloudExpense.updated_at);
+    })
+    .map(({ ...expense }) => expense);
+
+    if (expensesToUpload.length) await this.cloudExpensesService.upsertExpenses(expensesToUpload);
+    await this.syncDeletedExpenses(cloudExpensesByLocalId);
   }
 
   private async backupSavingsGoals(): Promise<void> {
-    const goals = this.savingsGoalsService.goals();
-    const payload = goals.map(goal => ({
+    const localGoals = this.savingsGoalsService.goals();
+    const cloudGoals = await this.cloudSavingsGoalsService.getGoals();
+    const cloudGoalsByLocalId = new Map(
+      cloudGoals
+        .filter(goal => !!goal.local_id)
+        .map(goal => [goal.local_id as string, goal])
+    );
+
+    const payload = localGoals.map(goal => ({
       local_id: this.getStringValue(goal, 'id'),
       name: this.getStringFromKeys(goal, ['name', 'title', 'label'], 'Untitled goal'),
       target_amount: this.getNumberValue(goal, 'targetAmount'),
       current_amount: this.getNumberValue(goal, 'currentAmount'),
       deadline: this.getNullableDateValue(goal, ['deadline', 'targetDate']),
-      icon: this.getNullableStringValue(goal, 'icon')
+      icon: this.getNullableStringValue(goal, 'icon'),
+      _localUpdatedAt: this.getLocalUpdatedAt(goal)
     }));
 
-    if (payload.length) await this.cloudSavingsGoalsService.upsertGoals(payload);
+    const goalsToUpload = payload
+    .filter(goal => {
+      const cloudGoal = goal.local_id
+        ? cloudGoalsByLocalId.get(goal.local_id)
+        : undefined;
 
-    await this.reconcileDeletedCloudGoals(
-      new Set(payload.map(goal => goal.local_id).filter(Boolean))
-    );
+      if (!cloudGoal) return true;
+
+      return this.isLocalNewerOrEqual(goal._localUpdatedAt, cloudGoal.updated_at);
+    })
+    .map(({ ...goal }) => goal);
+
+    if (goalsToUpload.length) await this.cloudSavingsGoalsService.upsertGoals(goalsToUpload);
+
+    await this.syncDeletedGoals(cloudGoalsByLocalId);
   }
 
   private getStringValue<T extends object>(
@@ -159,23 +195,77 @@ export class CloudBackupService {
     return fallback;
   }
 
-  private async reconcileDeletedCloudExpenses(localIds: Set<string>): Promise<void> {
-    const cloudExpenses = await this.cloudExpensesService.getExpenses();
+  private async syncDeletedExpenses(
+    cloudExpensesByLocalId: Map<string, { id: string; updated_at: string }>
+  ): Promise<void> {
+    const tombstones = this.localDeletionTombstoneService.getByEntityType('expense');
 
-    const cloudExpenseIdsToDelete = cloudExpenses
-      .filter(cloudExpense => cloudExpense.local_id && !localIds.has(cloudExpense.local_id))
-      .map(cloudExpense => cloudExpense.id);
+    if (!tombstones.length) return;
 
-    await this.cloudExpensesService.softDeleteExpenses(cloudExpenseIdsToDelete);
+    const cloudIdsToDelete: string[] = [];
+    const processedLocalIds: string[] = [];
+
+    for (const tombstone of tombstones) {
+      const cloudExpense = cloudExpensesByLocalId.get(tombstone.localId);
+
+      if (!cloudExpense) {
+        processedLocalIds.push(tombstone.localId);
+        continue;
+      }
+
+      if (this.isLocalNewerOrEqual(tombstone.deletedAt, cloudExpense.updated_at)) {
+        cloudIdsToDelete.push(cloudExpense.id);
+      }
+
+      processedLocalIds.push(tombstone.localId);
+    }
+
+    if (cloudIdsToDelete.length) await this.cloudExpensesService.softDeleteExpenses(cloudIdsToDelete);
+
+    this.localDeletionTombstoneService.remove('expense', processedLocalIds);
   }
 
-  private async reconcileDeletedCloudGoals(localIds: Set<string>): Promise<void> {
-    const cloudGoals = await this.cloudSavingsGoalsService.getGoals();
+  private async syncDeletedGoals(
+    cloudGoalsByLocalId: Map<string, { id: string; updated_at: string }>
+  ): Promise<void> {
+    const tombstones = this.localDeletionTombstoneService.getByEntityType('goal');
 
-    const cloudGoalIdsToDelete = cloudGoals
-      .filter(cloudGoal => cloudGoal.local_id && !localIds.has(cloudGoal.local_id))
-      .map(cloudGoal => cloudGoal.id);
+    if (!tombstones.length) return;
 
-    await this.cloudSavingsGoalsService.softDeleteGoals(cloudGoalIdsToDelete);
+    const cloudIdsToDelete: string[] = [];
+    const processedLocalIds: string[] = [];
+
+    for (const tombstone of tombstones) {
+      const cloudGoal = cloudGoalsByLocalId.get(tombstone.localId);
+
+      if (!cloudGoal) {
+        processedLocalIds.push(tombstone.localId);
+        continue;
+      }
+
+      if (this.isLocalNewerOrEqual(tombstone.deletedAt, cloudGoal.updated_at)) cloudIdsToDelete.push(cloudGoal.id);
+
+      processedLocalIds.push(tombstone.localId);
+    }
+
+    if (cloudIdsToDelete.length) await this.cloudSavingsGoalsService.softDeleteGoals(cloudIdsToDelete);
+
+    this.localDeletionTombstoneService.remove('goal', processedLocalIds);
+  }
+
+  private getLocalUpdatedAt<T extends object>(item: T): string {
+    const updatedAt = this.getValue(item, 'updatedAt');
+
+    if (typeof updatedAt === 'string' && updatedAt.trim()) return updatedAt;
+
+    const createdAt = this.getValue(item, 'createdAt');
+
+    if (typeof createdAt === 'string' && createdAt.trim()) return createdAt;
+
+    return '1970-01-01T00:00:00.000Z';
+  }
+
+  private isLocalNewerOrEqual(localUpdatedAt: string, cloudUpdatedAt: string): boolean {
+    return new Date(localUpdatedAt).getTime() >= new Date(cloudUpdatedAt).getTime();
   }
 }

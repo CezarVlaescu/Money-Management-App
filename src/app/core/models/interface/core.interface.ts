@@ -1,4 +1,4 @@
-import { BudgetCategory, CloudSyncReason, CloudSyncState, ConfirmDialogTone, ToastType } from "../types/core.types";
+import { BudgetCategory, CloudSyncReason, CloudSyncState, ConfirmDialogTone, DeletedEntityType, ToastType } from "../types/core.types";
 
 interface BudgetBucket {
   category: BudgetCategory;
@@ -32,6 +32,7 @@ interface Expense {
   note?: string;
   merchant?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 interface SavingsGoal {
@@ -43,6 +44,7 @@ interface SavingsGoal {
   icon: string;
   color?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 interface CategoryRule {
@@ -204,6 +206,20 @@ interface CloudSyncRequest {
   requestedAt: string;
 }
 
+interface LocalDeletionTombstone {
+  entityType: DeletedEntityType;
+  localId: string;
+  deletedAt: string;
+}
+
+interface UpdateSavingsGoalPayload {
+  title?: string;
+  targetAmount?: number;
+  currentAmount?: number;
+  monthlyContribution?: number;
+  icon?: string;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -226,5 +242,7 @@ export type {
   CloudRestoreResult,
   CloudSyncStatus,
   CloudSyncMeta,
-  CloudSyncRequest
+  CloudSyncRequest,
+  LocalDeletionTombstone,
+  UpdateSavingsGoalPayload
 };

@@ -5,12 +5,14 @@ import { CategoryService} from '../category/category';
 import { StorageService } from '../storage/storage';
 import { EXPENSES_STORE_KEY } from '../../../shared/constants/app.constants';
 import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';
+import { LocalDeletionTombstoneService } from '../../sync/local-deletion-tombstone/local-deletion-tombstone-service';
 
 @Injectable({ providedIn: 'root' })
 export class ExpensesService {
   private readonly storageService: StorageService = inject<StorageService>(StorageService);
   private readonly categoryService: CategoryService = inject<CategoryService>(CategoryService);
   private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
+  private readonly localDeletionTombstoneService: LocalDeletionTombstoneService = inject<LocalDeletionTombstoneService>(LocalDeletionTombstoneService);
 
   public readonly totalSpent: Signal<number> = computed<number>(() =>
     this.expenses().reduce((total, expense) => total + Math.abs(expense.amount), 0)
@@ -27,6 +29,7 @@ export class ExpensesService {
 
   public addExpense(payload: CreateExpensePayload): void {
     const category = payload.category ?? this.categoryService.detectCategory(payload.title);
+    const now = new Date().toISOString();
 
     const expense: Expense = {
       id: crypto.randomUUID(),
@@ -35,7 +38,8 @@ export class ExpensesService {
       category,
       date: payload.date ?? new Date().toISOString(),
       note: payload.note,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      updatedAt: now
     };
 
     this.expenses.update(expenses => [expense, ...expenses]);
@@ -43,12 +47,12 @@ export class ExpensesService {
     this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
-  public updateExpense(expenseId: string, expense: Partial<Expense>): void {
+  public updateExpense(id: string, payload: Partial<Expense>): void {
     this.expenses.update(expenses =>
-      expenses.map(currentExpense =>
-        currentExpense.id === expenseId
-          ? { ...currentExpense, ...expense }
-          : currentExpense
+      expenses.map(expense =>
+        expense.id === id
+        ? { ...expense, ...payload, updatedAt: new Date().toISOString() }
+        : expense
       )
     );
 
@@ -58,6 +62,7 @@ export class ExpensesService {
 
   public deleteExpense(expenseId: string): void {
     this.expenses.update(expenses => expenses.filter(expense => expense.id !== expenseId));
+    this.localDeletionTombstoneService.add('expense', expenseId);
     this.saveExpenses();
     this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
@@ -72,10 +77,11 @@ export class ExpensesService {
     this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
-  public replaceExpenses(expenses: Expense[]): void {
+  public replaceExpenses(expenses: Expense[], options?: { skipAutoSync?: boolean }): void {
     this.expenses.set(expenses);
     this.saveExpenses();
-    this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
+
+    if (!options?.skipAutoSync) this.cloudSyncQueueService.requestAutoBackup('expenses-changed');
   }
 
   private getTotalByCategory(category: BudgetCategory): number {
