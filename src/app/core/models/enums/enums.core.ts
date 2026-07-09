@@ -5,4 +5,10 @@ enum CATEGORY {
     UNCATEGORIZED = 'uncategorized'
 }
 
-export { CATEGORY };
+enum TIMELINE {
+    PAST = 'past',
+    CURRENT = 'current',
+    FUTURE = 'future'
+}
+
+export { CATEGORY, TIMELINE };

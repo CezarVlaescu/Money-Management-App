@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
-import { CloudExpense, CreateCloudExpensePayload, UpdateCloudExpensePayload } from '../../models/interface/core.interface';
+import { CloudExpense, CreateCloudExpensePayload, CreateSubscriptionExpenseParams, UpdateCloudExpensePayload } from '../../models/interface/core.interface';
 import { supabase } from '../../cloud/supabase.client';
 
 @Injectable({
@@ -105,4 +105,48 @@ export class CloudExpensesService {
 
     return data ?? [];
   }
+
+  public async getExpensesByDateRange(startDate: string, endDate: string): Promise<CloudExpense[]> {
+    const userId = this.authService.getCurrentUserId();
+    const { data, error } = await supabase
+      .from('expenses')
+      .select('*')
+      .eq('user_id', userId)
+      .is('deleted_at', null)
+      .gte('expense_date', startDate)
+      .lte('expense_date', endDate)
+      .order('expense_date', { ascending: false });
+
+    if (error) throw error;
+
+    return data ?? [];
+  }
+
+public async createOrUpdateSubscriptionExpense(
+  params: CreateSubscriptionExpenseParams
+): Promise<CloudExpense> {
+  const userId = this.authService.getCurrentUserId();
+
+  const payload: CreateCloudExpensePayload = {
+    user_id: userId,
+    local_id: `subscription-${params.paymentId}`,
+    title: params.subscriptionName,
+    amount: params.amount,
+    category: params.categoryType,
+    expense_date: params.expenseDate,
+    source_type: 'subscription',
+    subscription_payment_id: params.paymentId,
+    note: 'Recurring payment'
+  };
+
+  const { data, error } = await supabase
+    .from('expenses')
+    .upsert(payload, { onConflict: 'user_id,local_id' })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
 }

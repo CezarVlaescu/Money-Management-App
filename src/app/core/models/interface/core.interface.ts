@@ -1,4 +1,4 @@
-import { BudgetCategory, CloudSyncReason, CloudSyncState, ConfirmDialogTone, DeletedEntityType, ToastType } from "../types/core.types";
+import { BudgetCategory, CalendarDayStatus, CloudSyncReason, CloudSyncState, ConfirmDialogTone, DeletedEntityType, SourceType, SubscriptionCategoryType, SubscriptionFrequency, SubscriptionPaymentStatus, ToastType } from "../types/core.types";
 
 interface BudgetBucket {
   category: BudgetCategory;
@@ -98,6 +98,8 @@ interface CloudExpense {
   amount: number;
   category: BudgetCategory;
   expense_date: string;
+  source_type: SourceType;
+  subscription_payment_id: string | null;
   note: string | null;
   created_at: string;
   updated_at: string;
@@ -111,6 +113,8 @@ interface CreateCloudExpensePayload {
   amount: number;
   category: string;
   expense_date: string;
+  source_type?: SourceType;
+  subscription_payment_id?: string | null;
   note?: string | null;
 }
 
@@ -220,6 +224,161 @@ interface UpdateSavingsGoalPayload {
   icon?: string;
 }
 
+interface CloudSpendingPeriod {
+  id: string;
+  user_id: string;
+  period_start: string;
+  period_end: string;
+  daily_limit: number;
+  currency: string;
+  include_planned_recurring: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CreateCloudSpendingPeriodPayload {
+  user_id: string;
+  period_start: string;
+  period_end: string;
+  daily_limit: number;
+  currency?: string;
+  include_planned_recurring?: boolean;
+}
+
+interface UpdateCloudSpendingPeriodPayload {
+  daily_limit?: number;
+  currency?: string;
+  include_planned_recurring?: boolean;
+  updated_at?: string;
+}
+
+interface CalendarDayBudget {
+  date: string;
+  dayNumber: number;
+  isToday: boolean;
+  isFuture: boolean;
+  spent: number;
+  allowanceAtStartOfDay: number;
+  remainingAfterSpend: number;
+  status: CalendarDayStatus;
+}
+
+interface DailyAllowanceSummary {
+  periodStart: string;
+  periodEnd: string;
+  dailyLimit: number;
+  monthlyBudget: number;
+  spentBeforeToday: number;
+  spentToday: number;
+  spentThisMonth: number;
+  daysLeftIncludingToday: number;
+  adaptiveDailyAllowance: number;
+  todayRemaining: number;
+  remainingMonthlyBudget: number;
+  isOverBudget: boolean;
+}
+
+interface AllowanceExpense {
+  id: string;
+  amount: number;
+  date: string;
+}
+
+interface CloudSubscription {
+  id: string;
+  user_id: string;
+  name: string;
+  amount: number;
+  currency: string;
+  category_type: SubscriptionCategoryType;
+  frequency: SubscriptionFrequency;
+  due_day: number;
+  start_date: string;
+  end_date: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+interface CreateCloudSubscriptionPayload {
+  user_id: string;
+  name: string;
+  amount: number;
+  currency?: string;
+  category_type: SubscriptionCategoryType;
+  frequency?: SubscriptionFrequency;
+  due_day: number;
+  start_date?: string;
+  end_date?: string | null;
+  is_active?: boolean;
+}
+
+interface UpdateCloudSubscriptionPayload {
+  name?: string;
+  amount?: number;
+  currency?: string;
+  category_type?: SubscriptionCategoryType;
+  frequency?: SubscriptionFrequency;
+  due_day?: number;
+  start_date?: string;
+  end_date?: string | null;
+  is_active?: boolean;
+  updated_at?: string;
+  deleted_at?: string | null;
+}
+
+export interface CloudSubscriptionPayment {
+  id: string;
+  user_id: string;
+  subscription_id: string;
+  period_start: string;
+  due_date: string;
+  amount: number;
+  currency: string;
+  status: SubscriptionPaymentStatus;
+  paid_at: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+interface CreateCloudSubscriptionPaymentPayload {
+  user_id: string;
+  subscription_id: string;
+  period_start: string;
+  due_date: string;
+  amount: number;
+  currency?: string;
+  status?: SubscriptionPaymentStatus;
+  paid_at?: string | null;
+}
+interface UpdateCloudSubscriptionPaymentPayload {
+  amount?: number;
+  currency?: string;
+  status?: SubscriptionPaymentStatus;
+  paid_at?: string | null;
+  updated_at?: string;
+  deleted_at?: string | null;
+}
+
+interface SubscriptionPaymentItem {
+  payment: CloudSubscriptionPayment;
+  subscription: CloudSubscription | null;
+  name: string;
+  amount: number;
+  currency: string;
+  dueDate: string;
+  status: CloudSubscriptionPayment['status'];
+}
+
+interface CreateSubscriptionExpenseParams {
+  paymentId: string;
+  subscriptionName: string;
+  amount: number;
+  expenseDate: string;
+  categoryType: BudgetCategory;
+}
+
 export type { 
   BudgetBucket, 
   BudgetSummary, 
@@ -244,5 +403,18 @@ export type {
   CloudSyncMeta,
   CloudSyncRequest,
   LocalDeletionTombstone,
-  UpdateSavingsGoalPayload
+  UpdateSavingsGoalPayload,
+  CalendarDayBudget,
+  DailyAllowanceSummary,
+  AllowanceExpense,
+  CloudSpendingPeriod,
+  CreateCloudSpendingPeriodPayload,
+  UpdateCloudSpendingPeriodPayload,
+  CloudSubscription,
+  CreateCloudSubscriptionPayload,
+  UpdateCloudSubscriptionPayload,
+  CreateCloudSubscriptionPaymentPayload,
+  UpdateCloudSubscriptionPaymentPayload,
+  SubscriptionPaymentItem,
+  CreateSubscriptionExpenseParams
 };

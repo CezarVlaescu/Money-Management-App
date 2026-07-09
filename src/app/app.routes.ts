@@ -57,6 +57,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/settings/settings').then(component => component.Settings)
             },
             {
+                path: 'calendar',
+                loadComponent: () => import('./features/calendar/calendar').then(component => component.Calendar)
+            },
+            {
                 path: 'privacy',
                 loadComponent: () => import('./features/privacy/privacy').then(component => component.Privacy)
             }

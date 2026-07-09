@@ -110,6 +110,15 @@ const DEFAULT_CLOUD_SYNC_META: CloudSyncMeta = {
   lastErrorMessage: null,
   state: 'idle'
 };
+const DAY_WEEK_CONST: string[] = [
+  'Lun',
+  'Mar',
+  'Mie',
+  'Joi',
+  'Vin',
+  'Sâm',
+  'Dum'
+];
 
 export { 
   THEME_STORAGE_KEY,
@@ -128,5 +137,6 @@ export {
   CLOUD_RESTORE_PROMPT_KEY,
   DEFAULT_CLOUD_SYNC_META,
   CLOUD_SYNC_META_SERVICE_KEY,
-  LOCAL_DELETION_TOMBSTONE_KEY
+  LOCAL_DELETION_TOMBSTONE_KEY,
+  DAY_WEEK_CONST
 };
