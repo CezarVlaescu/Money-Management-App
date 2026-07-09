@@ -1,10 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { supabase } from '../../cloud/supabase.client';
-import { CloudSubscription, CreateCloudSubscriptionPayload, UpdateCloudSubscriptionPayload } from '../../models/interface/core.interface';
+import {
+  CloudSubscription,
+  CreateCloudSubscriptionPayload,
+  UpdateCloudSubscriptionPayload,
+} from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudSubscriptionsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
@@ -41,7 +45,7 @@ export class CloudSubscriptionsService {
   }
 
   public async createSubscription(
-    payload: Omit<CreateCloudSubscriptionPayload, 'user_id'>
+    payload: Omit<CreateCloudSubscriptionPayload, 'user_id'>,
   ): Promise<CloudSubscription> {
     const userId = this.authService.getCurrentUserId();
 
@@ -52,7 +56,7 @@ export class CloudSubscriptionsService {
         user_id: userId,
         currency: payload.currency ?? 'RON',
         frequency: payload.frequency ?? 'monthly',
-        is_active: payload.is_active ?? true
+        is_active: payload.is_active ?? true,
       })
       .select()
       .single();
@@ -64,7 +68,7 @@ export class CloudSubscriptionsService {
 
   public async updateSubscription(
     id: string,
-    payload: UpdateCloudSubscriptionPayload
+    payload: UpdateCloudSubscriptionPayload,
   ): Promise<CloudSubscription> {
     const userId = this.authService.getCurrentUserId();
 
@@ -72,7 +76,7 @@ export class CloudSubscriptionsService {
       .from('subscriptions')
       .update({
         ...payload,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('user_id', userId)
@@ -92,7 +96,7 @@ export class CloudSubscriptionsService {
       .update({
         deleted_at: new Date().toISOString(),
         is_active: false,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('user_id', userId);

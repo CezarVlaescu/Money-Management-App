@@ -6,7 +6,8 @@ import { CloudSyncReason } from '../../models/types/core.types';
   providedIn: 'root',
 })
 export class CloudSyncQueueService {
-  public readonly request: WritableSignal<CloudSyncRequest | null> = signal<CloudSyncRequest | null>(null);
+  public readonly request: WritableSignal<CloudSyncRequest | null> =
+    signal<CloudSyncRequest | null>(null);
 
   public requestAutoBackup(reason: CloudSyncReason): void {
     this.request.set({ reason, requestedAt: new Date().toISOString() });

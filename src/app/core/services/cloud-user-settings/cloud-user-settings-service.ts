@@ -1,10 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { supabase } from '../../cloud/supabase.client';
-import { CloudUserSettings, UpsertCloudUserSettingsPayload } from '../../models/interface/core.interface';
+import {
+  CloudUserSettings,
+  UpsertCloudUserSettingsPayload,
+} from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudUserSettingsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
@@ -24,7 +27,7 @@ export class CloudUserSettingsService {
   }
 
   public async upsertSettings(
-    payload: Omit<UpsertCloudUserSettingsPayload, 'user_id'>
+    payload: Omit<UpsertCloudUserSettingsPayload, 'user_id'>,
   ): Promise<CloudUserSettings> {
     const userId = this.authService.getCurrentUserId();
 

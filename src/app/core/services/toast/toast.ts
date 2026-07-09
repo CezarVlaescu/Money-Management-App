@@ -21,17 +21,17 @@ export class ToastService {
   }
 
   public remove(toastId: string): void {
-    this.toasts.update(toasts => toasts.filter(toast => toast.id !== toastId));
+    this.toasts.update((toasts) => toasts.filter((toast) => toast.id !== toastId));
   }
 
   private show(message: string, type: ToastType): void {
     const toast: Toast = {
       id: crypto.randomUUID(),
       message,
-      type
+      type,
     };
 
-    this.toasts.update(toasts => [toast, ...toasts]);
+    this.toasts.update((toasts) => [toast, ...toasts]);
 
     setTimeout(() => {
       this.remove(toast.id);

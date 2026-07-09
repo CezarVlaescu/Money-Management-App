@@ -1,22 +1,9 @@
 @if (onboardingService.isOpen()) {
   <div class="onboarding-dialog">
-    <div
-      class="onboarding-dialog__backdrop"
-      aria-hidden="true"
-    ></div>
+    <div class="onboarding-dialog__backdrop" aria-hidden="true"></div>
 
-    <section
-      class="onboarding-dialog__panel"
-      role="dialog"
-      aria-modal="true"
-    >
-      <button
-        class="onboarding-dialog__skip"
-        type="button"
-        (click)="skip()"
-      >
-        Skip
-      </button>
+    <section class="onboarding-dialog__panel" role="dialog" aria-modal="true">
+      <button class="onboarding-dialog__skip" type="button" (click)="skip()">Skip</button>
 
       <div class="onboarding-dialog__visual">
         <span class="onboarding-dialog__glow"></span>
@@ -33,30 +20,20 @@
 
       <div class="onboarding-dialog__dots">
         @for (step of steps; track step.title; let index = $index) {
-          <span
-            [class.onboarding-dialog__dot--active]="index === stepIndex()"
-          ></span>
+          <span [class.onboarding-dialog__dot--active]="index === stepIndex()"></span>
         }
       </div>
 
       <div class="onboarding-dialog__actions">
         @if (stepIndex() > 0) {
-          <button
-            class="onboarding-dialog__secondary"
-            type="button"
-            (click)="previous()"
-          >
+          <button class="onboarding-dialog__secondary" type="button" (click)="previous()">
             Back
           </button>
         } @else {
           <span></span>
         }
 
-        <button
-          class="onboarding-dialog__primary"
-          type="button"
-          (click)="next()"
-        >
+        <button class="onboarding-dialog__primary" type="button" (click)="next()">
           {{ isLastStep() ? 'Start using Money Bloom' : 'Next' }}
         </button>
       </div>

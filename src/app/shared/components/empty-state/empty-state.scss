@@ -13,9 +13,7 @@
   border: 1px solid var(--border-muted);
   border-radius: fn.radius(2xl);
   padding: fn.spacing(7) fn.spacing(5);
-  background:
-    radial-gradient(circle at top, var(--primary-soft), transparent 42%),
-    var(--surface);
+  background: radial-gradient(circle at top, var(--primary-soft), transparent 42%), var(--surface);
   box-shadow: var(--shadow-card);
   text-align: center;
 }

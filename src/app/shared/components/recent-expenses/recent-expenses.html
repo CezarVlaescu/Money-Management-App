@@ -3,23 +3,16 @@
     <div>
       <p class="recent-expenses__eyebrow">Recent expenses</p>
 
-      <h2 class="recent-expenses__title">
-        Latest activity
-      </h2>
+      <h2 class="recent-expenses__title">Latest activity</h2>
     </div>
 
-    <a class="recent-expenses__link" routerLink="/expenses">
-      View all
-    </a>
+    <a class="recent-expenses__link" routerLink="/expenses"> View all </a>
   </header>
 
   <div class="recent-expenses__list">
     @for (expense of expensesService.recentExpenses(); track expense.id) {
       <article class="recent-expenses__item">
-        <span
-          class="recent-expenses__icon"
-          [class]="'recent-expenses__icon--' + expense.category"
-        >
+        <span class="recent-expenses__icon" [class]="'recent-expenses__icon--' + expense.category">
           {{ categoryService.getCategoryIcon(expense.category) }}
         </span>
 

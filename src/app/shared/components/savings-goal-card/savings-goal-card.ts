@@ -15,7 +15,8 @@ export class SavingsGoalCard {
   public readonly editGoal: OutputEmitterRef<SavingsGoal> = output<SavingsGoal>();
   public readonly deleteGoal: OutputEmitterRef<string> = output<string>();
 
-  protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  protected readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
 
   protected onAddMoney(): void {

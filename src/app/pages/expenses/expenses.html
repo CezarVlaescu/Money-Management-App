@@ -11,9 +11,7 @@
     {{ moneyFormatter.format(expensesService.totalSpent()) }}
   </strong>
 
-  <span>
-    Based on {{ expensesService.expenses().length }} transactions
-  </span>
+  <span> Based on {{ expensesService.expenses().length }} transactions </span>
 </section>
 
 <app-add-expense-card (expenseAdded)="onExpenseAdded()" />

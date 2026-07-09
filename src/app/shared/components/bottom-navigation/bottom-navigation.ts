@@ -11,6 +11,7 @@ import { AddExpensesSheetService } from '../../../core/services/add-expenses-she
   styleUrl: './bottom-navigation.scss',
 })
 export class BottomNavigation {
-  protected readonly addExpensesSheetService: AddExpensesSheetService = inject<AddExpensesSheetService>(AddExpensesSheetService);
+  protected readonly addExpensesSheetService: AddExpensesSheetService =
+    inject<AddExpensesSheetService>(AddExpensesSheetService);
   protected readonly bottomNavigationItems: NavigationItem[] = BOTTOM_NAVIGATION_ITEMS;
 }

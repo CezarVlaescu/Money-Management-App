@@ -18,7 +18,7 @@ export class ForgotPassword {
   protected readonly success: WritableSignal<string | null> = signal<string | null>(null);
 
   protected readonly form = this.formBuilder.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required, Validators.email]],
   });
 
   protected async submit(): Promise<void> {

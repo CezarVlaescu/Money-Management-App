@@ -8,22 +8,14 @@
       </strong>
     </div>
 
-    <button class="income-card__edit-button" type="button">
-      ✎ Edit
-    </button>
+    <button class="income-card__edit-button" type="button">✎ Edit</button>
   </div>
 
   <label class="income-card__input-wrapper">
     <span>RON</span>
 
-    <input
-      type="number"
-      [value]="budgetService.income()"
-      (input)="updateIncome($event)"
-    />
+    <input type="number" [value]="budgetService.income()" (input)="updateIncome($event)" />
   </label>
 
-  <p class="income-card__note">
-    After-tax income for this month
-  </p>
+  <p class="income-card__note">After-tax income for this month</p>
 </section>

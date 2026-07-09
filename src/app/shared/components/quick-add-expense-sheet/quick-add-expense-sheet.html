@@ -8,11 +8,7 @@
       (click)="close()"
     ></button>
 
-    <section
-      class="quick-add-sheet__panel"
-      role="dialog"
-      aria-modal="true"
-    >
+    <section class="quick-add-sheet__panel" role="dialog" aria-modal="true">
       <div class="quick-add-sheet__handle"></div>
 
       <header class="quick-add-sheet__header">
@@ -26,19 +22,10 @@
           </h2>
         </div>
 
-        <button
-          type="button"
-          class="quick-add-sheet__close"
-          (click)="close()"
-        >
-          ✕
-        </button>
+        <button type="button" class="quick-add-sheet__close" (click)="close()">✕</button>
       </header>
 
-      <form
-        class="quick-add-sheet__form"
-        (ngSubmit)="submitExpense()"
-      >
+      <form class="quick-add-sheet__form" (ngSubmit)="submitExpense()">
         <label>
           <span>Description</span>
 
@@ -107,11 +94,7 @@
           </div>
         </div>
 
-        <button
-          class="quick-add-sheet__submit"
-          type="submit"
-          [disabled]="!canSubmit()"
-        >
+        <button class="quick-add-sheet__submit" type="submit" [disabled]="!canSubmit()">
           {{ submitLabel() }}
         </button>
       </form>

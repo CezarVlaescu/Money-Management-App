@@ -1,4 +1,15 @@
-import { Component, computed, ElementRef, inject, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  output,
+  OutputEmitterRef,
+  Signal,
+  signal,
+  viewChild,
+  WritableSignal,
+} from '@angular/core';
 import { ExpensesService } from '../../../core/services/expenses/expenses';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast/toast';
@@ -10,9 +21,11 @@ import { ToastService } from '../../../core/services/toast/toast';
   styleUrl: './add-expense-card.scss',
 })
 export class AddExpenseCard {
-  private readonly titleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> = viewChild<ElementRef<HTMLInputElement>>('titleInput');
+  private readonly titleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> =
+    viewChild<ElementRef<HTMLInputElement>>('titleInput');
   private readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  private readonly hostElement: ElementRef<HTMLElement> = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly hostElement: ElementRef<HTMLElement> =
+    inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   public readonly expenseAdded: OutputEmitterRef<void> = output<void>();

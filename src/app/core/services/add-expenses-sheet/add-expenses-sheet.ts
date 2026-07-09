@@ -20,6 +20,6 @@ export class AddExpensesSheetService {
   }
 
   public toggle(): void {
-    this.isOpen.update(isOpen => !isOpen);
+    this.isOpen.update((isOpen) => !isOpen);
   }
 }

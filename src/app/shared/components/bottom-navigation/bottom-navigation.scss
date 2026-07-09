@@ -1,7 +1,9 @@
 @use 'mixins' as mx;
 @use 'functions' as fn;
 
-:host { display: block; }
+:host {
+  display: block;
+}
 
 .bottom-navigation {
   @include mx.bottom-nav-container;

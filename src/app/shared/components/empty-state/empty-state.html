@@ -10,11 +10,7 @@
   </div>
 
   @if (actionLabel()) {
-    <button
-      class="empty-state__button"
-      type="button"
-      (click)="onActionClick()"
-    >
+    <button class="empty-state__button" type="button" (click)="onActionClick()">
       {{ actionLabel() }}
     </button>
   }

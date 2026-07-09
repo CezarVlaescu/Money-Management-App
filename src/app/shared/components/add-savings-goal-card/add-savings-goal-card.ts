@@ -1,4 +1,13 @@
-import { Component, computed, inject, output, OutputEmitterRef, Signal, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  output,
+  OutputEmitterRef,
+  Signal,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { SavingsGoalsService } from '../../../core/services/savings/savings';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast/toast';
@@ -17,7 +26,9 @@ export class AddSavingsGoalCard {
   protected readonly title: WritableSignal<string> = signal<string>('');
   protected readonly targetAmount: WritableSignal<number | null> = signal<number | null>(null);
   protected readonly currentAmount: WritableSignal<number | null> = signal<number | null>(null);
-  protected readonly monthlyContribution: WritableSignal<number | null> = signal<number | null>(null);
+  protected readonly monthlyContribution: WritableSignal<number | null> = signal<number | null>(
+    null,
+  );
 
   protected readonly canSubmit: Signal<boolean> = computed<boolean>(() => {
     const title = this.title().trim();
@@ -41,7 +52,7 @@ export class AddSavingsGoalCard {
       targetAmount,
       currentAmount: this.currentAmount() ?? 0,
       monthlyContribution: this.monthlyContribution() ?? undefined,
-      icon: '🎯'
+      icon: '🎯',
     });
 
     this.title.set('');

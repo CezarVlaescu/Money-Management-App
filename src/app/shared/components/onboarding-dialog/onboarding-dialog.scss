@@ -31,8 +31,7 @@
   border-radius: 34px;
   padding: fn.spacing(7) fn.spacing(5) fn.spacing(5);
   background:
-    radial-gradient(circle at top right, var(--primary-soft), transparent 34%),
-    var(--surface);
+    radial-gradient(circle at top right, var(--primary-soft), transparent 34%), var(--surface);
   box-shadow: 0 26px 100px rgba(0, 0, 0, 0.36);
   text-align: center;
   animation: onboarding-in 200ms ease-out;

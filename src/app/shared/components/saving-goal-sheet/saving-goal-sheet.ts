@@ -1,4 +1,15 @@
-import { Component, computed, effect, ElementRef, HostListener, inject, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  Signal,
+  signal,
+  viewChild,
+  WritableSignal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SavingsGoalSheetService } from '../../../core/services/savings-goal-sheet/savings-goal-sheet-service';
 import { SavingsGoalsService } from '../../../core/services/savings/savings';
@@ -12,16 +23,21 @@ import { ICON_OPTIONS_CONST } from '../../constants/app.constants';
   styleUrl: './saving-goal-sheet.scss',
 })
 export class SavingGoalSheet {
-  private readonly goalTitleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> = viewChild<ElementRef<HTMLInputElement>>('goalTitleInput');
-  
-  protected readonly sheetService: SavingsGoalSheetService = inject<SavingsGoalSheetService>(SavingsGoalSheetService);
-  private readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  private readonly goalTitleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> =
+    viewChild<ElementRef<HTMLInputElement>>('goalTitleInput');
+
+  protected readonly sheetService: SavingsGoalSheetService =
+    inject<SavingsGoalSheetService>(SavingsGoalSheetService);
+  private readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   protected readonly title: WritableSignal<string> = signal<string>('');
   protected readonly targetAmount: WritableSignal<number | null> = signal<number | null>(null);
   protected readonly currentAmount: WritableSignal<number | null> = signal<number | null>(null);
-  protected readonly monthlyContribution: WritableSignal<number | null> = signal<number | null>(null);
+  protected readonly monthlyContribution: WritableSignal<number | null> = signal<number | null>(
+    null,
+  );
   protected readonly selectedIcon: WritableSignal<string> = signal<string>('🎯');
   protected readonly iconOptions: string[] = ICON_OPTIONS_CONST;
 
@@ -88,7 +104,7 @@ export class SavingGoalSheet {
       targetAmount,
       currentAmount,
       monthlyContribution,
-      icon: this.selectedIcon()
+      icon: this.selectedIcon(),
     });
 
     this.toastService.success('Goal updated');

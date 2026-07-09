@@ -5,18 +5,21 @@ import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/clo
 import { CloudUserSettingsService } from '../../services/cloud-user-settings/cloud-user-settings-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudSyncStatusService {
-  private readonly cloudExpensesService: CloudExpensesService = inject<CloudExpensesService>(CloudExpensesService);
-  private readonly cloudSavingsGoalsService: CloudSavingsGoalsService = inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
-  private readonly cloudUserSettingsService: CloudUserSettingsService = inject<CloudUserSettingsService>(CloudUserSettingsService);
+  private readonly cloudExpensesService: CloudExpensesService =
+    inject<CloudExpensesService>(CloudExpensesService);
+  private readonly cloudSavingsGoalsService: CloudSavingsGoalsService =
+    inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
+  private readonly cloudUserSettingsService: CloudUserSettingsService =
+    inject<CloudUserSettingsService>(CloudUserSettingsService);
 
   public async getCloudSyncStatus(): Promise<CloudSyncStatus> {
     const [settings, expenses, goals] = await Promise.all([
       this.cloudUserSettingsService.getSettings(),
       this.cloudExpensesService.getExpenses(),
-      this.cloudSavingsGoalsService.getGoals()
+      this.cloudSavingsGoalsService.getGoals(),
     ]);
 
     return {
@@ -24,7 +27,7 @@ export class CloudSyncStatusService {
       hasSettings: !!settings,
       expensesCount: expenses.length,
       goalsCount: goals.length,
-      checkedAt: new Date().toISOString()
+      checkedAt: new Date().toISOString(),
     };
   }
 }

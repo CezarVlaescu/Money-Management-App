@@ -4,13 +4,22 @@ import { RouterOutlet } from '@angular/router';
 import { QuickAddExpenseSheet } from '../../shared/components/quick-add-expense-sheet/quick-add-expense-sheet';
 import { ToastContainer } from '../../shared/components/toast-container/toast-container';
 import { AppDecorations } from '../../shared/components/app-decorations/app-decorations';
-import { SavingGoalSheet } from "../../shared/components/saving-goal-sheet/saving-goal-sheet";
-import { ConfirmDialog } from "../../shared/components/confirm-dialog/confirm-dialog";
-import { OnboardingDialog } from "../../shared/components/onboarding-dialog/onboarding-dialog";
+import { SavingGoalSheet } from '../../shared/components/saving-goal-sheet/saving-goal-sheet';
+import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
+import { OnboardingDialog } from '../../shared/components/onboarding-dialog/onboarding-dialog';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, BottomNavigation, QuickAddExpenseSheet, ToastContainer, AppDecorations, SavingGoalSheet, ConfirmDialog, OnboardingDialog],
+  imports: [
+    RouterOutlet,
+    BottomNavigation,
+    QuickAddExpenseSheet,
+    ToastContainer,
+    AppDecorations,
+    SavingGoalSheet,
+    ConfirmDialog,
+    OnboardingDialog,
+  ],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
 })

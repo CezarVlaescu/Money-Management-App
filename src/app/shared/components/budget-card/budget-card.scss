@@ -4,7 +4,7 @@
 $budget-categories: (
   needs: var(--gradient-needs),
   wants: var(--gradient-wants),
-  savings: var(--gradient-savings)
+  savings: var(--gradient-savings),
 );
 
 :host {

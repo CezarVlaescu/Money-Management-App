@@ -9,32 +9,36 @@ import { CloudUserSettingsService } from '../../services/cloud-user-settings/clo
 import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service';
 import { LocalDeletionTombstoneService } from '../local-deletion-tombstone/local-deletion-tombstone-service';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudBackupService {
   private readonly budgetService: BudgetService = inject<BudgetService>(BudgetService);
   private readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  private readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  private readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
   private readonly themeService: ThemeService = inject<ThemeService>(ThemeService);
-  private readonly cloudExpensesService: CloudExpensesService = inject<CloudExpensesService>(CloudExpensesService);
-  private readonly cloudSavingsGoalsService: CloudSavingsGoalsService = inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
-  private readonly cloudUserSettingsService: CloudUserSettingsService = inject<CloudUserSettingsService>(CloudUserSettingsService);
-  private readonly cloudSyncMetaService: CloudSyncMetaService = inject<CloudSyncMetaService>(CloudSyncMetaService);
-  private readonly localDeletionTombstoneService: LocalDeletionTombstoneService = inject<LocalDeletionTombstoneService>(LocalDeletionTombstoneService);
+  private readonly cloudExpensesService: CloudExpensesService =
+    inject<CloudExpensesService>(CloudExpensesService);
+  private readonly cloudSavingsGoalsService: CloudSavingsGoalsService =
+    inject<CloudSavingsGoalsService>(CloudSavingsGoalsService);
+  private readonly cloudUserSettingsService: CloudUserSettingsService =
+    inject<CloudUserSettingsService>(CloudUserSettingsService);
+  private readonly cloudSyncMetaService: CloudSyncMetaService =
+    inject<CloudSyncMetaService>(CloudSyncMetaService);
+  private readonly localDeletionTombstoneService: LocalDeletionTombstoneService =
+    inject<LocalDeletionTombstoneService>(LocalDeletionTombstoneService);
 
   public async backupLocalDataToCloud(): Promise<void> {
     try {
       this.cloudSyncMetaService.markSyncing();
-      
+
       await this.backupUserSettings();
       await this.backupExpenses();
       await this.backupSavingsGoals();
 
       this.cloudSyncMetaService.markBackupSuccess();
-    } 
-    catch (error) {
+    } catch (error) {
       this.cloudSyncMetaService.markError(error);
       throw error;
     }
@@ -47,7 +51,7 @@ export class CloudBackupService {
       needs_percentage: 50,
       wants_percentage: 30,
       savings_percentage: 20,
-      theme: this.themeService.isDarkMode() ? 'dark' : 'light'
+      theme: this.themeService.isDarkMode() ? 'dark' : 'light',
     });
   }
 
@@ -55,39 +59,39 @@ export class CloudBackupService {
     const localExpenses = this.expensesService.expenses();
     const cloudExpenses = await this.cloudExpensesService.getExpenses();
     const cloudExpensesByLocalId = new Map(
-    cloudExpenses
-      .filter(expense => !!expense.local_id)
-      .map(expense => [expense.local_id as string, expense])
+      cloudExpenses
+        .filter((expense) => !!expense.local_id)
+        .map((expense) => [expense.local_id as string, expense]),
     );
 
-    const payloadWithMeta = localExpenses.map(expense => ({
+    const payloadWithMeta = localExpenses.map((expense) => ({
       local_id: this.getStringValue(expense, 'id'),
       title: this.getStringValue(expense, 'title', 'Untitled expense'),
       amount: this.getNumberValue(expense, 'amount'),
       category: this.getStringValue(expense, 'category', 'wants'),
       expense_date: this.getDateValue(expense, ['date', 'expenseDate', 'createdAt']),
       note: this.getNullableStringValue(expense, 'note'),
-      localUpdatedAt: this.getLocalUpdatedAt(expense)
+      localUpdatedAt: this.getLocalUpdatedAt(expense),
     }));
 
     const expensesToUpload = payloadWithMeta
-    .filter(expense => {
-      const cloudExpense = expense.local_id
-      ? cloudExpensesByLocalId.get(expense.local_id)
-      : undefined;
+      .filter((expense) => {
+        const cloudExpense = expense.local_id
+          ? cloudExpensesByLocalId.get(expense.local_id)
+          : undefined;
 
-      if (!cloudExpense) return true;
+        if (!cloudExpense) return true;
 
-      return this.isLocalNewerOrEqual(expense.localUpdatedAt, cloudExpense.updated_at);
-    })
-    .map(expense => ({
-      local_id: expense.local_id,
-      title: expense.title,
-      amount: expense.amount,
-      category: expense.category,
-      expense_date: expense.expense_date,
-      note: expense.note
-    }));
+        return this.isLocalNewerOrEqual(expense.localUpdatedAt, cloudExpense.updated_at);
+      })
+      .map((expense) => ({
+        local_id: expense.local_id,
+        title: expense.title,
+        amount: expense.amount,
+        category: expense.category,
+        expense_date: expense.expense_date,
+        note: expense.note,
+      }));
 
     if (expensesToUpload.length) await this.cloudExpensesService.upsertExpenses(expensesToUpload);
 
@@ -98,69 +102,55 @@ export class CloudBackupService {
     const localGoals = this.savingsGoalsService.goals();
     const cloudGoals = await this.cloudSavingsGoalsService.getGoals();
     const cloudGoalsByLocalId = new Map(
-      cloudGoals
-      .filter(goal => !!goal.local_id)
-      .map(goal => [goal.local_id as string, goal])
+      cloudGoals.filter((goal) => !!goal.local_id).map((goal) => [goal.local_id as string, goal]),
     );
 
-    const payloadWithMeta = localGoals.map(goal => ({
+    const payloadWithMeta = localGoals.map((goal) => ({
       local_id: this.getStringValue(goal, 'id'),
       name: this.getStringFromKeys(goal, ['name', 'title', 'label'], 'Untitled goal'),
       target_amount: this.getNumberValue(goal, 'targetAmount'),
       current_amount: this.getNumberValue(goal, 'currentAmount'),
       deadline: this.getNullableDateValue(goal, ['deadline', 'targetDate']),
       icon: this.getNullableStringValue(goal, 'icon'),
-      localUpdatedAt: this.getLocalUpdatedAt(goal)
+      localUpdatedAt: this.getLocalUpdatedAt(goal),
     }));
 
     const goalsToUpload = payloadWithMeta
-    .filter(goal => {
-      const cloudGoal = goal.local_id
-      ? cloudGoalsByLocalId.get(goal.local_id)
-      : undefined;
+      .filter((goal) => {
+        const cloudGoal = goal.local_id ? cloudGoalsByLocalId.get(goal.local_id) : undefined;
 
-      if (!cloudGoal) return true;
+        if (!cloudGoal) return true;
 
-      return this.isLocalNewerOrEqual(goal.localUpdatedAt, cloudGoal.updated_at);
-    })
-    .map(goal => ({
-      local_id: goal.local_id,
-      name: goal.name,
-      target_amount: goal.target_amount,
-      current_amount: goal.current_amount,
-      deadline: goal.deadline,
-      icon: goal.icon
-    }));
+        return this.isLocalNewerOrEqual(goal.localUpdatedAt, cloudGoal.updated_at);
+      })
+      .map((goal) => ({
+        local_id: goal.local_id,
+        name: goal.name,
+        target_amount: goal.target_amount,
+        current_amount: goal.current_amount,
+        deadline: goal.deadline,
+        icon: goal.icon,
+      }));
 
     if (goalsToUpload.length) await this.cloudSavingsGoalsService.upsertGoals(goalsToUpload);
 
     await this.syncDeletedGoals(cloudGoalsByLocalId);
   }
 
-  private getStringValue<T extends object>(
-    item: T,
-    key: string,
-    fallback = ''
-  ): string {
+  private getStringValue<T extends object>(item: T, key: string, fallback = ''): string {
     const value = this.getValue(item, key);
     if (typeof value === 'string') return value;
     if (typeof value === 'number') return String(value);
     return fallback;
   }
 
-  private getNullableStringValue<T extends object>(
-    item: T,
-    key: string
-  ): string | null {
+  private getNullableStringValue<T extends object>(item: T, key: string): string | null {
     const value = this.getValue(item, key);
     if (typeof value === 'string' && value.trim()) return value;
     return null;
   }
 
-  private getNumberValue<T extends object>(
-    item: T,
-    key: string
-  ): number {
+  private getNumberValue<T extends object>(item: T, key: string): number {
     const value = this.getValue(item, key);
     if (typeof value === 'number') return value;
 
@@ -172,17 +162,11 @@ export class CloudBackupService {
     return 0;
   }
 
-  private getDateValue<T extends object>(
-    item: T,
-    keys: string[]
-  ): string {
+  private getDateValue<T extends object>(item: T, keys: string[]): string {
     return this.getNullableDateValue(item, keys) ?? new Date().toISOString().slice(0, 10);
   }
 
-  private getNullableDateValue<T extends object>(
-    item: T,
-    keys: string[]
-  ): string | null {
+  private getNullableDateValue<T extends object>(item: T, keys: string[]): string | null {
     for (const key of keys) {
       const value = this.getValue(item, key);
       if (value instanceof Date) return value.toISOString().slice(0, 10);
@@ -196,11 +180,7 @@ export class CloudBackupService {
     return (item as Record<string, unknown>)[key];
   }
 
-  private getStringFromKeys<T extends object>(
-  item: T,
-  keys: string[],
-  fallback = ''
-  ): string {
+  private getStringFromKeys<T extends object>(item: T, keys: string[], fallback = ''): string {
     for (const key of keys) {
       const value = this.getValue(item, key);
 
@@ -212,7 +192,7 @@ export class CloudBackupService {
   }
 
   private async syncDeletedExpenses(
-    cloudExpensesByLocalId: Map<string, { id: string; updated_at: string }>
+    cloudExpensesByLocalId: Map<string, { id: string; updated_at: string }>,
   ): Promise<void> {
     const tombstones = this.localDeletionTombstoneService.getByEntityType('expense');
 
@@ -236,13 +216,14 @@ export class CloudBackupService {
       processedLocalIds.push(tombstone.localId);
     }
 
-    if (cloudIdsToDelete.length) await this.cloudExpensesService.softDeleteExpenses(cloudIdsToDelete);
+    if (cloudIdsToDelete.length)
+      await this.cloudExpensesService.softDeleteExpenses(cloudIdsToDelete);
 
     this.localDeletionTombstoneService.remove('expense', processedLocalIds);
   }
 
   private async syncDeletedGoals(
-    cloudGoalsByLocalId: Map<string, { id: string; updated_at: string }>
+    cloudGoalsByLocalId: Map<string, { id: string; updated_at: string }>,
   ): Promise<void> {
     const tombstones = this.localDeletionTombstoneService.getByEntityType('goal');
 
@@ -259,12 +240,14 @@ export class CloudBackupService {
         continue;
       }
 
-      if (this.isLocalNewerOrEqual(tombstone.deletedAt, cloudGoal.updated_at)) cloudIdsToDelete.push(cloudGoal.id);
+      if (this.isLocalNewerOrEqual(tombstone.deletedAt, cloudGoal.updated_at))
+        cloudIdsToDelete.push(cloudGoal.id);
 
       processedLocalIds.push(tombstone.localId);
     }
 
-    if (cloudIdsToDelete.length) await this.cloudSavingsGoalsService.softDeleteGoals(cloudIdsToDelete);
+    if (cloudIdsToDelete.length)
+      await this.cloudSavingsGoalsService.softDeleteGoals(cloudIdsToDelete);
 
     this.localDeletionTombstoneService.remove('goal', processedLocalIds);
   }

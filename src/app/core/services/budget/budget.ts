@@ -10,9 +10,12 @@ import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-qu
 export class BudgetService {
   private readonly storageService: StorageService = inject<StorageService>(StorageService);
   private readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
-  
-  public readonly income: WritableSignal<number> = signal<number>(this.storageService.getItem<number>(INCOME_STORAGE_KEY, 0));
+  private readonly cloudSyncQueueService: CloudSyncQueueService =
+    inject<CloudSyncQueueService>(CloudSyncQueueService);
+
+  public readonly income: WritableSignal<number> = signal<number>(
+    this.storageService.getItem<number>(INCOME_STORAGE_KEY, 0),
+  );
   public readonly needsAmount: Signal<number> = computed<number>(() => this.income() * 0.5);
   public readonly wantsAmount: Signal<number> = computed<number>(() => this.income() * 0.3);
   public readonly savingsAmount: Signal<number> = computed<number>(() => this.income() * 0.2);
@@ -26,7 +29,7 @@ export class BudgetService {
       spent: this.expensesService.needsSpent(),
       icon: '🧺',
       description: 'Rent, bills, food, transport',
-      actionLabel: 'used'
+      actionLabel: 'used',
     });
     const wants: BudgetBucket = this.createBucket({
       category: 'wants',
@@ -36,7 +39,7 @@ export class BudgetService {
       spent: this.expensesService.wantsSpent(),
       icon: '🛍️',
       description: 'Fun, shopping, restaurants',
-      actionLabel: 'used'
+      actionLabel: 'used',
     });
 
     const savings: BudgetBucket = this.createBucket({
@@ -47,7 +50,7 @@ export class BudgetService {
       spent: this.expensesService.savingsSpent(),
       icon: '🐷',
       description: 'Investments, emergency fund',
-      actionLabel: 'used'
+      actionLabel: 'used',
     });
 
     const totalSpent: number = needs.spent + wants.spent + savings.spent;
@@ -59,13 +62,13 @@ export class BudgetService {
       savings,
       totalSpent,
       totalRemaining: income - totalSpent,
-      yearlySavingsPotential: savings.amount * 12
+      yearlySavingsPotential: savings.amount * 12,
     };
   });
 
   public readonly budgetBuckets: Signal<BudgetBucket[]> = computed<BudgetBucket[]>(() => {
     const summary: BudgetSummary = this.budgetSummary();
-    return [ summary.needs, summary.wants, summary.savings ];
+    return [summary.needs, summary.wants, summary.savings];
   });
 
   public updateIncome(income: number): void {
@@ -92,14 +95,13 @@ export class BudgetService {
     actionLabel: string;
   }): BudgetBucket {
     const remaining = payload.amount - payload.spent;
-    const progress = payload.amount > 0
-      ? Math.min(Math.round((payload.spent / payload.amount) * 100), 100)
-      : 0;
+    const progress =
+      payload.amount > 0 ? Math.min(Math.round((payload.spent / payload.amount) * 100), 100) : 0;
 
     return {
       ...payload,
       remaining,
-      progress
+      progress,
     };
   }
 }

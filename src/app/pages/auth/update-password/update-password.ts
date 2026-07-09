@@ -18,7 +18,7 @@ export class UpdatePassword {
   protected readonly error: WritableSignal<string | null> = signal<string | null>(null);
 
   protected readonly form = this.formBuilder.nonNullable.group({
-    password: ['', [Validators.required, Validators.minLength(8)]]
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   protected async submit(): Promise<void> {

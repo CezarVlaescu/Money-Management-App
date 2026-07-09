@@ -1,6 +1,14 @@
 import { Component, computed, inject, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { CloudExpensesService } from '../../core/services/cloud-expenses/cloud-expenses-service';
-import { CloudSpendingPeriod, CloudExpense, DailyAllowanceSummary, CalendarDayBudget, CloudSubscriptionPayment, CloudSubscription, SubscriptionPaymentItem } from '../../core/models/interface/core.interface';
+import {
+  CloudSpendingPeriod,
+  CloudExpense,
+  DailyAllowanceSummary,
+  CalendarDayBudget,
+  CloudSubscriptionPayment,
+  CloudSubscription,
+  SubscriptionPaymentItem,
+} from '../../core/models/interface/core.interface';
 import { DailyAllowanceCalculatorService } from '../../core/services/daily-allowance-calculator/daily-allowance-calculator-service';
 import { SpendingPeriodsService } from '../../core/services/spending-periods/spending-periods-service';
 import { CommonModule } from '@angular/common';
@@ -18,36 +26,49 @@ import { CloudSubscriptionsService } from '../../core/services/cloud-subscriptio
   styleUrl: './calendar.scss',
 })
 export class Calendar implements OnInit {
-  private readonly cloudExpensesService: CloudExpensesService = inject<CloudExpensesService>(CloudExpensesService);
-  private readonly cloudSpendingPeriodsService: SpendingPeriodsService = inject<SpendingPeriodsService>(SpendingPeriodsService);
-  private readonly dailyAllowanceCalculatorService: DailyAllowanceCalculatorService = inject<DailyAllowanceCalculatorService>(DailyAllowanceCalculatorService);
-  private readonly cloudSubscriptionsService: CloudSubscriptionsService = inject<CloudSubscriptionsService>(CloudSubscriptionsService);
-  private readonly cloudSubscriptionPaymentsService: CloudSubscriptionPaymentsService = inject<CloudSubscriptionPaymentsService>(CloudSubscriptionPaymentsService);
+  private readonly cloudExpensesService: CloudExpensesService =
+    inject<CloudExpensesService>(CloudExpensesService);
+  private readonly cloudSpendingPeriodsService: SpendingPeriodsService =
+    inject<SpendingPeriodsService>(SpendingPeriodsService);
+  private readonly dailyAllowanceCalculatorService: DailyAllowanceCalculatorService =
+    inject<DailyAllowanceCalculatorService>(DailyAllowanceCalculatorService);
+  private readonly cloudSubscriptionsService: CloudSubscriptionsService =
+    inject<CloudSubscriptionsService>(CloudSubscriptionsService);
+  private readonly cloudSubscriptionPaymentsService: CloudSubscriptionPaymentsService =
+    inject<CloudSubscriptionPaymentsService>(CloudSubscriptionPaymentsService);
 
-  protected readonly subscriptions: WritableSignal<CloudSubscription[]> = signal<CloudSubscription[]>([]);
-  protected readonly subscriptionPayments: WritableSignal<CloudSubscriptionPayment[]> = signal<CloudSubscriptionPayment[]>([]);
+  protected readonly subscriptions: WritableSignal<CloudSubscription[]> = signal<
+    CloudSubscription[]
+  >([]);
+  protected readonly subscriptionPayments: WritableSignal<CloudSubscriptionPayment[]> = signal<
+    CloudSubscriptionPayment[]
+  >([]);
   protected readonly loading: WritableSignal<boolean> = signal<boolean>(true);
   protected readonly error: WritableSignal<string | null> = signal<string | null>(null);
-  protected readonly spendingPeriod: WritableSignal<CloudSpendingPeriod | null> = signal<CloudSpendingPeriod | null>(null);
+  protected readonly spendingPeriod: WritableSignal<CloudSpendingPeriod | null> =
+    signal<CloudSpendingPeriod | null>(null);
   protected readonly editingDailyLimit: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly dailyLimitInput: WritableSignal<string> = signal<string>('');
   protected readonly savingDailyLimit: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly expenses: WritableSignal<CloudExpense[]> = signal<CloudExpense[]>([]);
-  protected readonly selectedDay: WritableSignal<CalendarDayBudget | null> = signal<CalendarDayBudget | null>(null);
+  protected readonly selectedDay: WritableSignal<CalendarDayBudget | null> =
+    signal<CalendarDayBudget | null>(null);
   protected readonly selectedMonth: WritableSignal<Date> = signal<Date>(new Date());
   protected readonly addingSubscription: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly savingSubscription: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly subscriptionNameInput: WritableSignal<string> = signal<string>('');
   protected readonly subscriptionAmountInput: WritableSignal<string> = signal<string>('');
   protected readonly subscriptionDueDayInput: WritableSignal<string> = signal<string>('');
-  protected readonly subscriptionCategoryInput: WritableSignal<BudgetCategory> = signal<BudgetCategory>('needs');
-  
+  protected readonly subscriptionCategoryInput: WritableSignal<BudgetCategory> =
+    signal<BudgetCategory>('needs');
+
   protected readonly subscriptionPaymentItems = computed<SubscriptionPaymentItem[]>(() => {
     const subscriptions = this.subscriptions();
     const payments = this.subscriptionPayments();
 
-    return payments.map(payment => {
-      const subscription = subscriptions.find(item => item.id === payment.subscription_id) ?? null;
+    return payments.map((payment) => {
+      const subscription =
+        subscriptions.find((item) => item.id === payment.subscription_id) ?? null;
 
       return {
         payment,
@@ -56,18 +77,18 @@ export class Calendar implements OnInit {
         amount: payment.amount,
         currency: payment.currency,
         dueDate: payment.due_date,
-        status: payment.status
+        status: payment.status,
       };
     });
   });
 
   protected readonly pendingSubscriptionPaymentItems = computed<SubscriptionPaymentItem[]>(() => {
-    return this.subscriptionPaymentItems().filter(item => item.status === 'pending');
+    return this.subscriptionPaymentItems().filter((item) => item.status === 'pending');
   });
   protected readonly selectedDayExpenses: Signal<CloudExpense[]> = computed<CloudExpense[]>(() => {
     const selectedDay = this.selectedDay();
     if (!selectedDay) return [];
-    return this.expenses().filter(expense => expense.expense_date === selectedDay.date);
+    return this.expenses().filter((expense) => expense.expense_date === selectedDay.date);
   });
   protected readonly selectedMonthState: Signal<MonthState> = computed<MonthState>(() => {
     const selectedMonth = this.getMonthStartDate(this.selectedMonth());
@@ -86,82 +107,96 @@ export class Calendar implements OnInit {
 
     return new Date();
   });
-  protected readonly dailyAllowanceSummary: Signal<DailyAllowanceSummary | null> = computed<DailyAllowanceSummary | null>(() => {
-    const period = this.spendingPeriod();
+  protected readonly dailyAllowanceSummary: Signal<DailyAllowanceSummary | null> =
+    computed<DailyAllowanceSummary | null>(() => {
+      const period = this.spendingPeriod();
 
-    if (!period) return null;
+      if (!period) return null;
 
-    return this.dailyAllowanceCalculatorService.calculateSummary(
-      {
-        id: period.id,
-        user_id: period.user_id,
-        period_start: period.period_start,
-        period_end: period.period_end,
-        daily_limit: period.daily_limit,
-        currency: period.currency,
-        include_planned_recurring: period.include_planned_recurring,
-        created_at: period.created_at,
-        updated_at: period.updated_at
-      },
-      this.expenses().map(expense => ({
-        id: expense.id,
-        amount: expense.amount,
-        date: expense.expense_date
-      })),
-      this.allowanceReferenceDate()
-    );
-  });
+      return this.dailyAllowanceCalculatorService.calculateSummary(
+        {
+          id: period.id,
+          user_id: period.user_id,
+          period_start: period.period_start,
+          period_end: period.period_end,
+          daily_limit: period.daily_limit,
+          currency: period.currency,
+          include_planned_recurring: period.include_planned_recurring,
+          created_at: period.created_at,
+          updated_at: period.updated_at,
+        },
+        this.expenses().map((expense) => ({
+          id: expense.id,
+          amount: expense.amount,
+          date: expense.expense_date,
+        })),
+        this.allowanceReferenceDate(),
+      );
+    });
 
   protected readonly selectedMonthLabel: Signal<string> = computed<string>(() => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     }).format(this.selectedMonth());
   });
 
-  protected readonly calendarDays: Signal<CalendarDayBudget[]> = computed<CalendarDayBudget[]>(() => {
-    const period = this.spendingPeriod();
+  protected readonly calendarDays: Signal<CalendarDayBudget[]> = computed<CalendarDayBudget[]>(
+    () => {
+      const period = this.spendingPeriod();
 
-    if (!period) return [];
+      if (!period) return [];
 
-    return this.dailyAllowanceCalculatorService.buildCalendarDays(
-      {
-        id: period.id,
-        user_id: period.user_id,
-        period_start: period.period_start,
-        period_end: period.period_end,
-        daily_limit: period.daily_limit,
-        currency: period.currency,
-        include_planned_recurring: period.include_planned_recurring,
-        created_at: period.created_at,
-        updated_at: period.updated_at
-      },
-      this.expenses().map(expense => ({
-        id: expense.id,
-        amount: expense.amount,
-        date: expense.expense_date
-      }))
-    );
-  });
+      return this.dailyAllowanceCalculatorService.buildCalendarDays(
+        {
+          id: period.id,
+          user_id: period.user_id,
+          period_start: period.period_start,
+          period_end: period.period_end,
+          daily_limit: period.daily_limit,
+          currency: period.currency,
+          include_planned_recurring: period.include_planned_recurring,
+          created_at: period.created_at,
+          updated_at: period.updated_at,
+        },
+        this.expenses().map((expense) => ({
+          id: expense.id,
+          amount: expense.amount,
+          date: expense.expense_date,
+        })),
+      );
+    },
+  );
 
   protected readonly weekdayLabels: string[] = DAY_WEEK_CONST;
 
-  protected readonly calendarGridItems: Signal<({ type: "empty"; trackId: string;} | {
-    type: "day";
-    trackId: string;
-    day: CalendarDayBudget;})[]> = 
-    computed<(| { type: 'empty'; trackId: string } | { type: 'day'; trackId: string; day: CalendarDayBudget })[]>(() => {
+  protected readonly calendarGridItems: Signal<
+    (
+      | { type: 'empty'; trackId: string }
+      | {
+          type: 'day';
+          trackId: string;
+          day: CalendarDayBudget;
+        }
+    )[]
+  > = computed<
+    (
+      | { type: 'empty'; trackId: string }
+      | { type: 'day'; trackId: string; day: CalendarDayBudget }
+    )[]
+  >(() => {
     const days = this.calendarDays();
 
     if (!days.length) return [];
 
     const firstDay = new Date(days[0].date);
     const emptyDaysBeforeFirstDay = (firstDay.getDay() + 6) % 7;
-    const emptyItems = Array.from({ length: emptyDaysBeforeFirstDay },
-      (_, index) => ({ type: 'empty' as const, trackId: `empty-${index}` })
-    );
+    const emptyItems = Array.from({ length: emptyDaysBeforeFirstDay }, (_, index) => ({
+      type: 'empty' as const,
+      trackId: `empty-${index}`,
+    }));
 
-    const dayItems = days.map(day => ({ type: 'day' as const, trackId: day.date, day }));
+    const dayItems = days.map((day) => ({ type: 'day' as const, trackId: day.date, day }));
 
     return [...emptyItems, ...dayItems];
   });
@@ -176,26 +211,27 @@ export class Calendar implements OnInit {
       this.error.set(null);
       this.selectedDay.set(null);
 
-      const period = await this.cloudSpendingPeriodsService.getOrCreateCurrentSpendingPeriod(this.selectedMonth());
+      const period = await this.cloudSpendingPeriodsService.getOrCreateCurrentSpendingPeriod(
+        this.selectedMonth(),
+      );
       const [expenses, subscriptions, subscriptionPayments] = await Promise.all([
         this.cloudExpensesService.getExpensesByDateRange(period.period_start, period.period_end),
         this.cloudSubscriptionsService.getActiveSubscriptions(),
-        this.cloudSubscriptionPaymentsService.ensurePaymentsForPeriod(period.period_start, period.period_end)
+        this.cloudSubscriptionPaymentsService.ensurePaymentsForPeriod(
+          period.period_start,
+          period.period_end,
+        ),
       ]);
 
       this.spendingPeriod.set(period);
       this.expenses.set(expenses);
       this.subscriptions.set(subscriptions);
       this.subscriptionPayments.set(subscriptionPayments);
-    } 
-    catch (error) {
-      this.error.set(
-        error instanceof Error
-          ? error.message
-          : 'Could not load calendar.'
-      );
-    } 
-    finally { this.loading.set(false); }
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not load calendar.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   protected startEditingDailyLimit(): void {
@@ -228,21 +264,19 @@ export class Calendar implements OnInit {
       this.savingDailyLimit.set(true);
       this.error.set(null);
 
-      const updatedPeriod =
-        await this.cloudSpendingPeriodsService.updateDailyLimit(period.id, dailyLimit);
+      const updatedPeriod = await this.cloudSpendingPeriodsService.updateDailyLimit(
+        period.id,
+        dailyLimit,
+      );
 
       this.spendingPeriod.set(updatedPeriod);
       this.editingDailyLimit.set(false);
       this.dailyLimitInput.set('');
-    } 
-    catch (error) {
-      this.error.set(
-        error instanceof Error
-          ? error.message
-          : 'Could not update daily limit.'
-      );
-    } 
-    finally { this.savingDailyLimit.set(false); }
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not update daily limit.');
+    } finally {
+      this.savingDailyLimit.set(false);
+    }
   }
 
   protected selectDay(day: CalendarDayBudget): void {
@@ -327,21 +361,17 @@ export class Calendar implements OnInit {
         frequency: 'monthly',
         due_day: dueDay,
         start_date: period.period_start,
-        is_active: true
+        is_active: true,
       });
 
       this.cancelAddingSubscription();
 
       await this.loadCalendarForSelectedMonth();
-    } 
-    catch (error) {
+    } catch (error) {
       this.error.set(
-        error instanceof Error
-          ? error.message
-          : 'Could not create recurring payment.'
+        error instanceof Error ? error.message : 'Could not create recurring payment.',
       );
-    } 
-    finally {
+    } finally {
       this.savingSubscription.set(false);
     }
   }
@@ -367,49 +397,44 @@ export class Calendar implements OnInit {
     try {
       this.error.set(null);
 
-      const updatedPayment = await this.cloudSubscriptionPaymentsService.markPaymentAsSkipped(item.payment.id);
-
-      this.subscriptionPayments.update(payments =>
-        payments.map(payment => payment.id === updatedPayment.id ? updatedPayment : payment)
+      const updatedPayment = await this.cloudSubscriptionPaymentsService.markPaymentAsSkipped(
+        item.payment.id,
       );
-    } 
-    catch (error) {
-      this.error.set(
-        error instanceof Error
-          ? error.message
-          : 'Could not skip recurring payment.'
-        );
+
+      this.subscriptionPayments.update((payments) =>
+        payments.map((payment) => (payment.id === updatedPayment.id ? updatedPayment : payment)),
+      );
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not skip recurring payment.');
     }
   }
 
-protected async markSubscriptionPaymentAsPaid(
-  item: SubscriptionPaymentItem
-): Promise<void> {
-  if (!item.subscription) {
-    this.error.set('Could not find the recurring payment details.');
-    return;
+  protected async markSubscriptionPaymentAsPaid(item: SubscriptionPaymentItem): Promise<void> {
+    if (!item.subscription) {
+      this.error.set('Could not find the recurring payment details.');
+      return;
+    }
+
+    try {
+      this.error.set(null);
+
+      await this.cloudSubscriptionPaymentsService.markPaymentAsPaid(
+        item.payment,
+        item.subscription,
+      );
+
+      await this.loadCalendarForSelectedMonth();
+    } catch (error) {
+      this.error.set(
+        error instanceof Error ? error.message : 'Could not mark recurring payment as paid.',
+      );
+    }
   }
-
-  try {
-    this.error.set(null);
-
-    await this.cloudSubscriptionPaymentsService.markPaymentAsPaid(
-      item.payment,
-      item.subscription
-    );
-
-    await this.loadCalendarForSelectedMonth();
-  } catch (error) {
-    this.error.set(
-      error instanceof Error
-        ? error.message
-        : 'Could not mark recurring payment as paid.'
-    );
-  }
-}
 
   protected formatShortDate(date: string): string {
-    return new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'short' }).format(this.parseDateOnly(date));
+    return new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'short' }).format(
+      this.parseDateOnly(date),
+    );
   }
 
   private parseDateOnly(value: string): Date {

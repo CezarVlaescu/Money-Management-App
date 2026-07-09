@@ -1,10 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
-import { CloudExpense, CreateCloudExpensePayload, CreateSubscriptionExpenseParams, UpdateCloudExpensePayload } from '../../models/interface/core.interface';
+import {
+  CloudExpense,
+  CreateCloudExpensePayload,
+  CreateSubscriptionExpenseParams,
+  UpdateCloudExpensePayload,
+} from '../../models/interface/core.interface';
 import { supabase } from '../../cloud/supabase.client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudExpensesService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
@@ -33,12 +38,12 @@ export class CloudExpensesService {
       .order('expense_date', { ascending: false });
 
     if (error) throw error;
-    
+
     return data ?? [];
   }
 
   public async createExpense(
-    payload: Omit<CreateCloudExpensePayload, 'user_id'>
+    payload: Omit<CreateCloudExpensePayload, 'user_id'>,
   ): Promise<CloudExpense> {
     const userId = this.authService.getCurrentUserId();
 
@@ -55,7 +60,7 @@ export class CloudExpensesService {
 
   public async updateExpense(
     id: string,
-    payload: UpdateCloudExpensePayload
+    payload: UpdateCloudExpensePayload,
   ): Promise<CloudExpense> {
     const userId = this.authService.getCurrentUserId();
 
@@ -78,7 +83,7 @@ export class CloudExpensesService {
     const { error } = await supabase
       .from('expenses')
       .update({
-        deleted_at: new Date().toISOString()
+        deleted_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('user_id', userId);
@@ -87,13 +92,13 @@ export class CloudExpensesService {
   }
 
   public async upsertExpenses(
-    expenses: Omit<CreateCloudExpensePayload, 'user_id'>[]
+    expenses: Omit<CreateCloudExpensePayload, 'user_id'>[],
   ): Promise<CloudExpense[]> {
     const userId = this.authService.getCurrentUserId();
 
-    const payload = expenses.map(expense => ({
+    const payload = expenses.map((expense) => ({
       ...expense,
-      user_id: userId
+      user_id: userId,
     }));
 
     const { data, error } = await supabase
@@ -122,31 +127,31 @@ export class CloudExpensesService {
     return data ?? [];
   }
 
-public async createOrUpdateSubscriptionExpense(
-  params: CreateSubscriptionExpenseParams
-): Promise<CloudExpense> {
-  const userId = this.authService.getCurrentUserId();
+  public async createOrUpdateSubscriptionExpense(
+    params: CreateSubscriptionExpenseParams,
+  ): Promise<CloudExpense> {
+    const userId = this.authService.getCurrentUserId();
 
-  const payload: CreateCloudExpensePayload = {
-    user_id: userId,
-    local_id: `subscription-${params.paymentId}`,
-    title: params.subscriptionName,
-    amount: params.amount,
-    category: params.categoryType,
-    expense_date: params.expenseDate,
-    source_type: 'subscription',
-    subscription_payment_id: params.paymentId,
-    note: 'Recurring payment'
-  };
+    const payload: CreateCloudExpensePayload = {
+      user_id: userId,
+      local_id: `subscription-${params.paymentId}`,
+      title: params.subscriptionName,
+      amount: params.amount,
+      category: params.categoryType,
+      expense_date: params.expenseDate,
+      source_type: 'subscription',
+      subscription_payment_id: params.paymentId,
+      note: 'Recurring payment',
+    };
 
-  const { data, error } = await supabase
-    .from('expenses')
-    .upsert(payload, { onConflict: 'user_id,local_id' })
-    .select()
-    .single();
+    const { data, error } = await supabase
+      .from('expenses')
+      .upsert(payload, { onConflict: 'user_id,local_id' })
+      .select()
+      .single();
 
-  if (error) throw error;
+    if (error) throw error;
 
-  return data;
-}
+    return data;
+  }
 }

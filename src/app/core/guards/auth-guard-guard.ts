@@ -20,4 +20,4 @@ const authPageGuard: CanMatchFn = () => {
   return true;
 };
 
-export { authenticatedGuard, authPageGuard }
+export { authenticatedGuard, authPageGuard };

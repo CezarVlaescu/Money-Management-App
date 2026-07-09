@@ -3,9 +3,7 @@
     <span class="budget-card__icon">
       {{ budgetBucket().icon }}
     </span>
-    <small class="budget-card__percentage">
-      {{ budgetBucket().percentage }}%
-    </small>
+    <small class="budget-card__percentage"> {{ budgetBucket().percentage }}% </small>
   </div>
   <h2 class="budget-card__title">
     {{ budgetBucket().label }}
@@ -20,6 +18,7 @@
     <span [style.width.%]="budgetBucket().progress"></span>
   </div>
   <small class="budget-card__footer">
-    {{ moneyFormatterService.format(budgetBucket().spent) }} {{ budgetBucket().actionLabel }} · {{ budgetBucket().progress }}%
+    {{ moneyFormatterService.format(budgetBucket().spent) }} {{ budgetBucket().actionLabel }} ·
+    {{ budgetBucket().progress }}%
   </small>
 </article>

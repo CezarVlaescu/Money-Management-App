@@ -1,21 +1,26 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { supabase } from '../../cloud/supabase.client';
-import { CloudSubscriptionPayment, UpdateCloudSubscriptionPaymentPayload, CloudSubscription, CreateCloudSubscriptionPaymentPayload } from '../../models/interface/core.interface';
+import {
+  CloudSubscriptionPayment,
+  UpdateCloudSubscriptionPaymentPayload,
+  CloudSubscription,
+  CreateCloudSubscriptionPaymentPayload,
+} from '../../models/interface/core.interface';
 import { CloudExpensesService } from '../cloud-expenses/cloud-expenses-service';
 import { CloudSubscriptionsService } from '../cloud-subscriptions/cloud-subscriptions-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudSubscriptionPaymentsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
-  private readonly cloudSubscriptionsService: CloudSubscriptionsService = inject<CloudSubscriptionsService>(CloudSubscriptionsService);
-  private readonly cloudExpensesService: CloudExpensesService = inject<CloudExpensesService>(CloudExpensesService);
+  private readonly cloudSubscriptionsService: CloudSubscriptionsService =
+    inject<CloudSubscriptionsService>(CloudSubscriptionsService);
+  private readonly cloudExpensesService: CloudExpensesService =
+    inject<CloudExpensesService>(CloudExpensesService);
 
-  public async getPaymentsForPeriod(
-    periodStart: string
-  ): Promise<CloudSubscriptionPayment[]> {
+  public async getPaymentsForPeriod(periodStart: string): Promise<CloudSubscriptionPayment[]> {
     const userId = this.authService.getCurrentUserId();
 
     const { data, error } = await supabase
@@ -33,35 +38,28 @@ export class CloudSubscriptionPaymentsService {
 
   public async ensurePaymentsForPeriod(
     periodStart: string,
-    periodEnd: string
+    periodEnd: string,
   ): Promise<CloudSubscriptionPayment[]> {
     const userId = this.authService.getCurrentUserId();
 
-    const subscriptions =
-      await this.cloudSubscriptionsService.getActiveSubscriptions();
+    const subscriptions = await this.cloudSubscriptionsService.getActiveSubscriptions();
 
     const existingPayments = await this.getPaymentsForPeriod(periodStart);
 
-    const existingPaymentKeys = new Set(
-      existingPayments.map(payment => payment.subscription_id)
-    );
+    const existingPaymentKeys = new Set(existingPayments.map((payment) => payment.subscription_id));
 
     const missingPaymentsPayload = subscriptions
-      .filter(subscription =>
-        this.subscriptionAppliesToPeriod(subscription, periodStart, periodEnd)
+      .filter((subscription) =>
+        this.subscriptionAppliesToPeriod(subscription, periodStart, periodEnd),
       )
-      .filter(subscription => !existingPaymentKeys.has(subscription.id))
-      .map(subscription =>
-        this.buildPaymentPayload(userId, subscription, periodStart)
-      );
+      .filter((subscription) => !existingPaymentKeys.has(subscription.id))
+      .map((subscription) => this.buildPaymentPayload(userId, subscription, periodStart));
 
     if (!missingPaymentsPayload.length) {
       return existingPayments;
     }
 
-    const { error } = await supabase
-      .from('subscription_payments')
-      .insert(missingPaymentsPayload);
+    const { error } = await supabase.from('subscription_payments').insert(missingPaymentsPayload);
 
     if (error) throw error;
 
@@ -70,7 +68,7 @@ export class CloudSubscriptionPaymentsService {
 
   public async updatePayment(
     id: string,
-    payload: UpdateCloudSubscriptionPaymentPayload
+    payload: UpdateCloudSubscriptionPaymentPayload,
   ): Promise<CloudSubscriptionPayment> {
     const userId = this.authService.getCurrentUserId();
 
@@ -78,7 +76,7 @@ export class CloudSubscriptionPaymentsService {
       .from('subscription_payments')
       .update({
         ...payload,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('user_id', userId)
@@ -93,29 +91,29 @@ export class CloudSubscriptionPaymentsService {
   public async markPaymentAsSkipped(paymentId: string): Promise<CloudSubscriptionPayment> {
     return this.updatePayment(paymentId, { status: 'skipped', paid_at: null });
   }
- 
-public async markPaymentAsPaid(
-  payment: CloudSubscriptionPayment,
-  subscription: CloudSubscription
-): Promise<CloudSubscriptionPayment> {
-  await this.cloudExpensesService.createOrUpdateSubscriptionExpense({
-    paymentId: payment.id,
-    subscriptionName: subscription.name,
-    amount: payment.amount,
-    expenseDate: payment.due_date,
-    categoryType: subscription.category_type
-  });
 
-  return this.updatePayment(payment.id, {
-    status: 'paid',
-    paid_at: new Date().toISOString()
-  });
-}
+  public async markPaymentAsPaid(
+    payment: CloudSubscriptionPayment,
+    subscription: CloudSubscription,
+  ): Promise<CloudSubscriptionPayment> {
+    await this.cloudExpensesService.createOrUpdateSubscriptionExpense({
+      paymentId: payment.id,
+      subscriptionName: subscription.name,
+      amount: payment.amount,
+      expenseDate: payment.due_date,
+      categoryType: subscription.category_type,
+    });
+
+    return this.updatePayment(payment.id, {
+      status: 'paid',
+      paid_at: new Date().toISOString(),
+    });
+  }
 
   private buildPaymentPayload(
     userId: string,
     subscription: CloudSubscription,
-    periodStart: string
+    periodStart: string,
   ): CreateCloudSubscriptionPaymentPayload {
     return {
       user_id: userId,
@@ -125,19 +123,18 @@ public async markPaymentAsPaid(
       amount: subscription.amount,
       currency: subscription.currency,
       status: 'pending',
-      paid_at: null
+      paid_at: null,
     };
   }
 
   private subscriptionAppliesToPeriod(
     subscription: CloudSubscription,
     periodStart: string,
-    periodEnd: string
+    periodEnd: string,
   ): boolean {
     const startsBeforePeriodEnds = subscription.start_date <= periodEnd;
     const hasNoEndDate = !subscription.end_date;
-    const endsAfterPeriodStarts =
-      hasNoEndDate || subscription.end_date! >= periodStart;
+    const endsAfterPeriodStarts = hasNoEndDate || subscription.end_date! >= periodStart;
 
     return startsBeforePeriodEnds && endsAfterPeriodStarts;
   }

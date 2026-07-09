@@ -3,7 +3,7 @@ import type { User } from '@supabase/supabase-js';
 import { supabase } from '../cloud/supabase.client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   public readonly user: WritableSignal<User | null> = signal<User | null>(null);
@@ -40,26 +40,28 @@ export class AuthService {
   }
 
   public async signUp(email: string, password: string): Promise<void> {
-    const { data, error } = await supabase.auth.signUp({ email, password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/login` }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/login` },
     });
 
     if (error) throw error;
 
     this.user.set(data.user ?? data.session?.user ?? null);
-}
-  
+  }
+
   public async signIn(email: string, password: string): Promise<void> {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) throw error;
-    
+
     this.user.set(data.user ?? data.session?.user ?? null);
   }
 
   public async resetPassword(email: string): Promise<void> {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/update-password`
+      redirectTo: `${window.location.origin}/auth/update-password`,
     });
     if (error) throw error;
   }

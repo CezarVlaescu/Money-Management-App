@@ -8,7 +8,8 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog/conf
   styleUrl: './confirm-dialog.scss',
 })
 export class ConfirmDialog {
-  protected readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
+  protected readonly confirmDialogService: ConfirmDialogService =
+    inject<ConfirmDialogService>(ConfirmDialogService);
 
   @HostListener('document:keydown.escape')
   protected onEscape(): void {

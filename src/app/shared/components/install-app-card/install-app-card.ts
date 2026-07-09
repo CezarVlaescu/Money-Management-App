@@ -9,7 +9,8 @@ import { ToastService } from '../../../core/services/toast/toast';
   styleUrl: './install-app-card.scss',
 })
 export class InstallAppCard {
-  protected readonly pwaInstallService: PwaInstallService = inject<PwaInstallService>(PwaInstallService);
+  protected readonly pwaInstallService: PwaInstallService =
+    inject<PwaInstallService>(PwaInstallService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   protected async installApp(): Promise<void> {

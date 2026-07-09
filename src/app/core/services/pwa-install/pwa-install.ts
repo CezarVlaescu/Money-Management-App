@@ -8,10 +8,12 @@ export class PwaInstallService {
   private deferredPrompt: BeforeInstallPromptEvent | null = null;
 
   public readonly canInstall: WritableSignal<boolean> = signal<boolean>(false);
-  public readonly isInstalled: WritableSignal<boolean> = signal<boolean>(this.isRunningStandalone());
+  public readonly isInstalled: WritableSignal<boolean> = signal<boolean>(
+    this.isRunningStandalone(),
+  );
 
   public initialize(): void {
-    window.addEventListener('beforeinstallprompt', event => {
+    window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
 
       this.deferredPrompt = event as BeforeInstallPromptEvent;
@@ -47,7 +49,9 @@ export class PwaInstallService {
   }
 
   private isRunningStandalone(): boolean {
-    return window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true
+    );
   }
 }

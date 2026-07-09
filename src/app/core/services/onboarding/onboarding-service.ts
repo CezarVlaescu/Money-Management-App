@@ -3,7 +3,7 @@ import { StorageService } from '../storage/storage';
 import { ONBOARDING_STORAGE_KEY } from '../../../shared/constants/app.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OnboardingService {
   private readonly storageService: StorageService = inject<StorageService>(StorageService);
@@ -14,7 +14,9 @@ export class OnboardingService {
   public initialize(): void {
     const completed = this.storageService.getItem<boolean>(this.storageKey, false);
     if (completed) return;
-    setTimeout(() => { this.isOpen.set(true); }, 500);
+    setTimeout(() => {
+      this.isOpen.set(true);
+    }, 500);
   }
 
   public open(): void {

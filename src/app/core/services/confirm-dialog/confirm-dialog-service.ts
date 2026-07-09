@@ -2,11 +2,12 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { ConfirmDialogConfig } from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfirmDialogService {
   public readonly isOpen: WritableSignal<boolean> = signal<boolean>(false);
-  public readonly config: WritableSignal<ConfirmDialogConfig | null> = signal<ConfirmDialogConfig | null>(null);
+  public readonly config: WritableSignal<ConfirmDialogConfig | null> =
+    signal<ConfirmDialogConfig | null>(null);
 
   private resolver: ((confirmed: boolean) => void) | null = null;
 
@@ -15,12 +16,14 @@ export class ConfirmDialogService {
       cancelLabel: 'Cancel',
       confirmLabel: 'Confirm',
       tone: 'danger',
-      ...config
+      ...config,
     });
 
     this.isOpen.set(true);
 
-    return new Promise<boolean>(resolve => { this.resolver = resolve; });
+    return new Promise<boolean>((resolve) => {
+      this.resolver = resolve;
+    });
   }
 
   public accept(): void {

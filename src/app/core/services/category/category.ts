@@ -9,13 +9,13 @@ export class CategoryService {
   private readonly categoryRules: CategoryRule[] = [
     { category: CATEGORY.NEEDS, keywords: NEEDS_CONST },
     { category: CATEGORY.WANTS, keywords: WANTS_CONST },
-    { category: CATEGORY.SAVINGS, keywords: SAVINGS_CONST }
+    { category: CATEGORY.SAVINGS, keywords: SAVINGS_CONST },
   ];
 
   public detectCategory(value: string): BudgetCategory {
     const normalizedValue: string = this.normalize(value);
-    const matchedRule: CategoryRule | undefined = this.categoryRules.find(rule =>
-      rule.keywords.some(keyword => normalizedValue.includes(this.normalize(keyword)))
+    const matchedRule: CategoryRule | undefined = this.categoryRules.find((rule) =>
+      rule.keywords.some((keyword) => normalizedValue.includes(this.normalize(keyword))),
     );
 
     return matchedRule?.category ?? CATEGORY.UNCATEGORIZED;
@@ -26,7 +26,7 @@ export class CategoryService {
       needs: CATEGORY.NEEDS,
       wants: CATEGORY.WANTS,
       savings: CATEGORY.SAVINGS,
-      uncategorized: CATEGORY.UNCATEGORIZED
+      uncategorized: CATEGORY.UNCATEGORIZED,
     };
 
     return labels[category];
@@ -37,7 +37,7 @@ export class CategoryService {
       needs: '🧺',
       wants: '🛍️',
       savings: '🐷',
-      uncategorized: '✨'
+      uncategorized: '✨',
     };
 
     return icons[category];

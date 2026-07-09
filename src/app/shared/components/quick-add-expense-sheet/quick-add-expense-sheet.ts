@@ -1,4 +1,15 @@
-import { Component, computed, effect, ElementRef, HostListener, inject, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  Signal,
+  signal,
+  viewChild,
+  WritableSignal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BudgetCategory } from '../../../core/models/types/core.types';
 import { CategoryService } from '../../../core/services/category/category';
@@ -14,9 +25,11 @@ import { CATEGORIES_CONST } from '../../constants/app.constants';
   styleUrl: './quick-add-expense-sheet.scss',
 })
 export class QuickAddExpenseSheet {
-  private readonly titleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> = viewChild<ElementRef<HTMLInputElement>>('titleInput');
-  
-  protected readonly sheetService: AddExpensesSheetService = inject<AddExpensesSheetService>(AddExpensesSheetService);
+  private readonly titleInputElement: Signal<ElementRef<HTMLInputElement> | undefined> =
+    viewChild<ElementRef<HTMLInputElement>>('titleInput');
+
+  protected readonly sheetService: AddExpensesSheetService =
+    inject<AddExpensesSheetService>(AddExpensesSheetService);
   protected readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
   protected readonly categoryService: CategoryService = inject<CategoryService>(CategoryService);
   protected readonly toastService: ToastService = inject<ToastService>(ToastService);
@@ -39,10 +52,10 @@ export class QuickAddExpenseSheet {
     return title ? this.categoryService.detectCategory(title) : 'uncategorized';
   });
   protected readonly sheetTitle: Signal<string> = computed<string>(() =>
-    this.sheetService.isEditMode() ? 'Edit transaction' : 'New transaction'
+    this.sheetService.isEditMode() ? 'Edit transaction' : 'New transaction',
   );
   protected readonly submitLabel: Signal<string> = computed<string>(() =>
-    this.sheetService.isEditMode() ? 'Save changes' : 'Add transaction'
+    this.sheetService.isEditMode() ? 'Save changes' : 'Add transaction',
   );
 
   public constructor() {

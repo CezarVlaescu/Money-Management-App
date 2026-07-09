@@ -4,12 +4,14 @@ import { CloudBackupService } from '../cloud-backup/cloud-backup-service';
 import { CloudSyncQueueService } from '../cloud-sync-queue/cloud-sync-queue-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudAutoSyncRunnerService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
-  private readonly cloudBackupService: CloudBackupService = inject<CloudBackupService>(CloudBackupService);
-  private readonly cloudSyncQueueService: CloudSyncQueueService = inject<CloudSyncQueueService>(CloudSyncQueueService);
+  private readonly cloudBackupService: CloudBackupService =
+    inject<CloudBackupService>(CloudBackupService);
+  private readonly cloudSyncQueueService: CloudSyncQueueService =
+    inject<CloudSyncQueueService>(CloudSyncQueueService);
 
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
   private running = false;

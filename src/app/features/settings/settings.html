@@ -19,15 +19,11 @@
         {{ themeService.isDarkMode() ? 'Dark mode' : 'Light mode' }}
       </h2>
 
-      <span>
-        Choose the look that feels best for your budgeting flow.
-      </span>
+      <span> Choose the look that feels best for your budgeting flow. </span>
     </div>
   </div>
 
-  <button type="button" (click)="themeService.toggleTheme()">
-    Switch
-  </button>
+  <button type="button" (click)="themeService.toggleTheme()">Switch</button>
 </section>
 
 <section class="settings-card">
@@ -36,11 +32,7 @@
     <h2>Learn how Money Bloom works</h2>
   </div>
 
-  <button
-    class="settings-guide-button"
-    type="button"
-    (click)="openGuide()"
-  >
+  <button class="settings-guide-button" type="button" (click)="openGuide()">
     <span>🌷</span>
 
     <div>
@@ -61,16 +53,10 @@
   <label class="settings-input">
     <span>Income in RON</span>
 
-    <input
-      type="number"
-      [ngModel]="incomeDraft()"
-      (ngModelChange)="incomeDraft.set($event)"
-    />
+    <input type="number" [ngModel]="incomeDraft()" (ngModelChange)="incomeDraft.set($event)" />
   </label>
 
-  <button class="settings-primary-button" type="button" (click)="saveIncome()">
-    Save income
-  </button>
+  <button class="settings-primary-button" type="button" (click)="saveIncome()">Save income</button>
 </section>
 
 <section class="settings-card">
@@ -113,9 +99,7 @@
     <strong>ro-RO</strong>
   </div>
 
-  <p class="settings-note">
-    Multi-currency support can be added later for EUR, USD or GBP.
-  </p>
+  <p class="settings-note">Multi-currency support can be added later for EUR, USD or GBP.</p>
 </section>
 
 <section class="settings-card settings-card--danger">
@@ -125,13 +109,9 @@
   </div>
 
   <div class="settings-danger-actions">
-    <button type="button" (click)="resetExpenses()">
-      Reset expenses
-    </button>
+    <button type="button" (click)="resetExpenses()">Reset expenses</button>
 
-    <button type="button" (click)="resetGoals()">
-      Reset goals
-    </button>
+    <button type="button" (click)="resetGoals()">Reset goals</button>
   </div>
 </section>
 
@@ -160,8 +140,5 @@
 
   <h2>Money Bloom</h2>
 
-  <p>
-    A colorful 50/30/20 budget planner built with Angular.
-  </p>
+  <p>A colorful 50/30/20 budget planner built with Angular.</p>
 </section>
-

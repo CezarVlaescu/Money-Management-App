@@ -8,11 +8,7 @@
       aria-hidden="true"
     ></button>
 
-    <section
-      class="goal-sheet__panel"
-      role="dialog"
-      aria-modal="true"
-    >
+    <section class="goal-sheet__panel" role="dialog" aria-modal="true">
       <div class="goal-sheet__handle"></div>
 
       <header class="goal-sheet__header">
@@ -21,19 +17,10 @@
           <h2>Edit savings goal</h2>
         </div>
 
-        <button
-          class="goal-sheet__close"
-          type="button"
-          (click)="close()"
-        >
-          ✕
-        </button>
+        <button class="goal-sheet__close" type="button" (click)="close()">✕</button>
       </header>
 
-      <form
-        class="goal-sheet__form"
-        (ngSubmit)="saveGoal()"
-      >
+      <form class="goal-sheet__form" (ngSubmit)="saveGoal()">
         <label>
           <span>Goal name</span>
 
@@ -96,11 +83,7 @@
           }
         </div>
 
-        <button
-          class="goal-sheet__submit"
-          type="submit"
-          [disabled]="!canSubmit()"
-        >
+        <button class="goal-sheet__submit" type="submit" [disabled]="!canSubmit()">
           Save changes
         </button>
       </form>

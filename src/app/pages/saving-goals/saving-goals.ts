@@ -18,13 +18,17 @@ import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm
   styleUrl: './saving-goals.scss',
 })
 export class SavingGoals {
-  private readonly addGoalSection: Signal<ElementRef<HTMLElement> | undefined> = viewChild<ElementRef<HTMLElement>>('addGoalSection');
+  private readonly addGoalSection: Signal<ElementRef<HTMLElement> | undefined> =
+    viewChild<ElementRef<HTMLElement>>('addGoalSection');
 
-  protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  protected readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
-  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
+  private readonly confirmDialogService: ConfirmDialogService =
+    inject<ConfirmDialogService>(ConfirmDialogService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
-  private readonly savingsGoalSheetService: SavingsGoalSheetService = inject<SavingsGoalSheetService>(SavingsGoalSheetService);
+  private readonly savingsGoalSheetService: SavingsGoalSheetService =
+    inject<SavingsGoalSheetService>(SavingsGoalSheetService);
 
   protected addMoney(goalId: string): void {
     this.savingsGoalsService.addContribution(goalId, 100);
@@ -37,7 +41,7 @@ export class SavingGoals {
       message: 'This goal and its progress will be removed from your device.',
       confirmLabel: 'Delete',
       cancelLabel: 'Keep goal',
-      tone: 'danger'
+      tone: 'danger',
     });
 
     if (!confirmed) return;
@@ -49,7 +53,7 @@ export class SavingGoals {
   protected scrollToAddGoal(): void {
     this.addGoalSection()?.nativeElement.scrollIntoView({
       behavior: 'smooth',
-      block: 'center'
+      block: 'center',
     });
   }
 
@@ -61,5 +65,4 @@ export class SavingGoals {
     // Momentan nu trebuie să facă nimic.
     // Lăsăm metoda pentru extensie: toast, scroll, analytics, etc.
   }
-
 }

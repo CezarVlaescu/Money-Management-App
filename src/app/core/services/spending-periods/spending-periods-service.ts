@@ -1,10 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { supabase } from '../../cloud/supabase.client';
-import { CloudSpendingPeriod, CreateCloudSpendingPeriodPayload, UpdateCloudSpendingPeriodPayload } from '../../models/interface/core.interface';
+import {
+  CloudSpendingPeriod,
+  CreateCloudSpendingPeriodPayload,
+  UpdateCloudSpendingPeriodPayload,
+} from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SpendingPeriodsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
@@ -24,7 +28,7 @@ export class SpendingPeriodsService {
   }
 
   public async getCurrentSpendingPeriod(
-    date: Date = new Date()
+    date: Date = new Date(),
   ): Promise<CloudSpendingPeriod | null> {
     const userId = this.authService.getCurrentUserId();
     const periodStart = this.getMonthStart(date);
@@ -42,7 +46,7 @@ export class SpendingPeriodsService {
   }
 
   public async getOrCreateCurrentSpendingPeriod(
-    date: Date = new Date()
+    date: Date = new Date(),
   ): Promise<CloudSpendingPeriod> {
     const existingPeriod = await this.getCurrentSpendingPeriod(date);
 
@@ -60,12 +64,12 @@ export class SpendingPeriodsService {
       period_end: periodEnd,
       daily_limit: defaultDailyLimit,
       currency: 'RON',
-      include_planned_recurring: true
+      include_planned_recurring: true,
     });
   }
 
   public async createSpendingPeriod(
-    payload: CreateCloudSpendingPeriodPayload
+    payload: CreateCloudSpendingPeriodPayload,
   ): Promise<CloudSpendingPeriod> {
     const userId = this.authService.getCurrentUserId();
 
@@ -73,7 +77,7 @@ export class SpendingPeriodsService {
       .from('spending_periods')
       .insert({
         ...payload,
-        user_id: userId
+        user_id: userId,
       })
       .select()
       .single();
@@ -85,7 +89,7 @@ export class SpendingPeriodsService {
 
   public async updateSpendingPeriod(
     id: string,
-    payload: UpdateCloudSpendingPeriodPayload
+    payload: UpdateCloudSpendingPeriodPayload,
   ): Promise<CloudSpendingPeriod> {
     const userId = this.authService.getCurrentUserId();
 
@@ -93,7 +97,7 @@ export class SpendingPeriodsService {
       .from('spending_periods')
       .update({
         ...payload,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('user_id', userId)
@@ -105,12 +109,9 @@ export class SpendingPeriodsService {
     return data;
   }
 
-  public async updateDailyLimit(
-    id: string,
-    dailyLimit: number
-  ): Promise<CloudSpendingPeriod> {
+  public async updateDailyLimit(id: string, dailyLimit: number): Promise<CloudSpendingPeriod> {
     return this.updateSpendingPeriod(id, {
-      daily_limit: dailyLimit
+      daily_limit: dailyLimit,
     });
   }
 
@@ -131,15 +132,11 @@ export class SpendingPeriodsService {
   }
 
   private getMonthStart(date: Date): string {
-    return this.formatDateOnly(
-      new Date(date.getFullYear(), date.getMonth(), 1)
-    );
+    return this.formatDateOnly(new Date(date.getFullYear(), date.getMonth(), 1));
   }
 
   private getMonthEnd(date: Date): string {
-    return this.formatDateOnly(
-      new Date(date.getFullYear(), date.getMonth() + 1, 0)
-    );
+    return this.formatDateOnly(new Date(date.getFullYear(), date.getMonth() + 1, 0));
   }
 
   private formatDateOnly(date: Date): string {

@@ -24,15 +24,19 @@ export class Expenses {
   protected readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
-  private readonly addExpenseSheetService: AddExpensesSheetService = inject<AddExpensesSheetService>(AddExpensesSheetService);
-  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
+  private readonly addExpenseSheetService: AddExpensesSheetService =
+    inject<AddExpensesSheetService>(AddExpensesSheetService);
+  private readonly confirmDialogService: ConfirmDialogService =
+    inject<ConfirmDialogService>(ConfirmDialogService);
 
-  protected readonly selectedCategory: WritableSignal<BudgetCategory | 'all'> = signal<BudgetCategory | 'all'>('all');
+  protected readonly selectedCategory: WritableSignal<BudgetCategory | 'all'> = signal<
+    BudgetCategory | 'all'
+  >('all');
   protected readonly expensesFilters: CategoryFilter[] = EXPENSES_FILTERS;
   protected readonly filteredExpenses: Signal<Expense[]> = computed<Expense[]>(() => {
     const category = this.selectedCategory();
     if (category === 'all') return this.expensesService.expenses();
-    return this.expensesService.expenses().filter(expense => expense.category === category);
+    return this.expensesService.expenses().filter((expense) => expense.category === category);
   });
 
   protected onExpenseAdded(): void {
@@ -49,7 +53,7 @@ export class Expenses {
       message: 'This transaction will be removed from your local budget history.',
       confirmLabel: 'Delete',
       cancelLabel: 'Keep it',
-      tone: 'danger'
+      tone: 'danger',
     });
 
     if (!confirmed) return;

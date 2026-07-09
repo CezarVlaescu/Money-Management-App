@@ -1,66 +1,60 @@
 <section class="calendar-page">
-    <header class="calendar-page__month-switcher">
-        <button
-        type="button"
-        aria-label="Previous month"
-        [disabled]="loading()"
-        (click)="goToPreviousMonth()"
-        >
-            ‹
-        </button>
-
-        <div>
-            <span>Calendar</span>
-            <h1>{{ selectedMonthLabel() }}</h1>
-        </div>
-
-        <button
-        type="button"
-        aria-label="Next month"
-        [disabled]="loading()"
-        (click)="goToNextMonth()"
-        > 
-            ›
-        </button>
-    </header>
-
+  <header class="calendar-page__month-switcher">
     <button
+      type="button"
+      aria-label="Previous month"
+      [disabled]="loading()"
+      (click)="goToPreviousMonth()"
+    >
+      ‹
+    </button>
+
+    <div>
+      <span>Calendar</span>
+      <h1>{{ selectedMonthLabel() }}</h1>
+    </div>
+
+    <button type="button" aria-label="Next month" [disabled]="loading()" (click)="goToNextMonth()">
+      ›
+    </button>
+  </header>
+
+  <button
     class="calendar-page__today-button"
     type="button"
     [disabled]="loading()"
     (click)="goToCurrentMonth()"
-    >
-        Back to current month
-    </button>
-    @if (loading()) {
-        <p>Loading calendar...</p>
-    } @else if (error()) {
-        <p>{{ error() }}</p>
-    } @else {
+  >
+    Back to current month
+  </button>
+  @if (loading()) {
+    <p>Loading calendar...</p>
+  } @else if (error()) {
+    <p>{{ error() }}</p>
+  } @else {
     @if (dailyAllowanceSummary(); as summary) {
       <section class="calendar-page__hero">
         <p class="calendar-page__eyebrow">Daily allowance</p>
 
         @if (selectedMonthState() === 'current') {
-            <h1>{{ summary.todayRemaining | number: '1.0-2' }} lei left today</h1>
-            <p>
-                You started with {{ summary.dailyLimit | number: '1.0-2' }} lei/day.
-                Your adaptive allowance is now
-                {{ summary.adaptiveDailyAllowance | number: '1.0-2' }} lei/day.
-            </p>
+          <h1>{{ summary.todayRemaining | number: '1.0-2' }} lei left today</h1>
+          <p>
+            You started with {{ summary.dailyLimit | number: '1.0-2' }} lei/day. Your adaptive
+            allowance is now {{ summary.adaptiveDailyAllowance | number: '1.0-2' }} lei/day.
+          </p>
         } @else if (selectedMonthState() === 'past') {
-            <h1>{{ summary.remainingMonthlyBudget | number: '1.0-2' }} lei remaining</h1>
-            <p>
-                This month started with a budget of
-                {{ summary.monthlyBudget | number: '1.0-2' }} lei.
-                You spent {{ summary.spentThisMonth | number: '1.0-2' }} lei.
-            </p>
-        } @else { 
-            <h1>{{ summary.dailyLimit | number: '1.0-2' }} lei planned per day</h1>
-            <p>
-                This future month has a planned budget of
-                {{ summary.monthlyBudget | number: '1.0-2' }} lei.
-            </p>
+          <h1>{{ summary.remainingMonthlyBudget | number: '1.0-2' }} lei remaining</h1>
+          <p>
+            This month started with a budget of
+            {{ summary.monthlyBudget | number: '1.0-2' }} lei. You spent
+            {{ summary.spentThisMonth | number: '1.0-2' }} lei.
+          </p>
+        } @else {
+          <h1>{{ summary.dailyLimit | number: '1.0-2' }} lei planned per day</h1>
+          <p>
+            This future month has a planned budget of
+            {{ summary.monthlyBudget | number: '1.0-2' }} lei.
+          </p>
         }
       </section>
 
@@ -83,273 +77,258 @@
     }
 
     @if (spendingPeriod(); as period) {
-        <section class="calendar-page__daily-limit-card">
-            @if (!editingDailyLimit()) {
-                <div>
-                    <span>Daily limit</span>
-                    <strong>{{ period.daily_limit | number: '1.0-2' }} lei / day</strong>
-                </div>
-
-                <button type="button" (click)="startEditingDailyLimit()">
-                    Change
-                </button>
-            } @else {
-                <label>
-                    <span>New daily limit</span>
-
-                    <input
-                    type="number"
-                    min="0"
-                    inputmode="decimal"
-                    [(ngModel)]="dailyLimitInput"
-                    placeholder="100"
-                    />
-                </label>
-
-                <div class="calendar-page__daily-limit-actions">
-                    <button type="button" (click)="cancelEditingDailyLimit()">
-                        Cancel
-                    </button>
-
-                    <button
-                    type="button"
-                    [disabled]="savingDailyLimit()"
-                    (click)="saveDailyLimit()"
-                    >
-                        {{ savingDailyLimit() ? 'Saving...' : 'Save' }}
-                    </button>
-                </div>
-            }
-        </section>
-    }
-
-<section class="calendar-page__subscriptions-card">
-  <header class="calendar-page__subscriptions-header">
-    <div class="calendar-page__subscriptions-title">
-      <span>Recurring payments</span>
-      <h2>Upcoming this month</h2>
-    </div>
-
-    <div class="calendar-page__subscriptions-actions">
-      <strong class="calendar-page__subscription-count">
-        {{ pendingSubscriptionPaymentItems().length }} pending
-      </strong>
-
-      @if (!addingSubscription()) {
-        <button
-          class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
-          type="button"
-          (click)="startAddingSubscription()"
-        >
-          + Add
-        </button>
-      }
-    </div>
-  </header>
-
-  @if (addingSubscription()) {
-    <form
-      class="calendar-page__subscription-form"
-      (ngSubmit)="saveSubscription()"
-    >
-      <div class="calendar-page__subscription-form-grid">
-        <label class="calendar-page__form-field">
-          <span>Name</span>
-
-          <input
-            type="text"
-            name="subscriptionName"
-            placeholder="Netflix"
-            [ngModel]="subscriptionNameInput()"
-            (ngModelChange)="subscriptionNameInput.set($event)"
-          />
-        </label>
-
-        <label class="calendar-page__form-field">
-          <span>Amount</span>
-
-          <input
-            type="number"
-            name="subscriptionAmount"
-            min="0"
-            inputmode="decimal"
-            placeholder="50"
-            [ngModel]="subscriptionAmountInput()"
-            (ngModelChange)="subscriptionAmountInput.set($event)"
-          />
-        </label>
-
-        <label class="calendar-page__form-field">
-          <span>Due day</span>
-
-          <input
-            type="number"
-            name="subscriptionDueDay"
-            min="1"
-            max="31"
-            inputmode="numeric"
-            placeholder="15"
-            [ngModel]="subscriptionDueDayInput()"
-            (ngModelChange)="subscriptionDueDayInput.set($event)"
-          />
-        </label>
-
-        <label class="calendar-page__form-field">
-          <span>Category</span>
-
-          <select
-            name="subscriptionCategory"
-            [ngModel]="subscriptionCategoryInput()"
-            (ngModelChange)="subscriptionCategoryInput.set($event)"
-          >
-            <option value="needs">Needs</option>
-            <option value="wants">Wants</option>
-            <option value="savings">Savings</option>
-          </select>
-        </label>
-      </div>
-
-      <div class="calendar-page__subscription-form-actions">
-        <button
-          class="calendar-page__button calendar-page__button--secondary"
-          type="button"
-          (click)="cancelAddingSubscription()"
-        >
-          Cancel
-        </button>
-
-        <button
-          class="calendar-page__button calendar-page__button--primary"
-          type="submit"
-          [disabled]="savingSubscription()"
-        >
-          {{ savingSubscription() ? 'Saving...' : 'Save payment' }}
-        </button>
-      </div>
-    </form>
-  }
-
-  @if (subscriptionPaymentItems().length) {
-    <div class="calendar-page__subscriptions-list">
-      @for (item of subscriptionPaymentItems(); track item.payment.id) {
-        <article
-          class="subscription-payment"
-          [class.subscription-payment--paid]="item.status === 'paid'"
-          [class.subscription-payment--skipped]="item.status === 'skipped'"
-        >
-          <div class="subscription-payment__content">
-            <strong>{{ item.name }}</strong>
-
-            <span>
-              Due {{ formatShortDate(item.dueDate) }} · {{ item.status }}
-            </span>
+      <section class="calendar-page__daily-limit-card">
+        @if (!editingDailyLimit()) {
+          <div>
+            <span>Daily limit</span>
+            <strong>{{ period.daily_limit | number: '1.0-2' }} lei / day</strong>
           </div>
 
-          <div class="subscription-payment__meta">
-            <strong>{{ item.amount | number: '1.0-2' }} lei</strong>
+          <button type="button" (click)="startEditingDailyLimit()">Change</button>
+        } @else {
+          <label>
+            <span>New daily limit</span>
 
-            @if (item.status === 'pending') {
-              <div class="subscription-payment__actions">
-                <button
-                  class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
-                  type="button"
-                  (click)="markSubscriptionPaymentAsPaid(item)"
-                >
-                  Paid
-                </button>
+            <input
+              type="number"
+              min="0"
+              inputmode="decimal"
+              [(ngModel)]="dailyLimitInput"
+              placeholder="100"
+            />
+          </label>
 
-                <button
-                  class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
-                  type="button"
-                  (click)="skipSubscriptionPayment(item)"
-                >
-                  Skip
-                </button>
+          <div class="calendar-page__daily-limit-actions">
+            <button type="button" (click)="cancelEditingDailyLimit()">Cancel</button>
+
+            <button type="button" [disabled]="savingDailyLimit()" (click)="saveDailyLimit()">
+              {{ savingDailyLimit() ? 'Saving...' : 'Save' }}
+            </button>
+          </div>
+        }
+      </section>
+    }
+
+    <section class="calendar-page__subscriptions-card">
+      <header class="calendar-page__subscriptions-header">
+        <div class="calendar-page__subscriptions-title">
+          <span>Recurring payments</span>
+          <h2>Upcoming this month</h2>
+        </div>
+
+        <div class="calendar-page__subscriptions-actions">
+          <strong class="calendar-page__subscription-count">
+            {{ pendingSubscriptionPaymentItems().length }} pending
+          </strong>
+
+          @if (!addingSubscription()) {
+            <button
+              class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
+              type="button"
+              (click)="startAddingSubscription()"
+            >
+              + Add
+            </button>
+          }
+        </div>
+      </header>
+
+      @if (addingSubscription()) {
+        <form class="calendar-page__subscription-form" (ngSubmit)="saveSubscription()">
+          <div class="calendar-page__subscription-form-grid">
+            <label class="calendar-page__form-field">
+              <span>Name</span>
+
+              <input
+                type="text"
+                name="subscriptionName"
+                placeholder="Netflix"
+                [ngModel]="subscriptionNameInput()"
+                (ngModelChange)="subscriptionNameInput.set($event)"
+              />
+            </label>
+
+            <label class="calendar-page__form-field">
+              <span>Amount</span>
+
+              <input
+                type="number"
+                name="subscriptionAmount"
+                min="0"
+                inputmode="decimal"
+                placeholder="50"
+                [ngModel]="subscriptionAmountInput()"
+                (ngModelChange)="subscriptionAmountInput.set($event)"
+              />
+            </label>
+
+            <label class="calendar-page__form-field">
+              <span>Due day</span>
+
+              <input
+                type="number"
+                name="subscriptionDueDay"
+                min="1"
+                max="31"
+                inputmode="numeric"
+                placeholder="15"
+                [ngModel]="subscriptionDueDayInput()"
+                (ngModelChange)="subscriptionDueDayInput.set($event)"
+              />
+            </label>
+
+            <label class="calendar-page__form-field">
+              <span>Category</span>
+
+              <select
+                name="subscriptionCategory"
+                [ngModel]="subscriptionCategoryInput()"
+                (ngModelChange)="subscriptionCategoryInput.set($event)"
+              >
+                <option value="needs">Needs</option>
+                <option value="wants">Wants</option>
+                <option value="savings">Savings</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="calendar-page__subscription-form-actions">
+            <button
+              class="calendar-page__button calendar-page__button--secondary"
+              type="button"
+              (click)="cancelAddingSubscription()"
+            >
+              Cancel
+            </button>
+
+            <button
+              class="calendar-page__button calendar-page__button--primary"
+              type="submit"
+              [disabled]="savingSubscription()"
+            >
+              {{ savingSubscription() ? 'Saving...' : 'Save payment' }}
+            </button>
+          </div>
+        </form>
+      }
+
+      @if (subscriptionPaymentItems().length) {
+        <div class="calendar-page__subscriptions-list">
+          @for (item of subscriptionPaymentItems(); track item.payment.id) {
+            <article
+              class="subscription-payment"
+              [class.subscription-payment--paid]="item.status === 'paid'"
+              [class.subscription-payment--skipped]="item.status === 'skipped'"
+            >
+              <div class="subscription-payment__content">
+                <strong>{{ item.name }}</strong>
+
+                <span> Due {{ formatShortDate(item.dueDate) }} · {{ item.status }} </span>
               </div>
-            }
-          </div>
-        </article>
+
+              <div class="subscription-payment__meta">
+                <strong>{{ item.amount | number: '1.0-2' }} lei</strong>
+
+                @if (item.status === 'pending') {
+                  <div class="subscription-payment__actions">
+                    <button
+                      class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
+                      type="button"
+                      (click)="markSubscriptionPaymentAsPaid(item)"
+                    >
+                      Paid
+                    </button>
+
+                    <button
+                      class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+                      type="button"
+                      (click)="skipSubscriptionPayment(item)"
+                    >
+                      Skip
+                    </button>
+                  </div>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      } @else if (!addingSubscription()) {
+        <p class="calendar-page__subscriptions-empty">
+          No recurring payments yet. Add rent, Netflix, phone bills or any monthly payment.
+        </p>
+      }
+    </section>
+  }
+
+  <section class="calendar-page__calendar">
+    <div class="calendar-page__weekday-row">
+      @for (weekday of weekdayLabels; track weekday) {
+        <span>{{ weekday }}</span>
       }
     </div>
-  } @else if (!addingSubscription()) {
-    <p class="calendar-page__subscriptions-empty">
-      No recurring payments yet. Add rent, Netflix, phone bills or any monthly payment.
-    </p>
-  }
-</section>
-    }
 
-    <section class="calendar-page__calendar">
-        <div class="calendar-page__weekday-row">
-            @for (weekday of weekdayLabels; track weekday) {
-                <span>{{ weekday }}</span>
-            }
+    <div class="calendar-page__grid">
+      @for (item of calendarGridItems(); track item.trackId) {
+        @if (item.type === 'empty') {
+          <div class="calendar-day calendar-day--empty"></div>
+        } @else {
+          <button
+            class="calendar-day"
+            type="button"
+            [class.calendar-day--today]="item.day.isToday"
+            [class.calendar-day--future]="item.day.isFuture"
+            [class.calendar-day--over]="item.day.remainingAfterSpend < 0"
+            [class.calendar-day--selected]="selectedDay()?.date === item.day.date"
+            (click)="selectDay(item.day)"
+          >
+            <strong>{{ item.day.dayNumber }}</strong>
+            <span>{{ item.day.spent | number: '1.0-0' }} lei</span>
+          </button>
+        }
+      }
+    </div>
+  </section>
+
+  @if (selectedDay(); as day) {
+    <section class="calendar-page__day-details">
+      <div class="calendar-page__day-details-header">
+        <div>
+          <span>Selected day</span>
+          <h2>{{ day.date }}</h2>
         </div>
 
-        <div class="calendar-page__grid">
-            @for (item of calendarGridItems(); track item.trackId) {
-                @if (item.type === 'empty') {
-                    <div class="calendar-day calendar-day--empty"></div>
-                } 
-                @else {
-                    <button
-                    class="calendar-day"
-                    type="button"
-                    [class.calendar-day--today]="item.day.isToday"
-                    [class.calendar-day--future]="item.day.isFuture"
-                    [class.calendar-day--over]="item.day.remainingAfterSpend < 0"
-                    [class.calendar-day--selected]="selectedDay()?.date === item.day.date"
-                    (click)="selectDay(item.day)"
-                    >
-                        <strong>{{ item.day.dayNumber }}</strong>
-                        <span>{{ item.day.spent | number: '1.0-0' }} lei</span>
-                    </button>
-                }
-            }
+        <button type="button" (click)="closeSelectedDay()">✕</button>
+      </div>
+
+      <div class="calendar-page__day-stats">
+        <div>
+          <span>Allowance</span>
+          <strong>{{ day.allowanceAtStartOfDay | number: '1.0-2' }} lei</strong>
         </div>
+        <div>
+          <span>Spent</span>
+          <strong>{{ day.spent | number: '1.0-2' }} lei</strong>
+        </div>
+        <div>
+          <span>Remaining</span>
+          <strong>{{ day.remainingAfterSpend | number: '1.0-2' }} lei</strong>
+        </div>
+      </div>
+
+      <div class="calendar-page__expenses-list">
+        <h3>Expenses</h3>
+
+        @if (selectedDayExpenses().length) {
+          @for (expense of selectedDayExpenses(); track expense.id) {
+            <article class="calendar-page__expense-item">
+              <span>{{ getExpenseLabel(expense) }}</span>
+              <strong>{{ expense.amount | number: '1.0-2' }} lei</strong>
+            </article>
+          }
+        } @else {
+          <p>No expenses for this day.</p>
+        }
+      </div>
     </section>
-
-    @if (selectedDay(); as day) {
-        <section class="calendar-page__day-details">
-            <div class="calendar-page__day-details-header">
-                <div>
-                    <span>Selected day</span>
-                    <h2>{{ day.date }}</h2>
-                </div>
-
-                <button type="button" (click)="closeSelectedDay()">✕</button>
-            </div>
-
-            <div class="calendar-page__day-stats">
-                <div>
-                    <span>Allowance</span>
-                    <strong>{{ day.allowanceAtStartOfDay | number: '1.0-2' }} lei</strong>
-                </div>
-                <div>
-                    <span>Spent</span>
-                    <strong>{{ day.spent | number: '1.0-2' }} lei</strong>
-                </div>
-                <div>
-                    <span>Remaining</span>
-                    <strong>{{ day.remainingAfterSpend | number: '1.0-2' }} lei</strong>
-                </div>
-            </div>
-
-            <div class="calendar-page__expenses-list">
-                <h3>Expenses</h3>
-
-                @if (selectedDayExpenses().length) {
-                    @for (expense of selectedDayExpenses(); track expense.id) {
-                        <article class="calendar-page__expense-item">
-                            <span>{{ getExpenseLabel(expense) }}</span>
-                            <strong>{{ expense.amount | number: '1.0-2' }} lei</strong>
-                        </article>
-                    }
-                } 
-                @else {
-                    <p>No expenses for this day.</p>
-                }
-            </div>
-        </section>
-    }
+  }
 </section>

@@ -16,15 +16,21 @@ import { CloudSyncMetaService } from '../../core/sync/cloud-sync-meta/cloud-sync
 })
 export class CloudSyncCard implements OnInit {
   protected readonly authService: AuthService = inject<AuthService>(AuthService);
-  protected readonly cloudSyncMetaService: CloudSyncMetaService = inject<CloudSyncMetaService>(CloudSyncMetaService);
-  private readonly cloudSyncStatusService: CloudSyncStatusService = inject<CloudSyncStatusService>(CloudSyncStatusService);
+  protected readonly cloudSyncMetaService: CloudSyncMetaService =
+    inject<CloudSyncMetaService>(CloudSyncMetaService);
+  private readonly cloudSyncStatusService: CloudSyncStatusService =
+    inject<CloudSyncStatusService>(CloudSyncStatusService);
   private readonly router: Router = inject<Router>(Router);
-  private readonly cloudBackupService: CloudBackupService = inject<CloudBackupService>(CloudBackupService);
-  private readonly cloudRestoreService: CloudRestoreService = inject<CloudRestoreService>(CloudRestoreService);
-  private readonly cloudRestorePromptService: CloudRestorePromptService = inject<CloudRestorePromptService>(CloudRestorePromptService);
+  private readonly cloudBackupService: CloudBackupService =
+    inject<CloudBackupService>(CloudBackupService);
+  private readonly cloudRestoreService: CloudRestoreService =
+    inject<CloudRestoreService>(CloudRestoreService);
+  private readonly cloudRestorePromptService: CloudRestorePromptService =
+    inject<CloudRestorePromptService>(CloudRestorePromptService);
 
   protected readonly statusLoading: WritableSignal<boolean> = signal<boolean>(false);
-  protected readonly cloudStatus: WritableSignal<CloudSyncStatus | null> = signal<CloudSyncStatus | null>(null);
+  protected readonly cloudStatus: WritableSignal<CloudSyncStatus | null> =
+    signal<CloudSyncStatus | null>(null);
   protected readonly restoreLoading: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly restoreSuccess: WritableSignal<string | null> = signal<string | null>(null);
   protected readonly backupLoading: WritableSignal<boolean> = signal<boolean>(false);
@@ -44,13 +50,17 @@ export class CloudSyncCard implements OnInit {
       this.error.set(null);
       const status = await this.cloudSyncStatusService.getCloudSyncStatus();
       this.cloudStatus.set(status);
-    } 
-    catch (error) { this.error.set(this.authService.getErrorMessage(error)); } 
-    finally { this.statusLoading.set(false); }
+    } catch (error) {
+      this.error.set(this.authService.getErrorMessage(error));
+    } finally {
+      this.statusLoading.set(false);
+    }
   }
 
   protected async restoreFromCloud(): Promise<void> {
-    const confirmed = window.confirm('This will replace your local Money Bloom data with the data saved in cloud. Continue?');
+    const confirmed = window.confirm(
+      'This will replace your local Money Bloom data with the data saved in cloud. Continue?',
+    );
     if (!confirmed) return;
 
     try {
@@ -62,10 +72,14 @@ export class CloudSyncCard implements OnInit {
       const result = await this.cloudRestoreService.restoreCloudDataToLocal();
       await this.loadCloudStatus();
 
-      this.restoreSuccess.set(`Cloud data restored: ${result.expensesCount} expenses and ${result.goalsCount} goals.`);
-    } 
-    catch (error) { this.error.set(this.authService.getErrorMessage(error)); } 
-    finally { this.restoreLoading.set(false); }
+      this.restoreSuccess.set(
+        `Cloud data restored: ${result.expensesCount} expenses and ${result.goalsCount} goals.`,
+      );
+    } catch (error) {
+      this.error.set(this.authService.getErrorMessage(error));
+    } finally {
+      this.restoreLoading.set(false);
+    }
   }
 
   protected async backupToCloud(): Promise<void> {
@@ -96,8 +110,10 @@ export class CloudSyncCard implements OnInit {
 
       await this.authService.signOut();
       await this.router.navigate(['/dashboard']);
-    } 
-    catch (error) { this.error.set(this.authService.getErrorMessage(error)); } 
-    finally { this.loading.set(false); }
+    } catch (error) {
+      this.error.set(this.authService.getErrorMessage(error));
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

@@ -7,8 +7,11 @@ export class StorageService {
 
     if (!rawValue) return fallbackValue;
 
-    try { return JSON.parse(rawValue) as T; } 
-    catch { return fallbackValue; }
+    try {
+      return JSON.parse(rawValue) as T;
+    } catch {
+      return fallbackValue;
+    }
   }
 
   public setItem<T>(key: string, value: T): void {

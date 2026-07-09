@@ -1,4 +1,4 @@
-import { BudgetCategory } from "../../../core/models/types/core.types";
+import { BudgetCategory } from '../../../core/models/types/core.types';
 
 interface NavigationItem {
   label: string;

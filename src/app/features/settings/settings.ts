@@ -23,13 +23,18 @@ export class Settings {
   protected readonly themeService: ThemeService = inject<ThemeService>(ThemeService);
   protected readonly budgetService: BudgetService = inject<BudgetService>(BudgetService);
   protected readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  protected readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
+  protected readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
   protected readonly moneyFormatter: MoneyFormatter = inject<MoneyFormatter>(MoneyFormatter);
-  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
+  private readonly confirmDialogService: ConfirmDialogService =
+    inject<ConfirmDialogService>(ConfirmDialogService);
   private readonly toastService: ToastService = inject<ToastService>(ToastService);
-  private readonly onboardingService: OnboardingService = inject<OnboardingService>(OnboardingService);
+  private readonly onboardingService: OnboardingService =
+    inject<OnboardingService>(OnboardingService);
 
-  protected readonly incomeDraft: WritableSignal<number> = signal<number>(this.budgetService.income());
+  protected readonly incomeDraft: WritableSignal<number> = signal<number>(
+    this.budgetService.income(),
+  );
 
   protected openGuide(): void {
     this.onboardingService.open();
@@ -45,7 +50,7 @@ export class Settings {
       message: 'All local transactions will be deleted. You can export a backup before doing this.',
       confirmLabel: 'Reset',
       cancelLabel: 'Cancel',
-      tone: 'danger'
+      tone: 'danger',
     });
 
     if (!confirmed) return;
@@ -60,9 +65,8 @@ export class Settings {
       message: 'All local savings goals and progress will be deleted.',
       confirmLabel: 'Reset',
       cancelLabel: 'Cancel',
-      tone: 'danger'
+      tone: 'danger',
     });
-
 
     if (!confirmed) return;
 

@@ -1,10 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService } from '../../auth/auth-service';
 import { supabase } from '../../cloud/supabase.client';
-import { CloudSavingsGoal, CreateCloudSavingsGoalPayload, UpdateCloudSavingsGoalPayload } from '../../models/interface/core.interface';
+import {
+  CloudSavingsGoal,
+  CreateCloudSavingsGoalPayload,
+  UpdateCloudSavingsGoalPayload,
+} from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudSavingsGoalsService {
   private readonly authService: AuthService = inject<AuthService>(AuthService);
@@ -18,7 +22,7 @@ export class CloudSavingsGoalsService {
       .update({ deleted_at: new Date().toISOString() })
       .eq('user_id', userId)
       .in('id', ids);
-  
+
     if (error) throw error;
   }
 
@@ -38,7 +42,7 @@ export class CloudSavingsGoalsService {
   }
 
   public async createGoal(
-    payload: Omit<CreateCloudSavingsGoalPayload, 'user_id'>
+    payload: Omit<CreateCloudSavingsGoalPayload, 'user_id'>,
   ): Promise<CloudSavingsGoal> {
     const userId = this.authService.getCurrentUserId();
 
@@ -55,7 +59,7 @@ export class CloudSavingsGoalsService {
 
   public async updateGoal(
     id: string,
-    payload: UpdateCloudSavingsGoalPayload
+    payload: UpdateCloudSavingsGoalPayload,
   ): Promise<CloudSavingsGoal> {
     const userId = this.authService.getCurrentUserId();
 
@@ -85,11 +89,11 @@ export class CloudSavingsGoalsService {
   }
 
   public async upsertGoals(
-    goals: Omit<CreateCloudSavingsGoalPayload, 'user_id'>[]
+    goals: Omit<CreateCloudSavingsGoalPayload, 'user_id'>[],
   ): Promise<CloudSavingsGoal[]> {
     const userId = this.authService.getCurrentUserId();
 
-    const payload = goals.map(goal => ({ ...goal, user_id: userId }));
+    const payload = goals.map((goal) => ({ ...goal, user_id: userId }));
 
     const { data, error } = await supabase
       .from('savings_goals')

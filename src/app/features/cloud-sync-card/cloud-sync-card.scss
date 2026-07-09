@@ -5,9 +5,7 @@
   @include mx.glass-card(30px, 20px);
   @include mx.flex(row, flex-start, flex-start, 16px);
 
-  background:
-    linear-gradient(135deg, var(--primary-soft), var(--savings-soft)),
-    var(--surface);
+  background: linear-gradient(135deg, var(--primary-soft), var(--savings-soft)), var(--surface);
   color: var(--text-primary);
 
   &__icon {
@@ -115,34 +113,30 @@
   }
 
   &__sync-status {
-  display: grid;
-  gap: 12px;
-  border: 1px solid var(--border-muted);
-  border-radius: fn.radius(lg);
-  padding: 14px;
-  background: var(--surface-muted);
+    display: grid;
+    gap: 12px;
+    border: 1px solid var(--border-muted);
+    border-radius: fn.radius(lg);
+    padding: 14px;
+    background: var(--surface-muted);
 
-  p {
-    margin: 0;
-    color: var(--danger);
-    font-size: 13px;
-    line-height: 1.4;
-  }
+    p {
+      margin: 0;
+      color: var(--danger);
+      font-size: 13px;
+      line-height: 1.4;
+    }
 
-  &--success {
-    border-color: var(--success-soft);
-    background:
-      linear-gradient(135deg, var(--success-soft), transparent),
-      var(--surface-muted);
-  }
+    &--success {
+      border-color: var(--success-soft);
+      background: linear-gradient(135deg, var(--success-soft), transparent), var(--surface-muted);
+    }
 
-  &--error {
-    border-color: var(--danger-soft);
-    background:
-      linear-gradient(135deg, var(--danger-soft), transparent),
-      var(--surface-muted);
+    &--error {
+      border-color: var(--danger-soft);
+      background: linear-gradient(135deg, var(--danger-soft), transparent), var(--surface-muted);
+    }
   }
-}
 
   &__sync-status-header {
     @include mx.flex(row, center, space-between, 10px);

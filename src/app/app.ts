@@ -9,12 +9,14 @@ import { OnboardingService } from './core/services/onboarding/onboarding-service
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
   private readonly themeService: ThemeService = inject<ThemeService>(ThemeService);
-  private readonly pwaInstallService: PwaInstallService = inject<PwaInstallService>(PwaInstallService);
-  private readonly onboardingService: OnboardingService = inject<OnboardingService>(OnboardingService);
+  private readonly pwaInstallService: PwaInstallService =
+    inject<PwaInstallService>(PwaInstallService);
+  private readonly onboardingService: OnboardingService =
+    inject<OnboardingService>(OnboardingService);
 
   public ngOnInit(): void {
     this.themeService.initializeTheme();

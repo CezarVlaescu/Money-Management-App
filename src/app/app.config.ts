@@ -13,8 +13,9 @@ export const appConfig: ApplicationConfig = {
       return authService.initSession();
     }),
     provideAppInitializer(() => {
-      const cloudAutoSyncRunnerService: CloudAutoSyncRunnerService = inject<CloudAutoSyncRunnerService>(CloudAutoSyncRunnerService);
+      const cloudAutoSyncRunnerService: CloudAutoSyncRunnerService =
+        inject<CloudAutoSyncRunnerService>(CloudAutoSyncRunnerService);
       cloudAutoSyncRunnerService.init();
-    })
-  ]
+    }),
+  ],
 };

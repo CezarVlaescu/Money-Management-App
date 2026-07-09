@@ -1,6 +1,10 @@
-import { CloudSyncMeta } from "../../core/models/interface/core.interface";
-import { BudgetCategory } from "../../core/models/types/core.types";
-import { CategoryFilter, NavigationItem, OnboardingStep } from "../models/interfaces/shared.interface";
+import { CloudSyncMeta } from '../../core/models/interface/core.interface';
+import { BudgetCategory } from '../../core/models/types/core.types';
+import {
+  CategoryFilter,
+  NavigationItem,
+  OnboardingStep,
+} from '../models/interfaces/shared.interface';
 
 const THEME_STORAGE_KEY = 'money-bloom-theme';
 const INCOME_STORAGE_KEY = 'money-bloom-income';
@@ -12,94 +16,137 @@ const CLOUD_SYNC_META_SERVICE_KEY = 'money-bloom-cloud-sync-meta';
 const LOCAL_DELETION_TOMBSTONE_KEY = 'money-bloom-local-deletion-tombstones';
 
 const NEEDS_CONST: string[] = [
-  'lidl', 'kaufland', 'carrefour', 'mega image',
-  'profi', 'auchan', 'penny', 'rent', 'chirie',
-  'electricity', 'curent', 'gas', 'gaz', 'water',
-  'apa', 'internet', 'orange', 'digi', 'vodafone',
-  'bolt', 'uber', 'transport', 'bus', 'metro'
+  'lidl',
+  'kaufland',
+  'carrefour',
+  'mega image',
+  'profi',
+  'auchan',
+  'penny',
+  'rent',
+  'chirie',
+  'electricity',
+  'curent',
+  'gas',
+  'gaz',
+  'water',
+  'apa',
+  'internet',
+  'orange',
+  'digi',
+  'vodafone',
+  'bolt',
+  'uber',
+  'transport',
+  'bus',
+  'metro',
 ];
 const WANTS_CONST: string[] = [
-  'netflix', 'spotify', 'youtube', 'cinema',
-  'restaurant', 'tazz', 'glovo', 'mcdonald',
-  'kfc', 'starbucks', 'hm', 'h&m', 'zara',
-  'fashion', 'shopping', 'emag', 'altex'
+  'netflix',
+  'spotify',
+  'youtube',
+  'cinema',
+  'restaurant',
+  'tazz',
+  'glovo',
+  'mcdonald',
+  'kfc',
+  'starbucks',
+  'hm',
+  'h&m',
+  'zara',
+  'fashion',
+  'shopping',
+  'emag',
+  'altex',
 ];
 const SAVINGS_CONST: string[] = [
-  'xtb', 'vanguard', 'vwce', 'savings',
-  'economii', 'deposit', 'depozit',
-  'investment', 'investitii', 'revolut vault'
+  'xtb',
+  'vanguard',
+  'vwce',
+  'savings',
+  'economii',
+  'deposit',
+  'depozit',
+  'investment',
+  'investitii',
+  'revolut vault',
 ];
 const BOTTOM_NAVIGATION_ITEMS: NavigationItem[] = [
   {
     label: 'Home',
     icon: '🏠',
-    route: '/dashboard'
+    route: '/dashboard',
   },
   {
     label: 'Expenses',
     icon: '📊',
-    route: '/expenses'
+    route: '/expenses',
   },
   {
     label: 'Goals',
     icon: '🎯',
-    route: '/savings-goals'
+    route: '/savings-goals',
   },
   {
     label: 'Settings',
     icon: '⚙️',
-    route: '/settings'
-  }
+    route: '/settings',
+  },
 ];
 const EXPENSES_FILTERS: CategoryFilter[] = [
   {
     label: 'All',
     value: 'all',
-    icon: '✨'
+    icon: '✨',
   },
   {
     label: 'Needs',
     value: 'needs',
-    icon: '🧺'
+    icon: '🧺',
   },
   {
     label: 'Wants',
     value: 'wants',
-    icon: '🛍️'
+    icon: '🛍️',
   },
   {
     label: 'Savings',
     value: 'savings',
-    icon: '🐷'
-  }
-]
+    icon: '🐷',
+  },
+];
 
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     icon: '🌷',
     eyebrow: 'Welcome',
     title: 'Make your money bloom',
-    description: 'Money Bloom helps you organize your monthly income using the simple 50/30/20 budgeting method.'
+    description:
+      'Money Bloom helps you organize your monthly income using the simple 50/30/20 budgeting method.',
   },
   {
     icon: '💸',
     eyebrow: 'Track',
     title: 'Add your transactions',
-    description: 'Add expenses manually and Money Bloom will try to detect if they belong to Needs, Wants or Savings.'
+    description:
+      'Add expenses manually and Money Bloom will try to detect if they belong to Needs, Wants or Savings.',
   },
   {
     icon: '🎯',
     eyebrow: 'Plan',
     title: 'Create savings goals',
-    description: 'Track progress for your emergency fund, vacation, home, car or any other financial goal.'
+    description:
+      'Track progress for your emergency fund, vacation, home, car or any other financial goal.',
   },
   {
     icon: '🔐',
     eyebrow: 'Local-first',
     title: 'Your data stays on this device',
-    description: 'Money Bloom V1 stores data locally in your browser. You can export a backup from Settings.'
-  }
-]
+    description:
+      'Money Bloom V1 stores data locally in your browser. You can export a backup from Settings.',
+  },
+];
 
 const CATEGORIES_CONST: BudgetCategory[] = ['needs', 'wants', 'savings'];
 const ICON_OPTIONS_CONST: string[] = ['🎯', '🏖️', '🛟', '🏠', '🚗', '💻', '💍', '📚'];
@@ -108,19 +155,11 @@ const DEFAULT_CLOUD_SYNC_META: CloudSyncMeta = {
   lastRestoreAt: null,
   lastErrorAt: null,
   lastErrorMessage: null,
-  state: 'idle'
+  state: 'idle',
 };
-const DAY_WEEK_CONST: string[] = [
-  'Lun',
-  'Mar',
-  'Mie',
-  'Joi',
-  'Vin',
-  'Sâm',
-  'Dum'
-];
+const DAY_WEEK_CONST: string[] = ['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'];
 
-export { 
+export {
   THEME_STORAGE_KEY,
   INCOME_STORAGE_KEY,
   EXPENSES_STORE_KEY,
@@ -138,5 +177,5 @@ export {
   DEFAULT_CLOUD_SYNC_META,
   CLOUD_SYNC_META_SERVICE_KEY,
   LOCAL_DELETION_TOMBSTONE_KEY,
-  DAY_WEEK_CONST
+  DAY_WEEK_CONST,
 };

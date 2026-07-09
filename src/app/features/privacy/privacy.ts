@@ -8,4 +8,3 @@ import { PageHeader } from '../../shared/components/page-header/page-header';
   styleUrl: './privacy.scss',
 })
 export class Privacy {}
-  

@@ -1,9 +1,12 @@
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { CloudSyncMeta } from '../../models/interface/core.interface';
-import { CLOUD_SYNC_META_SERVICE_KEY, DEFAULT_CLOUD_SYNC_META } from '../../../shared/constants/app.constants';
+import {
+  CLOUD_SYNC_META_SERVICE_KEY,
+  DEFAULT_CLOUD_SYNC_META,
+} from '../../../shared/constants/app.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudSyncMetaService {
   public readonly meta: WritableSignal<CloudSyncMeta> = signal<CloudSyncMeta>(this.loadMeta());
@@ -23,11 +26,11 @@ export class CloudSyncMetaService {
   }
 
   public readonly lastBackupLabel = computed<string>(() =>
-    this.formatDate(this.meta().lastBackupAt)
+    this.formatDate(this.meta().lastBackupAt),
   );
 
   public readonly lastRestoreLabel = computed<string>(() =>
-    this.formatDate(this.meta().lastRestoreAt)
+    this.formatDate(this.meta().lastRestoreAt),
   );
 
   public markBackupSuccess(): void {
@@ -35,7 +38,7 @@ export class CloudSyncMetaService {
       lastBackupAt: new Date().toISOString(),
       lastErrorAt: null,
       lastErrorMessage: null,
-      state: 'synced'
+      state: 'synced',
     });
   }
 
@@ -44,7 +47,7 @@ export class CloudSyncMetaService {
       lastRestoreAt: new Date().toISOString(),
       lastErrorAt: null,
       lastErrorMessage: null,
-      state: 'synced'
+      state: 'synced',
     });
   }
 
@@ -52,7 +55,7 @@ export class CloudSyncMetaService {
     this.updateMeta({
       lastErrorAt: new Date().toISOString(),
       lastErrorMessage: this.getErrorMessage(error),
-      state: 'error'
+      state: 'error',
     });
   }
 
@@ -65,14 +68,14 @@ export class CloudSyncMetaService {
     this.updateMeta({
       lastErrorAt: null,
       lastErrorMessage: null,
-      state: this.meta().lastBackupAt || this.meta().lastRestoreAt ? 'synced' : 'idle'
+      state: this.meta().lastBackupAt || this.meta().lastRestoreAt ? 'synced' : 'idle',
     });
   }
 
   private updateMeta(partialMeta: Partial<CloudSyncMeta>): void {
     const nextMeta: CloudSyncMeta = {
       ...this.meta(),
-      ...partialMeta
+      ...partialMeta,
     };
 
     this.meta.set(nextMeta);
@@ -87,7 +90,7 @@ export class CloudSyncMetaService {
     try {
       return {
         ...DEFAULT_CLOUD_SYNC_META,
-        ...JSON.parse(rawMeta)
+        ...JSON.parse(rawMeta),
       };
     } catch {
       return DEFAULT_CLOUD_SYNC_META;
@@ -101,7 +104,7 @@ export class CloudSyncMetaService {
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }).format(new Date(value));
   }
 

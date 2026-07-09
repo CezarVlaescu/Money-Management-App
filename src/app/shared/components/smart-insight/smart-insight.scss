@@ -13,9 +13,7 @@
   border: 1px solid var(--border);
   border-radius: fn.radius(2xl);
   padding: fn.spacing(4);
-  background:
-    linear-gradient(135deg, var(--warning-soft), transparent),
-    var(--surface);
+  background: linear-gradient(135deg, var(--warning-soft), transparent), var(--surface);
   box-shadow: var(--shadow-card);
   backdrop-filter: blur(20px);
 }

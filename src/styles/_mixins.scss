@@ -33,8 +33,7 @@
   background:
     radial-gradient(circle at 15% 0%, var(--glow-blue), transparent 34%),
     radial-gradient(circle at 88% 8%, var(--glow-pink), transparent 32%),
-    radial-gradient(circle at 50% 100%, var(--glow-green), transparent 36%),
-    var(--app-bg);
+    radial-gradient(circle at 50% 100%, var(--glow-green), transparent 36%), var(--app-bg);
 }
 
 @mixin mobile-shell {

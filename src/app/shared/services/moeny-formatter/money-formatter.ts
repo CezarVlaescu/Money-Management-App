@@ -8,7 +8,7 @@ export class MoneyFormatter {
     return new Intl.NumberFormat('ro-RO', {
       style: 'currency',
       currency,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(value);
   }
 
@@ -17,7 +17,7 @@ export class MoneyFormatter {
       style: 'currency',
       currency,
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(value);
   }
 }

@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
-import { CloudSpendingPeriod, AllowanceExpense, DailyAllowanceSummary, CalendarDayBudget } from '../../models/interface/core.interface';
+import {
+  CloudSpendingPeriod,
+  AllowanceExpense,
+  DailyAllowanceSummary,
+  CalendarDayBudget,
+} from '../../models/interface/core.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DailyAllowanceCalculatorService {
   public calculateSummary(
     period: CloudSpendingPeriod,
     expenses: AllowanceExpense[],
-    today: Date = new Date()
+    today: Date = new Date(),
   ): DailyAllowanceSummary {
     const periodStart = this.parseDate(period.period_start);
     const periodEnd = this.parseDate(period.period_end);
@@ -19,17 +24,12 @@ export class DailyAllowanceCalculatorService {
     const spentToday = this.sumExpensesForDate(expenses, todayDate);
     const spentThisMonth = this.sumExpenses(expenses);
 
-    const daysLeftIncludingToday = Math.max(
-      this.daysBetween(todayDate, periodEnd) + 1,
-      0
-    );
+    const daysLeftIncludingToday = Math.max(this.daysBetween(todayDate, periodEnd) + 1, 0);
 
     const remainingBeforeToday = monthlyBudget - spentBeforeToday;
 
     const adaptiveDailyAllowance =
-      daysLeftIncludingToday > 0
-        ? remainingBeforeToday / daysLeftIncludingToday
-        : 0;
+      daysLeftIncludingToday > 0 ? remainingBeforeToday / daysLeftIncludingToday : 0;
 
     const todayRemaining = adaptiveDailyAllowance - spentToday;
     const remainingMonthlyBudget = monthlyBudget - spentThisMonth;
@@ -51,14 +51,14 @@ export class DailyAllowanceCalculatorService {
       todayRemaining,
 
       remainingMonthlyBudget,
-      isOverBudget: remainingMonthlyBudget < 0
+      isOverBudget: remainingMonthlyBudget < 0,
     };
   }
 
   public buildCalendarDays(
     period: CloudSpendingPeriod,
     expenses: AllowanceExpense[],
-    today: Date = new Date()
+    today: Date = new Date(),
   ): CalendarDayBudget[] {
     const periodStart = this.parseDate(period.period_start);
     const periodEnd = this.parseDate(period.period_end);
@@ -83,9 +83,7 @@ export class DailyAllowanceCalculatorService {
       const remainingAtStartOfDay = monthlyBudget - spentBeforeDay;
 
       const allowanceAtStartOfDay =
-        daysLeftIncludingDay > 0
-          ? remainingAtStartOfDay / daysLeftIncludingDay
-          : 0;
+        daysLeftIncludingDay > 0 ? remainingAtStartOfDay / daysLeftIncludingDay : 0;
 
       const remainingAfterSpend = allowanceAtStartOfDay - spentOnDay;
 
@@ -104,8 +102,8 @@ export class DailyAllowanceCalculatorService {
           isToday,
           isFuture,
           spent: spentOnDay,
-          remainingAfterSpend
-        })
+          remainingAfterSpend,
+        }),
       });
     }
 
@@ -130,30 +128,21 @@ export class DailyAllowanceCalculatorService {
     return expenses.reduce((total, expense) => total + expense.amount, 0);
   }
 
-  private sumExpensesBeforeDate(
-    expenses: AllowanceExpense[],
-    date: Date
-  ): number {
+  private sumExpensesBeforeDate(expenses: AllowanceExpense[], date: Date): number {
     return expenses
-      .filter(expense => this.parseDate(expense.date) < this.stripTime(date))
+      .filter((expense) => this.parseDate(expense.date) < this.stripTime(date))
       .reduce((total, expense) => total + expense.amount, 0);
   }
 
-  private sumExpensesForDate(
-    expenses: AllowanceExpense[],
-    date: Date
-  ): number {
+  private sumExpensesForDate(expenses: AllowanceExpense[], date: Date): number {
     return expenses
-      .filter(expense => this.isSameDate(this.parseDate(expense.date), date))
+      .filter((expense) => this.isSameDate(this.parseDate(expense.date), date))
       .reduce((total, expense) => total + expense.amount, 0);
   }
 
   private daysBetween(start: Date, end: Date): number {
     const msPerDay = 1000 * 60 * 60 * 24;
-    return Math.round(
-      (this.stripTime(end).getTime() - this.stripTime(start).getTime()) /
-        msPerDay
-    );
+    return Math.round((this.stripTime(end).getTime() - this.stripTime(start).getTime()) / msPerDay);
   }
 
   private parseDate(value: string): Date {

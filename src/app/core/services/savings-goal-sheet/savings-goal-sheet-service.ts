@@ -6,7 +6,9 @@ import { SavingsGoal } from '../../models/interface/core.interface';
 })
 export class SavingsGoalSheetService {
   public readonly isOpen: WritableSignal<boolean> = signal<boolean>(false);
-  public readonly selectedGoal: WritableSignal<SavingsGoal | null> = signal<SavingsGoal | null>(null);
+  public readonly selectedGoal: WritableSignal<SavingsGoal | null> = signal<SavingsGoal | null>(
+    null,
+  );
 
   public readonly isEditMode: Signal<boolean> = computed<boolean>(() => !!this.selectedGoal());
 

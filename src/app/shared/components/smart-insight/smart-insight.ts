@@ -15,7 +15,7 @@ export class SmartInsight {
   protected readonly insightTitle: Signal<string> = computed<string>(() => {
     const summary = this.budgetService.budgetSummary();
 
-    if (summary.savings.spent >= summary.savings.amount) return 'Great job, you are on track.'; 
+    if (summary.savings.spent >= summary.savings.amount) return 'Great job, you are on track.';
     if (summary.wants.progress > 90) return 'Careful with lifestyle spending.';
 
     return 'You are building a healthy habit.';
@@ -25,8 +25,10 @@ export class SmartInsight {
     const summary = this.budgetService.budgetSummary();
     const yearlySavings = this.moneyFormatter.format(summary.yearlySavingsPotential);
 
-    if (summary.savings.spent >= summary.savings.amount) return `If you keep this rhythm, you could save around ${yearlySavings} in one year.`;
-    if (summary.wants.progress > 90) return 'Your wants category is almost full. Try reducing optional spending this month.';
+    if (summary.savings.spent >= summary.savings.amount)
+      return `If you keep this rhythm, you could save around ${yearlySavings} in one year.`;
+    if (summary.wants.progress > 90)
+      return 'Your wants category is almost full. Try reducing optional spending this month.';
 
     return `Following the 50/30/20 rule, your yearly saving potential is ${yearlySavings}.`;
   });

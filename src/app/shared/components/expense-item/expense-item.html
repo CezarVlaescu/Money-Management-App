@@ -1,8 +1,5 @@
 <article class="expense-item">
-  <span
-    class="expense-item__icon"
-    [class]="'expense-item__icon--' + expense().category"
-  >
+  <span class="expense-item__icon" [class]="'expense-item__icon--' + expense().category">
     {{ categoryService.getCategoryIcon(expense().category) }}
   </span>
 
@@ -31,18 +28,12 @@
     </strong>
 
     <div class="expense-item__actions">
-      <button
-        class="expense-item__action"
-        type="button"
-        (click)="onEditExpense()"
-      >
-        Edit
-      </button>
+      <button class="expense-item__action" type="button" (click)="onEditExpense()">Edit</button>
 
       <button
         class="expense-item__action expense-item__action--danger"
         type="button"
-       (click)="onDeleteExpense()"
+        (click)="onDeleteExpense()"
       >
         Delete
       </button>

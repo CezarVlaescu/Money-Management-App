@@ -8,15 +8,19 @@ import { SavingsGoalsService } from '../../services/savings/savings';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CloudRestorePromptService {
   private readonly budgetService: BudgetService = inject<BudgetService>(BudgetService);
   private readonly expensesService: ExpensesService = inject<ExpensesService>(ExpensesService);
-  private readonly savingsGoalsService: SavingsGoalsService = inject<SavingsGoalsService>(SavingsGoalsService);
-  private readonly confirmDialogService: ConfirmDialogService = inject<ConfirmDialogService>(ConfirmDialogService);
-  private readonly cloudRestoreService: CloudRestoreService = inject<CloudRestoreService>(CloudRestoreService);
-  private readonly cloudSyncStatusService: CloudSyncStatusService = inject<CloudSyncStatusService>(CloudSyncStatusService);
+  private readonly savingsGoalsService: SavingsGoalsService =
+    inject<SavingsGoalsService>(SavingsGoalsService);
+  private readonly confirmDialogService: ConfirmDialogService =
+    inject<ConfirmDialogService>(ConfirmDialogService);
+  private readonly cloudRestoreService: CloudRestoreService =
+    inject<CloudRestoreService>(CloudRestoreService);
+  private readonly cloudSyncStatusService: CloudSyncStatusService =
+    inject<CloudSyncStatusService>(CloudSyncStatusService);
 
   public async askToRestoreCloudDataIfNeeded(): Promise<void> {
     const status = await this.cloudSyncStatusService.getCloudSyncStatus();
@@ -33,10 +37,9 @@ export class CloudRestorePromptService {
 
     const shouldRestore = await this.confirmDialogService.confirm({
       title: 'Cloud backup found',
-      message:
-        `We found ${status.expensesCount} expenses and ${status.goalsCount} savings goals saved in your cloud account. Restore them on this device?`,
+      message: `We found ${status.expensesCount} expenses and ${status.goalsCount} savings goals saved in your cloud account. Restore them on this device?`,
       confirmLabel: 'Restore',
-      cancelLabel: 'Not now'
+      cancelLabel: 'Not now',
     });
 
     this.markPromptAsShown();
