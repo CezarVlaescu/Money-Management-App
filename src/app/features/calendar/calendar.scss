@@ -553,6 +553,8 @@
 
 .subscription-payment__actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: fn.spacing(2);
 }
 
@@ -583,4 +585,9 @@
   .subscription-payment__actions {
     justify-content: flex-end;
   }
+}
+
+.calendar-page__button--danger {
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.9);
 }

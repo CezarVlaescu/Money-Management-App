@@ -110,6 +110,52 @@ export class CloudSubscriptionPaymentsService {
     });
   }
 
+  public async updatePendingPaymentFromSubscription(
+    payment: CloudSubscriptionPayment,
+    subscription: CloudSubscription,
+  ): Promise<CloudSubscriptionPayment> {
+    if (payment.status !== 'pending') {
+      return payment;
+    }
+
+    return this.updatePayment(payment.id, {
+      amount: subscription.amount,
+      currency: subscription.currency,
+      due_date: this.getDueDate(payment.period_start, subscription.due_day),
+    });
+  }
+
+  public async softDeletePayment(paymentId: string): Promise<void> {
+    const userId = this.authService.getCurrentUserId();
+
+    const { error } = await supabase
+      .from('subscription_payments')
+      .update({
+        deleted_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', paymentId)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+  }
+
+  public async getPayments(): Promise<CloudSubscriptionPayment[]> {
+    const userId = this.authService.getCurrentUserId();
+
+    const { data, error } = await supabase
+      .from('subscription_payments')
+      .select('*')
+      .eq('user_id', userId)
+      .is('deleted_at', null)
+      .order('period_start', { ascending: false })
+      .order('due_date', { ascending: true });
+
+    if (error) throw error;
+
+    return data ?? [];
+  }
+
   private buildPaymentPayload(
     userId: string,
     subscription: CloudSubscription,

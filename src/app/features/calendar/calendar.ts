@@ -61,6 +61,12 @@ export class Calendar implements OnInit {
   protected readonly subscriptionDueDayInput: WritableSignal<string> = signal<string>('');
   protected readonly subscriptionCategoryInput: WritableSignal<BudgetCategory> =
     signal<BudgetCategory>('needs');
+  protected readonly editingSubscriptionItem: WritableSignal<SubscriptionPaymentItem | null> =
+    signal<SubscriptionPaymentItem | null>(null);
+
+  protected readonly subscriptionFormOpen = computed<boolean>(() => {
+    return this.addingSubscription() || !!this.editingSubscriptionItem();
+  });
 
   protected readonly subscriptionPaymentItems = computed<SubscriptionPaymentItem[]>(() => {
     const subscriptions = this.subscriptions();
@@ -288,6 +294,7 @@ export class Calendar implements OnInit {
   }
 
   protected startAddingSubscription(): void {
+    this.editingSubscriptionItem.set(null);
     this.subscriptionNameInput.set('');
     this.subscriptionAmountInput.set('');
     this.subscriptionDueDayInput.set('');
@@ -295,8 +302,24 @@ export class Calendar implements OnInit {
     this.addingSubscription.set(true);
   }
 
-  protected cancelAddingSubscription(): void {
+  protected startEditingSubscription(item: SubscriptionPaymentItem): void {
+    if (!item.subscription) {
+      this.error.set('Could not find recurring payment details.');
+      return;
+    }
+
     this.addingSubscription.set(false);
+    this.editingSubscriptionItem.set(item);
+
+    this.subscriptionNameInput.set(item.subscription.name);
+    this.subscriptionAmountInput.set(String(item.subscription.amount));
+    this.subscriptionDueDayInput.set(String(item.subscription.due_day));
+    this.subscriptionCategoryInput.set(item.subscription.category_type);
+  }
+
+  protected cancelSubscriptionForm(): void {
+    this.addingSubscription.set(false);
+    this.editingSubscriptionItem.set(null);
     this.subscriptionNameInput.set('');
     this.subscriptionAmountInput.set('');
     this.subscriptionDueDayInput.set('');
@@ -326,6 +349,7 @@ export class Calendar implements OnInit {
     const name = this.subscriptionNameInput().trim();
     const amount = Number(this.subscriptionAmountInput());
     const dueDay = Number(this.subscriptionDueDayInput());
+    const categoryType = this.subscriptionCategoryInput();
 
     if (!name) {
       this.error.set('Please enter a recurring payment name.');
@@ -353,26 +377,71 @@ export class Calendar implements OnInit {
       this.savingSubscription.set(true);
       this.error.set(null);
 
+      const editingItem = this.editingSubscriptionItem();
+
+      if (editingItem?.subscription) {
+        const updatedSubscription = await this.cloudSubscriptionsService.updateSubscription(
+          editingItem.subscription.id,
+          {
+            name,
+            amount,
+            currency: 'RON',
+            category_type: categoryType,
+            frequency: 'monthly',
+            due_day: dueDay,
+          },
+        );
+
+        await this.cloudSubscriptionPaymentsService.updatePendingPaymentFromSubscription(
+          editingItem.payment,
+          updatedSubscription,
+        );
+
+        this.cancelSubscriptionForm();
+        await this.loadCalendarForSelectedMonth();
+
+        return;
+      }
+
       await this.cloudSubscriptionsService.createSubscription({
         name,
         amount,
         currency: 'RON',
-        category_type: this.subscriptionCategoryInput(),
+        category_type: categoryType,
         frequency: 'monthly',
         due_day: dueDay,
         start_date: period.period_start,
         is_active: true,
       });
 
-      this.cancelAddingSubscription();
+      this.cancelSubscriptionForm();
 
       await this.loadCalendarForSelectedMonth();
     } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : 'Could not create recurring payment.',
-      );
+      this.error.set(error instanceof Error ? error.message : 'Could not save recurring payment.');
     } finally {
       this.savingSubscription.set(false);
+    }
+  }
+
+  protected async stopSubscription(item: SubscriptionPaymentItem): Promise<void> {
+    if (!item.subscription) {
+      this.error.set('Could not find recurring payment details.');
+      return;
+    }
+
+    try {
+      this.error.set(null);
+
+      await this.cloudSubscriptionsService.softDeleteSubscription(item.subscription.id);
+
+      if (item.status === 'pending') {
+        await this.cloudSubscriptionPaymentsService.softDeletePayment(item.payment.id);
+      }
+
+      await this.loadCalendarForSelectedMonth();
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not stop recurring payment.');
     }
   }
 

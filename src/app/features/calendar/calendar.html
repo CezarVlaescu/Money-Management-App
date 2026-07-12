@@ -121,7 +121,7 @@
             {{ pendingSubscriptionPaymentItems().length }} pending
           </strong>
 
-          @if (!addingSubscription()) {
+          @if (!subscriptionFormOpen()) {
             <button
               class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
               type="button"
@@ -133,7 +133,7 @@
         </div>
       </header>
 
-      @if (addingSubscription()) {
+      @if (subscriptionFormOpen()) {
         <form class="calendar-page__subscription-form" (ngSubmit)="saveSubscription()">
           <div class="calendar-page__subscription-form-grid">
             <label class="calendar-page__form-field">
@@ -196,7 +196,7 @@
             <button
               class="calendar-page__button calendar-page__button--secondary"
               type="button"
-              (click)="cancelAddingSubscription()"
+              (click)="cancelSubscriptionForm()"
             >
               Cancel
             </button>
@@ -206,7 +206,13 @@
               type="submit"
               [disabled]="savingSubscription()"
             >
-              {{ savingSubscription() ? 'Saving...' : 'Save payment' }}
+              @if (savingSubscription()) {
+                Saving...
+              } @else if (editingSubscriptionItem()) {
+                Save changes
+              } @else {
+                Save payment
+              }
             </button>
           </div>
         </form>
@@ -245,6 +251,42 @@
                       (click)="skipSubscriptionPayment(item)"
                     >
                       Skip
+                    </button>
+
+                    @if (item.subscription) {
+                      <button
+                        class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+                        type="button"
+                        (click)="startEditingSubscription(item)"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        class="calendar-page__button calendar-page__button--danger calendar-page__button--small"
+                        type="button"
+                        (click)="stopSubscription(item)"
+                      >
+                        Stop
+                      </button>
+                    }
+                  </div>
+                } @else if (item.subscription) {
+                  <div class="subscription-payment__actions">
+                    <button
+                      class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+                      type="button"
+                      (click)="startEditingSubscription(item)"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      class="calendar-page__button calendar-page__button--danger calendar-page__button--small"
+                      type="button"
+                      (click)="stopSubscription(item)"
+                    >
+                      Stop
                     </button>
                   </div>
                 }

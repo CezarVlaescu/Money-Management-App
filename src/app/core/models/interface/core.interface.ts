@@ -199,13 +199,22 @@ interface CloudRestoreResult {
   settingsRestored: boolean;
   expensesCount: number;
   goalsCount: number;
+  spendingPeriodsCount: number;
+  subscriptionsCount: number;
+  subscriptionPaymentsCount: number;
 }
 
 interface CloudSyncStatus {
   hasCloudData: boolean;
   hasSettings: boolean;
+
   expensesCount: number;
   goalsCount: number;
+
+  spendingPeriodsCount: number;
+  subscriptionsCount: number;
+  subscriptionPaymentsCount: number;
+
   checkedAt: string;
 }
 
@@ -367,6 +376,7 @@ interface CreateCloudSubscriptionPaymentPayload {
 interface UpdateCloudSubscriptionPaymentPayload {
   amount?: number;
   currency?: string;
+  due_date?: string;
   status?: SubscriptionPaymentStatus;
   paid_at?: string | null;
   updated_at?: string;

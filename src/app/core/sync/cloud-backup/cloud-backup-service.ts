@@ -8,6 +8,8 @@ import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/clo
 import { CloudUserSettingsService } from '../../services/cloud-user-settings/cloud-user-settings-service';
 import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service';
 import { LocalDeletionTombstoneService } from '../local-deletion-tombstone/local-deletion-tombstone-service';
+import { SourceType } from '../../models/types/core.types';
+import { CloudExpense } from '../../models/interface/core.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +60,7 @@ export class CloudBackupService {
   private async backupExpenses(): Promise<void> {
     const localExpenses = this.expensesService.expenses();
     const cloudExpenses = await this.cloudExpensesService.getExpenses();
-    const cloudExpensesByLocalId = new Map(
+    const cloudExpensesByLocalId = new Map<string, CloudExpense>(
       cloudExpenses
         .filter((expense) => !!expense.local_id)
         .map((expense) => [expense.local_id as string, expense]),
@@ -72,6 +74,8 @@ export class CloudBackupService {
       expense_date: this.getDateValue(expense, ['date', 'expenseDate', 'createdAt']),
       note: this.getNullableStringValue(expense, 'note'),
       localUpdatedAt: this.getLocalUpdatedAt(expense),
+      source_type: 'manual' as SourceType,
+      subscription_payment_id: null,
     }));
 
     const expensesToUpload = payloadWithMeta
@@ -82,6 +86,10 @@ export class CloudBackupService {
 
         if (!cloudExpense) return true;
 
+        if (cloudExpense.source_type === 'subscription') {
+          return false;
+        }
+
         return this.isLocalNewerOrEqual(expense.localUpdatedAt, cloudExpense.updated_at);
       })
       .map((expense) => ({
@@ -91,6 +99,8 @@ export class CloudBackupService {
         category: expense.category,
         expense_date: expense.expense_date,
         note: expense.note,
+        source_type: 'manual' as SourceType,
+        subscription_payment_id: null,
       }));
 
     if (expensesToUpload.length) await this.cloudExpensesService.upsertExpenses(expensesToUpload);

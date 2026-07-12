@@ -6,6 +6,7 @@ import { BudgetService } from '../../services/budget/budget';
 import { ExpensesService } from '../../services/expenses/expenses';
 import { SavingsGoalsService } from '../../services/savings/savings';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog-service';
+import { CloudSyncStatus } from '../../models/interface/core.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +38,7 @@ export class CloudRestorePromptService {
 
     const shouldRestore = await this.confirmDialogService.confirm({
       title: 'Cloud backup found',
-      message: `We found ${status.expensesCount} expenses and ${status.goalsCount} savings goals saved in your cloud account. Restore them on this device?`,
+      message: this.getRestorePromptMessage(status),
       confirmLabel: 'Restore',
       cancelLabel: 'Not now',
     });
@@ -67,5 +68,33 @@ export class CloudRestorePromptService {
 
   private markPromptAsShown(): void {
     localStorage.setItem(CLOUD_RESTORE_PROMPT_KEY, 'true');
+  }
+
+  private getRestorePromptMessage(status: CloudSyncStatus): string {
+    const parts: string[] = [];
+
+    if (status.expensesCount > 0) {
+      parts.push(`${status.expensesCount} expenses`);
+    }
+
+    if (status.goalsCount > 0) {
+      parts.push(`${status.goalsCount} savings goals`);
+    }
+
+    if (status.spendingPeriodsCount > 0) {
+      parts.push(`${status.spendingPeriodsCount} spending periods`);
+    }
+
+    if (status.subscriptionsCount > 0) {
+      parts.push(`${status.subscriptionsCount} recurring payments`);
+    }
+
+    if (status.subscriptionPaymentsCount > 0) {
+      parts.push(`${status.subscriptionPaymentsCount} recurring payment records`);
+    }
+
+    const cloudDataLabel = parts.length ? parts.join(', ') : 'cloud data';
+
+    return `We found ${cloudDataLabel} saved in your cloud account. Restore them on this device?`;
   }
 }
