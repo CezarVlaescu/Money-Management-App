@@ -349,7 +349,7 @@ interface UpdateCloudSubscriptionPayload {
   deleted_at?: string | null;
 }
 
-export interface CloudSubscriptionPayment {
+interface CloudSubscriptionPayment {
   id: string;
   user_id: string;
   subscription_id: string;
@@ -362,6 +362,7 @@ export interface CloudSubscriptionPayment {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+  cleared_at: string | null;
 }
 interface CreateCloudSubscriptionPaymentPayload {
   user_id: string;
@@ -381,6 +382,7 @@ interface UpdateCloudSubscriptionPaymentPayload {
   paid_at?: string | null;
   updated_at?: string;
   deleted_at?: string | null;
+  cleared_at?: string | null;
 }
 
 interface SubscriptionPaymentItem {
@@ -439,4 +441,5 @@ export type {
   UpdateCloudSubscriptionPaymentPayload,
   SubscriptionPaymentItem,
   CreateSubscriptionExpenseParams,
+  CloudSubscriptionPayment,
 };

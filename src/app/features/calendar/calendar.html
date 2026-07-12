@@ -121,6 +121,24 @@
             {{ pendingSubscriptionPaymentItems().length }} pending
           </strong>
 
+          @if (completedSubscriptionPaymentItems().length) {
+            <button
+              class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+              type="button"
+              (click)="toggleCompletedSubscriptionPayments()"
+            >
+              {{ showCompletedSubscriptionPayments() ? 'Hide completed' : 'Show completed' }}
+            </button>
+
+            <button
+              class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+              type="button"
+              (click)="clearCompletedSubscriptionPayments()"
+            >
+              Clear
+            </button>
+          }
+
           @if (!subscriptionFormOpen()) {
             <button
               class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
@@ -218,9 +236,9 @@
         </form>
       }
 
-      @if (subscriptionPaymentItems().length) {
+      @if (visibleSubscriptionPaymentItems().length) {
         <div class="calendar-page__subscriptions-list">
-          @for (item of subscriptionPaymentItems(); track item.payment.id) {
+          @for (item of visibleSubscriptionPaymentItems(); track item.payment.id) {
             <article
               class="subscription-payment"
               [class.subscription-payment--paid]="item.status === 'paid'"
@@ -294,9 +312,14 @@
             </article>
           }
         </div>
-      } @else if (!addingSubscription()) {
+      } @else if (!subscriptionFormOpen()) {
         <p class="calendar-page__subscriptions-empty">
-          No recurring payments yet. Add rent, Netflix, phone bills or any monthly payment.
+          @if (completedSubscriptionPaymentItems().length) {
+            All recurring payments for this month are completed. Use “Show completed” to review them
+            or “Clear” to hide them from this list.
+          } @else {
+            No recurring payments yet. Add rent, Netflix, phone bills or any monthly payment.
+          }
         </p>
       }
     </section>

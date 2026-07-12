@@ -391,7 +391,9 @@
 
 .calendar-page__subscriptions-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: fn.spacing(2);
   flex-shrink: 0;
 }
@@ -561,6 +563,17 @@
 .subscription-payment--paid,
 .subscription-payment--skipped {
   opacity: 0.6;
+}
+
+@media (max-width: 520px) {
+  .calendar-page__subscriptions-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .calendar-page__subscriptions-actions {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 420px) {

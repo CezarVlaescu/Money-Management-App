@@ -20,16 +20,25 @@ export class CloudSubscriptionPaymentsService {
   private readonly cloudExpensesService: CloudExpensesService =
     inject<CloudExpensesService>(CloudExpensesService);
 
-  public async getPaymentsForPeriod(periodStart: string): Promise<CloudSubscriptionPayment[]> {
+  public async getPaymentsForPeriod(
+    periodStart: string,
+    includeCleared = false,
+  ): Promise<CloudSubscriptionPayment[]> {
     const userId = this.authService.getCurrentUserId();
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('subscription_payments')
       .select('*')
       .eq('user_id', userId)
       .eq('period_start', periodStart)
       .is('deleted_at', null)
       .order('due_date', { ascending: true });
+
+    if (!includeCleared) {
+      query = query.is('cleared_at', null);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
 
@@ -44,9 +53,11 @@ export class CloudSubscriptionPaymentsService {
 
     const subscriptions = await this.cloudSubscriptionsService.getActiveSubscriptions();
 
-    const existingPayments = await this.getPaymentsForPeriod(periodStart);
+    const allExistingPayments = await this.getPaymentsForPeriod(periodStart, true);
 
-    const existingPaymentKeys = new Set(existingPayments.map((payment) => payment.subscription_id));
+    const existingPaymentKeys = new Set(
+      allExistingPayments.map((payment) => payment.subscription_id),
+    );
 
     const missingPaymentsPayload = subscriptions
       .filter((subscription) =>
@@ -55,15 +66,31 @@ export class CloudSubscriptionPaymentsService {
       .filter((subscription) => !existingPaymentKeys.has(subscription.id))
       .map((subscription) => this.buildPaymentPayload(userId, subscription, periodStart));
 
-    if (!missingPaymentsPayload.length) {
-      return existingPayments;
+    if (missingPaymentsPayload.length) {
+      const { error } = await supabase.from('subscription_payments').insert(missingPaymentsPayload);
+
+      if (error) throw error;
     }
 
-    const { error } = await supabase.from('subscription_payments').insert(missingPaymentsPayload);
+    return this.getPaymentsForPeriod(periodStart);
+  }
+
+  public async clearCompletedPaymentsForPeriod(periodStart: string): Promise<void> {
+    const userId = this.authService.getCurrentUserId();
+
+    const { error } = await supabase
+      .from('subscription_payments')
+      .update({
+        cleared_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', userId)
+      .eq('period_start', periodStart)
+      .is('deleted_at', null)
+      .is('cleared_at', null)
+      .in('status', ['paid', 'skipped']);
 
     if (error) throw error;
-
-    return this.getPaymentsForPeriod(periodStart);
   }
 
   public async updatePayment(
@@ -89,7 +116,11 @@ export class CloudSubscriptionPaymentsService {
   }
 
   public async markPaymentAsSkipped(paymentId: string): Promise<CloudSubscriptionPayment> {
-    return this.updatePayment(paymentId, { status: 'skipped', paid_at: null });
+    return this.updatePayment(paymentId, {
+      status: 'skipped',
+      paid_at: null,
+      cleared_at: null,
+    });
   }
 
   public async markPaymentAsPaid(
@@ -107,6 +138,7 @@ export class CloudSubscriptionPaymentsService {
     return this.updatePayment(payment.id, {
       status: 'paid',
       paid_at: new Date().toISOString(),
+      cleared_at: null,
     });
   }
 

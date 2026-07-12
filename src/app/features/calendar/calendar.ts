@@ -63,6 +63,22 @@ export class Calendar implements OnInit {
     signal<BudgetCategory>('needs');
   protected readonly editingSubscriptionItem: WritableSignal<SubscriptionPaymentItem | null> =
     signal<SubscriptionPaymentItem | null>(null);
+  protected readonly showCompletedSubscriptionPayments: WritableSignal<boolean> =
+    signal<boolean>(false);
+
+  protected readonly completedSubscriptionPaymentItems = computed<SubscriptionPaymentItem[]>(() => {
+    return this.subscriptionPaymentItems().filter(
+      (item) => item.status === 'paid' || item.status === 'skipped',
+    );
+  });
+
+  protected readonly visibleSubscriptionPaymentItems = computed<SubscriptionPaymentItem[]>(() => {
+    if (this.showCompletedSubscriptionPayments()) {
+      return this.subscriptionPaymentItems();
+    }
+
+    return this.subscriptionPaymentItems().filter((item) => item.status === 'pending');
+  });
 
   protected readonly subscriptionFormOpen = computed<boolean>(() => {
     return this.addingSubscription() || !!this.editingSubscriptionItem();
@@ -343,6 +359,33 @@ export class Calendar implements OnInit {
       item.category_name ??
       'Expense'
     );
+  }
+
+  protected toggleCompletedSubscriptionPayments(): void {
+    this.showCompletedSubscriptionPayments.update((value) => !value);
+  }
+
+  protected async clearCompletedSubscriptionPayments(): Promise<void> {
+    const period = this.spendingPeriod();
+
+    if (!period) {
+      this.error.set('Could not find the selected month.');
+      return;
+    }
+
+    try {
+      this.error.set(null);
+
+      await this.cloudSubscriptionPaymentsService.clearCompletedPaymentsForPeriod(
+        period.period_start,
+      );
+
+      await this.loadCalendarForSelectedMonth();
+    } catch (error) {
+      this.error.set(
+        error instanceof Error ? error.message : 'Could not clear completed recurring payments.',
+      );
+    }
   }
 
   protected async saveSubscription(): Promise<void> {
