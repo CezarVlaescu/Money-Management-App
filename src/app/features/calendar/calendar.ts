@@ -18,6 +18,8 @@ import { TIMELINE } from '../../core/models/enums/enums.core';
 import { DAY_WEEK_CONST } from '../../shared/constants/app.constants';
 import { CloudSubscriptionPaymentsService } from '../../core/services/cloud-subscription-payments/cloud-subscription-payments-service';
 import { CloudSubscriptionsService } from '../../core/services/cloud-subscriptions/cloud-subscriptions-service';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
+import { ToastService } from '../../core/services/toast/toast';
 
 @Component({
   selector: 'app-calendar',
@@ -36,6 +38,11 @@ export class Calendar implements OnInit {
     inject<CloudSubscriptionsService>(CloudSubscriptionsService);
   private readonly cloudSubscriptionPaymentsService: CloudSubscriptionPaymentsService =
     inject<CloudSubscriptionPaymentsService>(CloudSubscriptionPaymentsService);
+
+    private readonly confirmDialogService: ConfirmDialogService =
+  inject<ConfirmDialogService>(ConfirmDialogService);
+
+private readonly toastService: ToastService = inject<ToastService>(ToastService);
 
   protected readonly subscriptions: WritableSignal<CloudSubscription[]> = signal<
     CloudSubscription[]
@@ -294,6 +301,7 @@ export class Calendar implements OnInit {
       this.spendingPeriod.set(updatedPeriod);
       this.editingDailyLimit.set(false);
       this.dailyLimitInput.set('');
+      this.toastService.info('Daily limit updated');
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Could not update daily limit.');
     } finally {
@@ -365,28 +373,41 @@ export class Calendar implements OnInit {
     this.showCompletedSubscriptionPayments.update((value) => !value);
   }
 
-  protected async clearCompletedSubscriptionPayments(): Promise<void> {
-    const period = this.spendingPeriod();
+protected async clearCompletedSubscriptionPayments(): Promise<void> {
+  const period = this.spendingPeriod();
 
-    if (!period) {
-      this.error.set('Could not find the selected month.');
-      return;
-    }
-
-    try {
-      this.error.set(null);
-
-      await this.cloudSubscriptionPaymentsService.clearCompletedPaymentsForPeriod(
-        period.period_start,
-      );
-
-      await this.loadCalendarForSelectedMonth();
-    } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : 'Could not clear completed recurring payments.',
-      );
-    }
+  if (!period) {
+    this.error.set('Could not find the selected month.');
+    return;
   }
+
+  const confirmed = await this.confirmDialogService.confirm({
+    title: 'Clear completed payments?',
+    message:
+      'Paid and skipped payments will be hidden from this month. Expenses already created will remain.',
+    confirmLabel: 'Clear',
+    cancelLabel: 'Cancel',
+  });
+
+  if (!confirmed) return;
+
+  try {
+    this.error.set(null);
+
+    await this.cloudSubscriptionPaymentsService.clearCompletedPaymentsForPeriod(
+      period.period_start,
+    );
+
+    this.toastService.info('Completed payments cleared');
+    await this.loadCalendarForSelectedMonth();
+  } catch (error) {
+    this.error.set(
+      error instanceof Error
+        ? error.message
+        : 'Could not clear completed recurring payments.',
+    );
+  }
+}
 
   protected async saveSubscription(): Promise<void> {
     const name = this.subscriptionNameInput().trim();
@@ -422,44 +443,48 @@ export class Calendar implements OnInit {
 
       const editingItem = this.editingSubscriptionItem();
 
-      if (editingItem?.subscription) {
-        const updatedSubscription = await this.cloudSubscriptionsService.updateSubscription(
-          editingItem.subscription.id,
-          {
-            name,
-            amount,
-            currency: 'RON',
-            category_type: categoryType,
-            frequency: 'monthly',
-            due_day: dueDay,
-          },
-        );
-
-        await this.cloudSubscriptionPaymentsService.updatePendingPaymentFromSubscription(
-          editingItem.payment,
-          updatedSubscription,
-        );
-
-        this.cancelSubscriptionForm();
-        await this.loadCalendarForSelectedMonth();
-
-        return;
-      }
-
-      await this.cloudSubscriptionsService.createSubscription({
+if (editingItem?.subscription) {
+  const updatedSubscription =
+    await this.cloudSubscriptionsService.updateSubscription(
+      editingItem.subscription.id,
+      {
         name,
         amount,
         currency: 'RON',
         category_type: categoryType,
         frequency: 'monthly',
         due_day: dueDay,
-        start_date: period.period_start,
-        is_active: true,
-      });
+      },
+    );
 
-      this.cancelSubscriptionForm();
+  await this.cloudSubscriptionPaymentsService.updatePendingPaymentFromSubscription(
+    editingItem.payment,
+    updatedSubscription,
+  );
 
-      await this.loadCalendarForSelectedMonth();
+  this.toastService.info('Recurring payment updated');
+
+  this.cancelSubscriptionForm();
+  await this.loadCalendarForSelectedMonth();
+
+  return;
+}
+
+await this.cloudSubscriptionsService.createSubscription({
+  name,
+  amount,
+  currency: 'RON',
+  category_type: categoryType,
+  frequency: 'monthly',
+  due_day: dueDay,
+  start_date: period.period_start,
+  is_active: true,
+});
+
+this.toastService.info('Recurring payment added');
+
+this.cancelSubscriptionForm();
+await this.loadCalendarForSelectedMonth();
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Could not save recurring payment.');
     } finally {
@@ -467,26 +492,45 @@ export class Calendar implements OnInit {
     }
   }
 
-  protected async stopSubscription(item: SubscriptionPaymentItem): Promise<void> {
-    if (!item.subscription) {
-      this.error.set('Could not find recurring payment details.');
-      return;
-    }
-
-    try {
-      this.error.set(null);
-
-      await this.cloudSubscriptionsService.softDeleteSubscription(item.subscription.id);
-
-      if (item.status === 'pending') {
-        await this.cloudSubscriptionPaymentsService.softDeletePayment(item.payment.id);
-      }
-
-      await this.loadCalendarForSelectedMonth();
-    } catch (error) {
-      this.error.set(error instanceof Error ? error.message : 'Could not stop recurring payment.');
-    }
+protected async stopSubscription(item: SubscriptionPaymentItem): Promise<void> {
+  if (!item.subscription) {
+    this.error.set('Could not find recurring payment details.');
+    return;
   }
+
+  const confirmed = await this.confirmDialogService.confirm({
+    title: 'Stop recurring payment?',
+    message: `This will stop future payments for ${item.subscription.name}. Existing expenses will remain.`,
+    confirmLabel: 'Stop',
+    cancelLabel: 'Cancel',
+    tone: 'danger',
+  });
+
+  if (!confirmed) return;
+
+  try {
+    this.error.set(null);
+
+    await this.cloudSubscriptionsService.softDeleteSubscription(
+      item.subscription.id,
+    );
+
+    if (item.status === 'pending') {
+      await this.cloudSubscriptionPaymentsService.softDeletePayment(
+        item.payment.id,
+      );
+    }
+
+    this.toastService.info('Recurring payment stopped');
+    await this.loadCalendarForSelectedMonth();
+  } catch (error) {
+    this.error.set(
+      error instanceof Error
+        ? error.message
+        : 'Could not stop recurring payment.',
+    );
+  }
+}
 
   protected async goToPreviousMonth(): Promise<void> {
     const current = this.selectedMonth();
@@ -504,44 +548,61 @@ export class Calendar implements OnInit {
     this.selectedMonth.set(new Date());
     await this.loadCalendarForSelectedMonth();
   }
+protected async skipSubscriptionPayment(
+  item: SubscriptionPaymentItem,
+): Promise<void> {
+  try {
+    this.error.set(null);
 
-  protected async skipSubscriptionPayment(item: SubscriptionPaymentItem): Promise<void> {
-    try {
-      this.error.set(null);
-
-      const updatedPayment = await this.cloudSubscriptionPaymentsService.markPaymentAsSkipped(
+    const updatedPayment =
+      await this.cloudSubscriptionPaymentsService.markPaymentAsSkipped(
         item.payment.id,
       );
 
-      this.subscriptionPayments.update((payments) =>
-        payments.map((payment) => (payment.id === updatedPayment.id ? updatedPayment : payment)),
-      );
-    } catch (error) {
-      this.error.set(error instanceof Error ? error.message : 'Could not skip recurring payment.');
-    }
+    this.subscriptionPayments.update((payments) =>
+      payments.map((payment) =>
+        payment.id === updatedPayment.id ? updatedPayment : payment,
+      ),
+    );
+
+    this.toastService.info('Payment skipped');
+  } catch (error) {
+    this.error.set(
+      error instanceof Error
+        ? error.message
+        : 'Could not skip recurring payment.',
+    );
+  }
+}
+
+protected async markSubscriptionPaymentAsPaid(
+  item: SubscriptionPaymentItem,
+): Promise<void> {
+  if (!item.subscription) {
+    this.error.set('Could not find the recurring payment details.');
+    return;
   }
 
-  protected async markSubscriptionPaymentAsPaid(item: SubscriptionPaymentItem): Promise<void> {
-    if (!item.subscription) {
-      this.error.set('Could not find the recurring payment details.');
-      return;
-    }
+  try {
+    this.error.set(null);
 
-    try {
-      this.error.set(null);
+    await this.cloudSubscriptionPaymentsService.markPaymentAsPaid(
+      item.payment,
+      item.subscription,
+    );
 
-      await this.cloudSubscriptionPaymentsService.markPaymentAsPaid(
-        item.payment,
-        item.subscription,
-      );
+    this.toastService.info('Recurring payment added to expenses');
+    await this.loadCalendarForSelectedMonth();
+  } catch (error) {
+    console.error('Mark subscription payment as paid failed:', error);
 
-      await this.loadCalendarForSelectedMonth();
-    } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : 'Could not mark recurring payment as paid.',
-      );
-    }
+    this.error.set(
+      error instanceof Error
+        ? error.message
+        : 'Could not mark recurring payment as paid.',
+    );
   }
+}
 
   protected formatShortDate(date: string): string {
     return new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'short' }).format(
