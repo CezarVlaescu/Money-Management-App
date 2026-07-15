@@ -11,6 +11,7 @@ type CalendarDayStatus = 'future' | 'today' | 'under-budget' | 'over-budget' | '
 type MonthState = 'past' | 'current' | 'future';
 type SubscriptionPaymentStatus = 'pending' | 'paid' | 'skipped';
 type SourceType = 'manual' | 'subscription';
+type SavingsAccountType = 'cash' | 'bank_account' | 'investment' | 'deposit' | 'other';
 
 export type {
   AppTheme,
@@ -26,4 +27,5 @@ export type {
   SubscriptionFrequency,
   SubscriptionPaymentStatus,
   SourceType,
+  SavingsAccountType,
 };

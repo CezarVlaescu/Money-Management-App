@@ -18,6 +18,7 @@ import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service
 import { CloudSubscriptionPaymentsService } from '../../services/cloud-subscription-payments/cloud-subscription-payments-service';
 import { CloudSubscriptionsService } from '../../services/cloud-subscriptions/cloud-subscriptions-service';
 import { SpendingPeriodsService } from '../../services/spending-periods/spending-periods-service';
+import { CloudSavingsAccountsService } from '../../services/cloud-savings-accounts/cloud-savings-accounts-service';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +39,8 @@ export class CloudRestoreService {
     inject<CloudSyncMetaService>(CloudSyncMetaService);
   private readonly cloudSpendingPeriodsService: SpendingPeriodsService =
     inject<SpendingPeriodsService>(SpendingPeriodsService);
-
+  private readonly cloudSavingsAccountsService: CloudSavingsAccountsService =
+    inject<CloudSavingsAccountsService>(CloudSavingsAccountsService);
   private readonly cloudSubscriptionsService: CloudSubscriptionsService =
     inject<CloudSubscriptionsService>(CloudSubscriptionsService);
 
@@ -47,15 +49,23 @@ export class CloudRestoreService {
 
   public async restoreCloudDataToLocal(): Promise<CloudRestoreResult> {
     try {
-      const [settings, expenses, goals, spendingPeriods, subscriptions, subscriptionPayments] =
-        await Promise.all([
-          this.cloudUserSettingsService.getSettings(),
-          this.cloudExpensesService.getExpenses(),
-          this.cloudSavingsGoalsService.getGoals(),
-          this.cloudSpendingPeriodsService.getSpendingPeriods(),
-          this.cloudSubscriptionsService.getSubscriptions(),
-          this.cloudSubscriptionPaymentsService.getPayments(),
-        ]);
+      const [
+        settings,
+        expenses,
+        goals,
+        spendingPeriods,
+        subscriptions,
+        subscriptionPayments,
+        savingsAccounts,
+      ] = await Promise.all([
+        this.cloudUserSettingsService.getSettings(),
+        this.cloudExpensesService.getExpenses(),
+        this.cloudSavingsGoalsService.getGoals(),
+        this.cloudSpendingPeriodsService.getSpendingPeriods(),
+        this.cloudSubscriptionsService.getSubscriptions(),
+        this.cloudSubscriptionPaymentsService.getPayments(),
+        this.cloudSavingsAccountsService.getSavingsAccounts(),
+      ]);
 
       if (settings) this.restoreSettings(settings);
 
@@ -78,6 +88,8 @@ export class CloudRestoreService {
         spendingPeriodsCount: spendingPeriods.length,
         subscriptionsCount: subscriptions.length,
         subscriptionPaymentsCount: subscriptionPayments.length,
+
+        savingsAccountsCount: savingsAccounts.length,
       };
     } catch (error) {
       this.cloudSyncMetaService.markError(error);

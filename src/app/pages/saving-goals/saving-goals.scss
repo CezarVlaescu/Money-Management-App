@@ -117,3 +117,218 @@ app-add-savings-goal-card {
   display: grid;
   gap: fn.spacing(3);
 }
+
+.savings-accounts-card {
+  display: grid;
+  gap: fn.spacing(4);
+  padding: fn.spacing(4);
+  border-radius: fn.radius(xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.savings-accounts-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: fn.spacing(3);
+
+  div {
+    display: grid;
+    gap: fn.spacing(1);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(extrabold);
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  button {
+    border: 0;
+    border-radius: fn.radius(md);
+    padding: fn.spacing(2) fn.spacing(3);
+    color: #ffffff;
+    background: var(--gradient-primary);
+    font-size: 12px;
+    font-weight: fn.weight(extrabold);
+    cursor: pointer;
+  }
+}
+
+.savings-accounts-card__error {
+  margin: 0;
+  color: #ef4444;
+  font-size: 13px;
+}
+
+.savings-accounts-card__empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.savings-account-form {
+  display: grid;
+  gap: fn.spacing(3);
+  padding: fn.spacing(4);
+  border: 1px solid var(--border);
+  border-radius: fn.radius(lg);
+  background: var(--background);
+
+  label {
+    display: grid;
+    gap: fn.spacing(1);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(bold);
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 fn.spacing(3);
+    border: 1px solid var(--border);
+    border-radius: fn.radius(md);
+    color: var(--text-primary);
+    background: var(--surface);
+    font: inherit;
+    outline: none;
+
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(159, 97, 255, 0.18);
+    }
+  }
+}
+
+.savings-account-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: fn.spacing(2);
+
+  button {
+    border: 0;
+    border-radius: fn.radius(md);
+    padding: fn.spacing(2) fn.spacing(3);
+    color: #ffffff;
+    background: var(--gradient-primary);
+    font-weight: fn.weight(extrabold);
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
+
+.savings-account-form__secondary-button {
+  color: var(--text-primary) !important;
+  background: var(--surface-muted) !important;
+}
+
+.savings-accounts-list {
+  display: grid;
+  gap: fn.spacing(2);
+}
+
+.savings-account-item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: fn.spacing(3);
+  padding: fn.spacing(3);
+  border-radius: fn.radius(lg);
+  background: var(--background);
+}
+
+.savings-account-item__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: fn.radius(lg);
+  background: var(--surface);
+  font-size: 20px;
+}
+
+.savings-account-item__content {
+  display: grid;
+  gap: fn.spacing(1);
+  min-width: 0;
+
+  strong {
+    font-size: 14px;
+  }
+
+  span,
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+}
+
+.savings-account-item__meta {
+  display: grid;
+  justify-items: end;
+  gap: fn.spacing(2);
+  white-space: nowrap;
+
+  > strong {
+    font-size: 14px;
+  }
+
+  div {
+    display: flex;
+    gap: fn.spacing(2);
+  }
+
+  button {
+    border: 0;
+    border-radius: fn.radius(md);
+    padding: fn.spacing(2);
+    color: var(--text-primary);
+    background: var(--surface-muted);
+    font-size: 12px;
+    font-weight: fn.weight(extrabold);
+    cursor: pointer;
+  }
+}
+
+.savings-account-item__danger-button {
+  color: #ffffff !important;
+  background: rgba(239, 68, 68, 0.9) !important;
+}
+
+@media (max-width: 520px) {
+  .savings-accounts-card__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .savings-account-item {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .savings-account-item__meta {
+    grid-column: 1 / -1;
+    justify-items: stretch;
+  }
+
+  .savings-account-item__meta div {
+    justify-content: flex-end;
+  }
+}

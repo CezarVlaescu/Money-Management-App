@@ -53,3 +53,161 @@
     />
   }
 </section>
+
+<section class="savings-accounts-card">
+  <header class="savings-accounts-card__header">
+    <div>
+      <span>Where your savings are</span>
+      <h2>{{ totalSavingsAccountsAmount() | number: '1.0-2' }} lei saved</h2>
+    </div>
+
+    @if (!savingsAccountFormOpen()) {
+      <button type="button" (click)="startAddingSavingsAccount()">+ Add</button>
+    }
+  </header>
+
+  @if (savingsAccountsError()) {
+    <p class="savings-accounts-card__error">
+      {{ savingsAccountsError() }}
+    </p>
+  }
+
+  @if (savingsAccountFormOpen()) {
+    <form class="savings-account-form" (ngSubmit)="saveSavingsAccount()">
+      <label>
+        <span>Name</span>
+
+        <input
+          type="text"
+          name="savingsAccountName"
+          placeholder="BT Savings Account"
+          [ngModel]="savingsAccountNameInput()"
+          (ngModelChange)="savingsAccountNameInput.set($event)"
+        />
+      </label>
+
+      <label>
+        <span>Amount</span>
+
+        <input
+          type="number"
+          name="savingsAccountAmount"
+          min="0"
+          inputmode="decimal"
+          placeholder="4000"
+          [ngModel]="savingsAccountAmountInput()"
+          (ngModelChange)="savingsAccountAmountInput.set($event)"
+        />
+      </label>
+
+      <label>
+        <span>Type</span>
+
+        <select
+          name="savingsAccountType"
+          [ngModel]="savingsAccountTypeInput()"
+          (ngModelChange)="savingsAccountTypeInput.set($event)"
+        >
+          <option value="cash">Cash</option>
+          <option value="bank_account">Bank account</option>
+          <option value="investment">Investment</option>
+          <option value="deposit">Deposit</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+
+      <label>
+        <span>Institution</span>
+
+        <input
+          type="text"
+          name="savingsAccountInstitution"
+          placeholder="BT, XTB, Revolut..."
+          [ngModel]="savingsAccountInstitutionInput()"
+          (ngModelChange)="savingsAccountInstitutionInput.set($event)"
+        />
+      </label>
+
+      <label class="savings-account-form__full">
+        <span>Note</span>
+
+        <input
+          type="text"
+          name="savingsAccountNote"
+          placeholder="Optional note"
+          [ngModel]="savingsAccountNoteInput()"
+          (ngModelChange)="savingsAccountNoteInput.set($event)"
+        />
+      </label>
+
+      <div class="savings-account-form__actions">
+        <button
+          type="button"
+          class="savings-account-form__secondary-button"
+          (click)="cancelSavingsAccountForm()"
+        >
+          Cancel
+        </button>
+
+        <button type="submit" [disabled]="savingSavingsAccount()">
+          @if (savingSavingsAccount()) {
+            Saving...
+          } @else if (editingSavingsAccount()) {
+            Save changes
+          } @else {
+            Save savings place
+          }
+        </button>
+      </div>
+    </form>
+  }
+
+  @if (loadingSavingsAccounts()) {
+    <p class="savings-accounts-card__empty">Loading savings places...</p>
+  } @else if (savingsAccounts().length) {
+    <div class="savings-accounts-list">
+      @for (account of savingsAccounts(); track account.id) {
+        <article class="savings-account-item">
+          <div class="savings-account-item__icon">
+            {{ getSavingsAccountIcon(account.type) }}
+          </div>
+
+          <div class="savings-account-item__content">
+            <strong>{{ account.name }}</strong>
+
+            <span>
+              {{ getSavingsAccountTypeLabel(account.type) }}
+              @if (account.institution) {
+                · {{ account.institution }}
+              }
+            </span>
+
+            @if (account.note) {
+              <p>{{ account.note }}</p>
+            }
+          </div>
+
+          <div class="savings-account-item__meta">
+            <strong>{{ account.current_amount | number: '1.0-2' }} lei</strong>
+
+            <div>
+              <button type="button" (click)="startEditingSavingsAccount(account)">Edit</button>
+
+              <button
+                type="button"
+                class="savings-account-item__danger-button"
+                (click)="deleteSavingsAccount(account)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  } @else if (!savingsAccountFormOpen()) {
+    <p class="savings-accounts-card__empty">
+      Add your savings places, like a bank account, XTB portfolio, cash or deposits.
+    </p>
+  }
+</section>

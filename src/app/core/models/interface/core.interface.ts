@@ -5,6 +5,7 @@ import {
   CloudSyncState,
   ConfirmDialogTone,
   DeletedEntityType,
+  SavingsAccountType,
   SourceType,
   SubscriptionCategoryType,
   SubscriptionFrequency,
@@ -202,20 +203,19 @@ interface CloudRestoreResult {
   spendingPeriodsCount: number;
   subscriptionsCount: number;
   subscriptionPaymentsCount: number;
+  savingsAccountsCount: number;
 }
 
 interface CloudSyncStatus {
   hasCloudData: boolean;
   hasSettings: boolean;
-
   expensesCount: number;
   goalsCount: number;
-
   spendingPeriodsCount: number;
   subscriptionsCount: number;
   subscriptionPaymentsCount: number;
-
   checkedAt: string;
+  savingsAccountsCount: number;
 }
 
 interface CloudSyncMeta {
@@ -403,6 +403,44 @@ interface CreateSubscriptionExpenseParams {
   categoryType: BudgetCategory;
 }
 
+interface CloudSavingsAccount {
+  id: string;
+  user_id: string;
+  name: string;
+  type: SavingsAccountType;
+  current_amount: number;
+  currency: string;
+  institution: string | null;
+  note: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+interface CreateCloudSavingsAccountPayload {
+  user_id: string;
+  name: string;
+  type: SavingsAccountType;
+  current_amount: number;
+  currency?: string;
+  institution?: string | null;
+  note?: string | null;
+  is_active?: boolean;
+}
+
+interface UpdateCloudSavingsAccountPayload {
+  name?: string;
+  type?: SavingsAccountType;
+  current_amount?: number;
+  currency?: string;
+  institution?: string | null;
+  note?: string | null;
+  is_active?: boolean;
+  updated_at?: string;
+  deleted_at?: string | null;
+}
+
 export type {
   BudgetBucket,
   BudgetSummary,
@@ -442,4 +480,7 @@ export type {
   SubscriptionPaymentItem,
   CreateSubscriptionExpenseParams,
   CloudSubscriptionPayment,
+  CloudSavingsAccount,
+  CreateCloudSavingsAccountPayload,
+  UpdateCloudSavingsAccountPayload,
 };

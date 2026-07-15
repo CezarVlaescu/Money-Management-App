@@ -81,6 +81,10 @@ export class CloudRestorePromptService {
       parts.push(`${status.goalsCount} savings goals`);
     }
 
+    if (status.savingsAccountsCount > 0) {
+      parts.push(`${status.savingsAccountsCount} savings places`);
+    }
+
     if (status.spendingPeriodsCount > 0) {
       parts.push(`${status.spendingPeriodsCount} spending periods`);
     }

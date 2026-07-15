@@ -116,39 +116,39 @@
           <h2>Upcoming this month</h2>
         </div>
 
-<div class="calendar-page__subscriptions-actions">
-  <strong class="calendar-page__subscription-count">
-    {{ pendingSubscriptionPaymentItems().length }} pending
-  </strong>
+        <div class="calendar-page__subscriptions-actions">
+          <strong class="calendar-page__subscription-count">
+            {{ pendingSubscriptionPaymentItems().length }} pending
+          </strong>
 
-  @if (completedSubscriptionPaymentItems().length) {
-    <button
-      class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
-      type="button"
-      (click)="toggleCompletedSubscriptionPayments()"
-    >
-      {{ showCompletedSubscriptionPayments() ? 'Hide completed' : 'Show completed' }}
-    </button>
+          @if (completedSubscriptionPaymentItems().length) {
+            <button
+              class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+              type="button"
+              (click)="toggleCompletedSubscriptionPayments()"
+            >
+              {{ showCompletedSubscriptionPayments() ? 'Hide completed' : 'Show completed' }}
+            </button>
 
-    <button
-      class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
-      type="button"
-      (click)="clearCompletedSubscriptionPayments()"
-    >
-      Clear
-    </button>
-  }
+            <button
+              class="calendar-page__button calendar-page__button--secondary calendar-page__button--small"
+              type="button"
+              (click)="clearCompletedSubscriptionPayments()"
+            >
+              Clear
+            </button>
+          }
 
-  @if (!subscriptionFormOpen()) {
-    <button
-      class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
-      type="button"
-      (click)="startAddingSubscription()"
-    >
-      + Add
-    </button>
-  }
-</div>
+          @if (!subscriptionFormOpen()) {
+            <button
+              class="calendar-page__button calendar-page__button--primary calendar-page__button--small"
+              type="button"
+              (click)="startAddingSubscription()"
+            >
+              + Add
+            </button>
+          }
+        </div>
       </header>
 
       @if (subscriptionFormOpen()) {
