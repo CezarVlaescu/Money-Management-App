@@ -12,6 +12,15 @@ type MonthState = 'past' | 'current' | 'future';
 type SubscriptionPaymentStatus = 'pending' | 'paid' | 'skipped';
 type SourceType = 'manual' | 'subscription';
 type SavingsAccountType = 'cash' | 'bank_account' | 'investment' | 'deposit' | 'other';
+type MoneyInsightType = 'info' | 'success' | 'warning' | 'danger';
+type MoneyInsightCategory =
+  | 'spending'
+  | 'subscriptions'
+  | 'savings'
+  | 'daily_allowance'
+  | 'goals'
+  | 'forecast'
+  | 'budget_split';
 
 export type {
   AppTheme,
@@ -28,4 +37,6 @@ export type {
   SubscriptionPaymentStatus,
   SourceType,
   SavingsAccountType,
+  MoneyInsightCategory,
+  MoneyInsightType,
 };

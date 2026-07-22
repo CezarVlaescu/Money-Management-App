@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmartInsight } from './smart-insight';
+import { SmartInsights } from './smart-insights';
 
-describe('SmartInsight', () => {
-  let component: SmartInsight;
-  let fixture: ComponentFixture<SmartInsight>;
+describe('SmartInsights', () => {
+  let component: SmartInsights;
+  let fixture: ComponentFixture<SmartInsights>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SmartInsight],
+      imports: [SmartInsights],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SmartInsight);
+    fixture = TestBed.createComponent(SmartInsights);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

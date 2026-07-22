@@ -5,6 +5,8 @@ import {
   CloudSyncState,
   ConfirmDialogTone,
   DeletedEntityType,
+  MoneyInsightCategory,
+  MoneyInsightType,
   SavingsAccountType,
   SourceType,
   SubscriptionCategoryType,
@@ -441,6 +443,18 @@ interface UpdateCloudSavingsAccountPayload {
   deleted_at?: string | null;
 }
 
+interface MoneyInsight {
+  id: string;
+  type: MoneyInsightType;
+  category: MoneyInsightCategory;
+  title: string;
+  message: string;
+  icon: string;
+  priority: number;
+  actionLabel?: string;
+  route?: string;
+}
+
 export type {
   BudgetBucket,
   BudgetSummary,
@@ -483,4 +497,5 @@ export type {
   CloudSavingsAccount,
   CreateCloudSavingsAccountPayload,
   UpdateCloudSavingsAccountPayload,
+  MoneyInsight,
 };

@@ -1,0 +1,250 @@
+@use 'functions' as fn;
+
+:host {
+  display: block;
+}
+
+.smart-insights {
+  display: grid;
+  gap: fn.spacing(4);
+  padding: fn.spacing(4);
+  border-radius: fn.radius(xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.smart-insights__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: fn.spacing(3);
+
+  > div:first-child {
+    display: grid;
+    gap: fn.spacing(1);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: fn.weight(extrabold);
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 20px;
+  }
+}
+
+.smart-insights__badge {
+  flex-shrink: 0;
+  padding: fn.spacing(2) fn.spacing(3);
+  border-radius: fn.radius(lg);
+  color: var(--primary);
+  background: var(--surface-muted);
+  font-size: 12px;
+  font-weight: fn.weight(extrabold);
+}
+
+.smart-insights__list {
+  display: grid;
+  gap: fn.spacing(3);
+}
+
+.smart-insight {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: fn.spacing(3);
+  padding: fn.spacing(3);
+  border: 1px solid transparent;
+  border-radius: fn.radius(lg);
+  background: var(--background);
+}
+
+.smart-insight--info {
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.smart-insight--success {
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.smart-insight--warning {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.smart-insight--danger {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.smart-insight__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: fn.radius(lg);
+  background: var(--surface);
+  font-size: 20px;
+}
+
+.smart-insight__content {
+  display: grid;
+  gap: fn.spacing(1);
+  min-width: 0;
+
+  > strong {
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.smart-insight__type {
+  font-size: 10px !important;
+  letter-spacing: 0.04em;
+}
+
+.smart-insight__action {
+  display: inline-flex;
+  align-items: center;
+  gap: fn.spacing(1);
+  justify-self: start;
+  margin-top: fn.spacing(1);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: fn.weight(extrabold);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.smart-insights__empty {
+  display: flex;
+  align-items: flex-start;
+  gap: fn.spacing(3);
+  padding: fn.spacing(4);
+  border-radius: fn.radius(lg);
+  background: var(--background);
+
+  > span {
+    font-size: 24px;
+  }
+
+  div {
+    display: grid;
+    gap: fn.spacing(1);
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.smart-insights__skeleton-list {
+  display: grid;
+  gap: fn.spacing(3);
+}
+
+.smart-insights__skeleton {
+  min-height: 100px;
+  border-radius: fn.radius(lg);
+  background: linear-gradient(
+    90deg,
+    var(--background) 25%,
+    var(--surface-muted) 50%,
+    var(--background) 75%
+  );
+  background-size: 200% 100%;
+  animation: smart-insights-loading 1.4s infinite;
+}
+
+@keyframes smart-insights-loading {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .smart-insights__header {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .smart-insights__header-actions {
+    flex-shrink: 0;
+  }
+
+  .smart-insights__badge {
+    align-self: flex-start;
+  }
+
+  .smart-insight {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .smart-insight__icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.smart-insights__header-actions {
+  display: flex;
+  align-items: center;
+  gap: fn.spacing(2);
+}
+
+.smart-insights__refresh {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: fn.radius(lg);
+  color: var(--primary);
+  background: var(--surface-muted);
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--background);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.smart-insights__refresh-icon--loading {
+  animation: smart-insights-refresh 0.8s linear infinite;
+}
+
+@keyframes smart-insights-refresh {
+  to {
+    transform: rotate(360deg);
+  }
+}

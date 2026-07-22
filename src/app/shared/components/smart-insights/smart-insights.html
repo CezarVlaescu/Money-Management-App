@@ -1,0 +1,74 @@
+<section class="smart-insights">
+  <header class="smart-insights__header">
+    <div>
+      <span>Smart money coach</span>
+      <h2>Insights for you</h2>
+    </div>
+
+    <div class="smart-insights__header-actions">
+      <div class="smart-insights__badge">✨ {{ insights.length }}</div>
+
+      <button
+        type="button"
+        class="smart-insights__refresh"
+        [disabled]="loading"
+        aria-label="Refresh smart insights"
+        (click)="refreshInsights()"
+      >
+        <span aria-hidden="true" [class.smart-insights__refresh-icon--loading]="loading"> ↻ </span>
+      </button>
+    </div>
+  </header>
+
+  @if (loading) {
+    <div class="smart-insights__skeleton-list">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="smart-insights__skeleton"></div>
+      }
+    </div>
+  } @else if (insights.length) {
+    <div class="smart-insights__list">
+      @for (insight of insights; track insight.id) {
+        <article
+          class="smart-insight"
+          [class.smart-insight--info]="insight.type === 'info'"
+          [class.smart-insight--success]="insight.type === 'success'"
+          [class.smart-insight--warning]="insight.type === 'warning'"
+          [class.smart-insight--danger]="insight.type === 'danger'"
+        >
+          <div class="smart-insight__icon" aria-hidden="true">
+            {{ insight.icon }}
+          </div>
+
+          <div class="smart-insight__content">
+            <span class="smart-insight__type">
+              {{ getInsightLabel(insight.type) }}
+            </span>
+
+            <strong>{{ insight.title }}</strong>
+
+            <p>{{ insight.message }}</p>
+
+            @if (insight.route && insight.actionLabel) {
+              <a class="smart-insight__action" [routerLink]="insight.route">
+                {{ insight.actionLabel }}
+                <span aria-hidden="true">→</span>
+              </a>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="smart-insights__empty">
+      <span aria-hidden="true">🌱</span>
+
+      <div>
+        <strong>No insights yet</strong>
+        <p>
+          Add income, expenses, savings or recurring payments to receive personalized observations.
+        </p>
+      </div>
+    </div>
+  }
+</section>

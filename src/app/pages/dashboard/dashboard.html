@@ -6,5 +6,17 @@
   }
 </section>
 <app-budget-overview />
-<app-smart-insight />
+<app-smart-insights
+  [insights]="moneyInsights()"
+  [loading]="loadingMoneyInsights()"
+  (refreshRequested)="loadMoneyInsights()"
+/>
+
+@if (moneyInsightsError()) {
+  <div class="dashboard__insights-error">
+    <span>Smart insights are temporarily unavailable.</span>
+
+    <button type="button" (click)="loadMoneyInsights()">Try again</button>
+  </div>
+}
 <app-recent-expenses />
