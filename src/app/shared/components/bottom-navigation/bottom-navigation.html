@@ -29,15 +29,6 @@
     <span class="bottom-navigation__label">Calendar</span>
   </a>
 
-  <button
-    class="bottom-navigation__add-button"
-    type="button"
-    aria-label="Add expense"
-    (click)="addExpensesSheetService.open()"
-  >
-    +
-  </button>
-
   <a
     class="bottom-navigation__item"
     routerLink="/savings-goals"
@@ -57,4 +48,13 @@
     <span class="bottom-navigation__icon">⚙️</span>
     <span class="bottom-navigation__label">Settings</span>
   </a>
+
+  <button
+    class="bottom-navigation__add-button"
+    type="button"
+    aria-label="Add expense"
+    (click)="addExpensesSheetService.open()"
+  >
+    <span aria-hidden="true">+</span>
+  </button>
 </nav>

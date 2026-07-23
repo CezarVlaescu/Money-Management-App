@@ -7,10 +7,10 @@
 
 .bottom-navigation {
   @include mx.bottom-nav-container;
-
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 64px 1fr 1fr;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: center;
+  overflow: visible;
 }
 
 .bottom-navigation__item {
@@ -50,18 +50,45 @@
 }
 
 .bottom-navigation__add-button {
+  position: absolute;
+  right: fn.spacing(3);
+  bottom: calc(100% + #{fn.spacing(3)});
+  z-index: 2;
+
   display: grid;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   place-items: center;
+
+  padding: 0;
   border: 0;
-  border-radius: fn.radius(xl);
+  border-radius: 50%;
   color: #ffffff;
   background: var(--gradient-primary);
   box-shadow: var(--shadow-button);
-  font-size: 34px;
-  line-height: 1;
+
   cursor: pointer;
-  text-decoration: none;
-  transform: translateY(-14px);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+
+  span {
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1;
+    transform: translateY(-2px);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  &:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    outline-offset: 4px;
+  }
 }
