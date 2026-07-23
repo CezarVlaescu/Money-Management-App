@@ -1,5 +1,5 @@
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { CloudSyncMeta } from '../../models/interface/core.interface';
+import { CloudSyncMeta } from '../../models/interface';
 import {
   CLOUD_SYNC_META_SERVICE_KEY,
   DEFAULT_CLOUD_SYNC_META,

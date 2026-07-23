@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MoneyInsight } from '../../../core/models/interface/core.interface';
+import { MoneyInsight } from '../../../core/models/interface';
 
 @Component({
   selector: 'app-smart-insights',

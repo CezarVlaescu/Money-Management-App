@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Toast } from '../../models/interface/core.interface';
+import { Toast } from '../../models/interface';
 import { ToastType } from '../../models/types/core.types';
 
 @Injectable({

@@ -5,7 +5,7 @@ import { BudgetCard } from '../../shared/components/budget-card/budget-card';
 import { BudgetOverview } from '../../shared/components/budget-overview/budget-overview';
 import { RecentExpenses } from '../../shared/components/recent-expenses/recent-expenses';
 import { DashboardHero } from '../../features/dashboard-hero/dashboard-hero';
-import { MoneyInsight } from '../../core/models/interface/core.interface';
+import { MoneyInsight } from '../../core/models/interface';
 import { SmartInsightsService } from '../../core/services/smart-insights/smart-insights-service';
 import { SmartInsights } from '../../shared/components/smart-insights/smart-insights';
 import { NavigationEnd, Router } from '@angular/router';

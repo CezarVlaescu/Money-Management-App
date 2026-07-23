@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { CloudSyncStatus } from '../../models/interface/core.interface';
+import { CloudSyncStatus } from '../../models/interface';
 import { CloudExpensesService } from '../../services/cloud-expenses/cloud-expenses-service';
 import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/cloud-savings-goals-service';
 import { CloudUserSettingsService } from '../../services/cloud-user-settings/cloud-user-settings-service';

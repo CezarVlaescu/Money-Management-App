@@ -5,7 +5,7 @@ import {
   CloudSavingsGoal,
   CreateCloudSavingsGoalPayload,
   UpdateCloudSavingsGoalPayload,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',

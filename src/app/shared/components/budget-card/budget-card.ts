@@ -1,5 +1,5 @@
 import { Component, inject, input, InputSignal } from '@angular/core';
-import { BudgetBucket } from '../../../core/models/interface/core.interface';
+import { BudgetBucket } from '../../../core/models/interface';
 import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
 
 @Component({

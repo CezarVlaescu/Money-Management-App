@@ -8,7 +8,7 @@ import {
   Expense,
   SavingsGoal,
   DailyAllowanceSummary,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 import { BudgetService } from '../budget/budget';
 import { CloudSavingsAccountsService } from '../cloud-savings-accounts/cloud-savings-accounts-service';
 import { CloudSubscriptionPaymentsService } from '../cloud-subscription-payments/cloud-subscription-payments-service';

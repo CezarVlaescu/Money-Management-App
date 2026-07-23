@@ -6,7 +6,7 @@ import {
   CloudSavingsGoal,
   Expense,
   SavingsGoal,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 import { BudgetService } from '../../services/budget/budget';
 import { CloudExpensesService } from '../../services/cloud-expenses/cloud-expenses-service';
 import { CloudSavingsGoalsService } from '../../services/cloud-savings-goals/cloud-savings-goals-service';

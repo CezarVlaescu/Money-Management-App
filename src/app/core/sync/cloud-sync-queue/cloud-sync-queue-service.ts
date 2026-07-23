@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { CloudSyncRequest } from '../../models/interface/core.interface';
+import { CloudSyncRequest } from '../../models/interface';
 import { CloudSyncReason } from '../../models/types/core.types';
 
 @Injectable({

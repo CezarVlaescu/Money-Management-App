@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NEEDS_CONST, WANTS_CONST, SAVINGS_CONST } from '../../../shared/constants/app.constants';
 import { CATEGORY } from '../../models/enums/enums.core';
-import { CategoryRule } from '../../models/interface/core.interface';
+import { CategoryRule } from '../../models/interface';
 import { BudgetCategory } from '../../models/types/core.types';
 
 @Injectable({ providedIn: 'root' })

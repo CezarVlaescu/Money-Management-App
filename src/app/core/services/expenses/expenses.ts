@@ -1,5 +1,5 @@
 import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
-import { Expense, CreateExpensePayload } from '../../models/interface/core.interface';
+import { Expense, CreateExpensePayload } from '../../models/interface';
 import { BudgetCategory } from '../../models/types/core.types';
 import { CategoryService } from '../category/category';
 import { StorageService } from '../storage/storage';

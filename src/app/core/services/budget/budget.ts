@@ -2,7 +2,7 @@ import { Injectable, Signal, WritableSignal, computed, inject, signal } from '@a
 import { StorageService } from '../storage/storage';
 import { ExpensesService } from '../expenses/expenses';
 import { INCOME_STORAGE_KEY } from '../../../shared/constants/app.constants';
-import { BudgetSummary, BudgetBucket } from '../../models/interface/core.interface';
+import { BudgetSummary, BudgetBucket } from '../../models/interface';
 import { BudgetCategory } from '../../models/types/core.types';
 import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';
 

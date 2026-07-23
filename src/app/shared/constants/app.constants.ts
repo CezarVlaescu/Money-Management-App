@@ -1,4 +1,4 @@
-import { CloudSyncMeta } from '../../core/models/interface/core.interface';
+import { CloudSyncMeta } from '../../core/models/interface';
 import { BudgetCategory } from '../../core/models/types/core.types';
 import {
   CategoryFilter,

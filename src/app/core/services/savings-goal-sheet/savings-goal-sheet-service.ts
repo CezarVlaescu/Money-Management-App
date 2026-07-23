@@ -1,5 +1,5 @@
 import { computed, Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { SavingsGoal } from '../../models/interface/core.interface';
+import { SavingsGoal } from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',

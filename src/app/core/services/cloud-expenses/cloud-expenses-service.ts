@@ -5,7 +5,7 @@ import {
   CreateCloudExpensePayload,
   CreateSubscriptionExpenseParams,
   UpdateCloudExpensePayload,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 import { supabase } from '../../cloud/supabase.client';
 
 @Injectable({

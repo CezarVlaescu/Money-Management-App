@@ -3,7 +3,7 @@ import {
   SavingsGoal,
   CreateSavingsGoalPayload,
   UpdateSavingsGoalPayload,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 import { StorageService } from '../storage/storage';
 import { SAVINGS_STORE_KEY } from '../../../shared/constants/app.constants';
 import { CloudSyncQueueService } from '../../sync/cloud-sync-queue/cloud-sync-queue-service';

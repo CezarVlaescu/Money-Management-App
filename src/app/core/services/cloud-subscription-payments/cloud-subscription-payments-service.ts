@@ -6,7 +6,7 @@ import {
   UpdateCloudSubscriptionPaymentPayload,
   CloudSubscription,
   CreateCloudSubscriptionPaymentPayload,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 import { CloudExpensesService } from '../cloud-expenses/cloud-expenses-service';
 import { CloudSubscriptionsService } from '../cloud-subscriptions/cloud-subscriptions-service';
 

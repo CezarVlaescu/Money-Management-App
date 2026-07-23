@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { LocalDeletionTombstone } from '../../models/interface/core.interface';
+import { LocalDeletionTombstone } from '../../models/interface';
 import { DeletedEntityType } from '../../models/types/core.types';
 import { LOCAL_DELETION_TOMBSTONE_KEY } from '../../../shared/constants/app.constants';
 

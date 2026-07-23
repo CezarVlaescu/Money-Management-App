@@ -18,7 +18,7 @@ import { AddSavingsGoalCard } from '../../shared/components/add-savings-goal-car
 import { ToastService } from '../../core/services/toast/toast';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import { SavingsGoalSheetService } from '../../core/services/savings-goal-sheet/savings-goal-sheet-service';
-import { CloudSavingsAccount, SavingsGoal } from '../../core/models/interface/core.interface';
+import { CloudSavingsAccount, SavingsGoal } from '../../core/models/interface';
 import { ConfirmDialogService } from '../../core/services/confirm-dialog/confirm-dialog-service';
 import { CloudSavingsAccountsService } from '../../core/services/cloud-savings-accounts/cloud-savings-accounts-service';
 import { SavingsAccountType } from '../../core/models/types/core.types';

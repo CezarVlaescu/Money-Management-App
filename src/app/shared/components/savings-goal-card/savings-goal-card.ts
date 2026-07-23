@@ -1,5 +1,5 @@
 import { Component, inject, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
-import { SavingsGoal } from '../../../core/models/interface/core.interface';
+import { SavingsGoal } from '../../../core/models/interface';
 import { SavingsGoalsService } from '../../../core/services/savings/savings';
 import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
 

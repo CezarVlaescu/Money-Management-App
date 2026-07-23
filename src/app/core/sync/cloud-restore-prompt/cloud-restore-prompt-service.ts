@@ -6,7 +6,7 @@ import { BudgetService } from '../../services/budget/budget';
 import { ExpensesService } from '../../services/expenses/expenses';
 import { SavingsGoalsService } from '../../services/savings/savings';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog-service';
-import { CloudSyncStatus } from '../../models/interface/core.interface';
+import { CloudSyncStatus } from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',

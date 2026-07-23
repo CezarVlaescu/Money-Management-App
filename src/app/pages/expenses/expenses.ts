@@ -3,7 +3,7 @@ import { ExpensesService } from '../../core/services/expenses/expenses';
 import { BudgetCategory } from '../../core/models/types/core.types';
 import { CategoryFilter } from '../../shared/models/interfaces/shared.interface';
 import { EXPENSES_FILTERS } from '../../shared/constants/app.constants';
-import { Expense } from '../../core/models/interface/core.interface';
+import { Expense } from '../../core/models/interface';
 import { FormsModule } from '@angular/forms';
 import { PageHeader } from '../../shared/components/page-header/page-header';
 import { AddExpenseCard } from '../../shared/components/add-expense-card/add-expense-card';

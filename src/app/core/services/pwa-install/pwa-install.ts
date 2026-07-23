@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { BeforeInstallPromptEvent } from '../../models/interface/core.interface';
+import { BeforeInstallPromptEvent } from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',

@@ -4,7 +4,7 @@ import { AuthService } from '../../core/auth/auth-service';
 import { CloudBackupService } from '../../core/sync/cloud-backup/cloud-backup-service';
 import { CloudRestoreService } from '../../core/sync/cloud-restore/cloud-restore-service';
 import { CloudSyncStatusService } from '../../core/sync/cloud-sync-status/cloud-sync-status-service';
-import { CloudSyncStatus } from '../../core/models/interface/core.interface';
+import { CloudSyncStatus } from '../../core/models/interface';
 import { CloudRestorePromptService } from '../../core/sync/cloud-restore-prompt/cloud-restore-prompt-service';
 import { CloudSyncMetaService } from '../../core/sync/cloud-sync-meta/cloud-sync-meta-service';
 

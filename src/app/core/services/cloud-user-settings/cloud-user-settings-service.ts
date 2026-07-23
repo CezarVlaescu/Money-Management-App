@@ -4,7 +4,7 @@ import { supabase } from '../../cloud/supabase.client';
 import {
   CloudUserSettings,
   UpsertCloudUserSettingsPayload,
-} from '../../models/interface/core.interface';
+} from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',

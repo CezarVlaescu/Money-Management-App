@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
-import { Expense } from '../../../core/models/interface/core.interface';
+import { Expense } from '../../../core/models/interface';
 import { CategoryService } from '../../../core/services/category/category';
 import { MoneyFormatter } from '../../services/moeny-formatter/money-formatter';
 

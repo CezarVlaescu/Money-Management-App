@@ -8,7 +8,7 @@ import {
   CloudSubscriptionPayment,
   CloudSubscription,
   SubscriptionPaymentItem,
-} from '../../core/models/interface/core.interface';
+} from '../../core/models/interface';
 import { DailyAllowanceCalculatorService } from '../../core/services/daily-allowance-calculator/daily-allowance-calculator-service';
 import { SpendingPeriodsService } from '../../core/services/spending-periods/spending-periods-service';
 import { CommonModule } from '@angular/common';

@@ -9,7 +9,7 @@ import { CloudUserSettingsService } from '../../services/cloud-user-settings/clo
 import { CloudSyncMetaService } from '../cloud-sync-meta/cloud-sync-meta-service';
 import { LocalDeletionTombstoneService } from '../local-deletion-tombstone/local-deletion-tombstone-service';
 import { SourceType } from '../../models/types/core.types';
-import { CloudExpense } from '../../models/interface/core.interface';
+import { CloudExpense } from '../../models/interface';
 
 @Injectable({
   providedIn: 'root',
