@@ -32,6 +32,8 @@ Open `http://localhost:4200`.
 
 Money Bloom is a personal budgeting tool and does not provide financial or investment advice.
 
+Live project: https://money-bloom.netlify.app/
+
 ---
 
 Built by **Cezar Vlaescu**.
